@@ -47,14 +47,17 @@ for _pc in __files__:
 	plugin_filename = os.path.splitext(os.path.basename(_pc))[0]
 	# obtain the plugin name
 	plugin_name = plugin_filename.split('_')[1].lower()
-	# import the plugin as a module
-	plugin_module = __import__('{0}.{1}'.format(__name__, plugin_filename), fromlist=[__name__])
-	# define the object of the plugin instance, using the plugin name as the object name
-	exec(plugin_name + '= plugin_module.instantiate()')
-	# register the object with the dictionary
-	__plugin_dict__.update({plugin_name:eval(plugin_name)})
-	# done
-	output.printf("|- " + plugin_filename + " imported.", 'l_yellow')
+	try:
+		# import the plugin as a module
+		plugin_module = __import__('{0}.{1}'.format(__name__, plugin_filename), fromlist=[__name__])
+		# define the object of the plugin instance, using the plugin name as the object name
+		exec(plugin_name + '= plugin_module.instantiate()')
+		# register the object with the dictionary
+		__plugin_dict__.update({plugin_name:eval(plugin_name)})
+		# done
+		output.printf("|- " + plugin_filename + " imported.", 'l_yellow')
+	except:
+		output.exception(__file__, "Plugin {0} could not be loaded".format(plugin_filename), "Please unit test the plugin code")
 
 
 
