@@ -28,14 +28,21 @@
 
 import domashSystem as system
 import domashInfra as infra
+import sys
+sys.path.append('domashMeta')
+import output
 
-config = system.config.default()
-socket = eval("system.socket.{0}()".format(config.socket()))
-event = eval("system.event.{0}()".format(config.event()))
 
-address = config.address()
-socket.bind(address)
+try:
+	config = system.config.default()
+	socket = eval("system.socket.{0}()".format(config.socket()))
+	event = eval("system.event.{0}()".format(config.event()))
 
+	address = config.address()
+	socket.bind(address)
+
+except:
+	output.exception(__file__, "Compulsory plugins failed to load", "Please check dependent libraries")
 
 
 
