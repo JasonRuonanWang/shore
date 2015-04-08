@@ -1,3 +1,4 @@
+#
 #    (c) University of Western Australia
 #    International Centre of Radio Astronomy Research
 #    M468/35 Stirling Hwy
@@ -22,55 +23,21 @@
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
 #    MA 02111-1307  USA
 #
+#	 Any bugs, problems, and/or suggestions please email to 
+#	 jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
-import sys
-sys.path.append('domashMeta')
-import output
+import zmq 
+from zmq.eventloop.zmqstream import ZMQStream
+from zmq.eventloop.ioloop import IOLoop
 
-
-
-class config_default:
-
-	__config_dict__ = {}
+class event_zmq:
 
 	def __init__(self):
-		try:
-			config_file = open('config','r')
-			for line in config_file.readlines():
-				try:
-					left = line.split('=')[0]
-					right = line.split('=')[1].split('\n')[0]
-					self.__config_dict__.update({left:right})
-				except:
-					continue
-		except:
-			output.exception(__name__,'Cannot find config file','Check if config file is in domash root directory')
-
-	def socket(self):
-		try:
-			return self.__config_dict__['socket']
-		except:
-			return
-
-	def event(self):
-		try:
-			return self.__config_dict__['event']
-		except:
-			return
-
-	def address(self):
-		try:
-			return self.__config_dict__['address']
-		except:
-			return
-
-	def print_dict():
-		print __config_dict__
-
+		return
+	 
 
 def instantiate():
-	return config_default
-
+	return event_zmq
 
 
 

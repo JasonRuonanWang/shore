@@ -77,7 +77,7 @@ class socket_zmq:
 
 
 def instantiate():
-	return socket_zmq()
+	return socket_zmq
 
 
 
