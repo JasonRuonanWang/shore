@@ -69,10 +69,10 @@ l_onwhite = '\033[107m'
 
 	
 def exception(plugin, description, suggestion):
-	print red + bold + flash + 'Exception from file: ' +  endc + red + bold + plugin + '! ' +'Description: ' + description + '. Suggestion: ' + suggestion + '.' + endc 
+	print red + bold + flash + 'Exception from plugin: ' + plugin + '! ' + endc + red + bold + 'Description: ' + description + '. Suggestion: ' + suggestion + '.' + endc 
 
 def warning(plugin, description):
-	print bold + yellow + 'Warning from file: ' + plugin + '! Description: ' + description + '.' + endc
+	print bold + yellow + 'Warning from plugin: ' + plugin + '! Description: ' + description + '.' + endc
 
 def printf(text, *args):
 	message = ''

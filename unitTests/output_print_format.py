@@ -7,8 +7,8 @@ import output
 output.exception('unitTest', 'Just a test', 'No action needed')
 output.warning('unitTest', 'Just a test')
 
-output.superprint('Test printing in red', 'onred', 'flash')
-output.superprint('Test printing in red', 'daga')
+output.printf('Test printing in red', 'onred', 'flash')
+output.printf('Test printing in red', 'daga')
 
 
 
