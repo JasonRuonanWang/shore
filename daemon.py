@@ -26,23 +26,26 @@
 #	 Any bugs, problems, and/or suggestions please email to 
 #	 jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
-import domashSystem as system
 import domashInfra as infra
+import domashSystem as system
 import sys
 sys.path.append('domashMeta')
 import output
 
 
-try:
-	config = system.config.default()
-	socket = eval("system.socket.{0}()".format(config.socket()))
-	event = eval("system.event.{0}()".format(config.event()))
+config = system.config.default()
+socket = eval("system.socket.{0}()".format(config.value('socket')))
+event = eval("system.event.{0}()".format(config.value('event')))
+mainloop = eval("system.mainloop.{0}".format(config.value('mainloop')))
 
-	address = config.address()
-	socket.bind(address)
 
-except:
-	output.exception(__file__, "Compulsory plugins failed to load", "Please check dependent libraries")
+address = config.value('address')
+socket.bind(address)
+
+event.reg_socket(socket.socket)
+event.reg_on_recv(mainloop)
+event.start()
+
 
 
 

@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 import sys
-sys.path.append('../domashMeta')
+sys.path.append('../../domashMeta')
 import output
 
 output.exception('unitTest', 'Just a test', 'No action needed')

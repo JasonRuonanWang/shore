@@ -27,54 +27,15 @@
 #	 jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
 import sys
-import zmq
 sys.path.append('../domashMeta')
 import output
 
-class socket_zmq:
-
-	address = None
-	isbound = None
-
-	def __del__(self):
-		if self.isbound:
-			self.unbind()
-
-	def bind(self, address):
-
-		self.address = address
-
-		while True:
-			try:
-				self.context = zmq.Context(10)
-				self.socket = self.context.socket(zmq.REP)
-				self.socket.bind(self.address)
-				self.isbound = True
-				output.printf('bound {0}'.format(self.address),'blue')
-				return self.socket
-			except:
-				output.exception(__name__,'unable to bind address'.format(self.address),'')
-				self.address = raw_input('please re-enter the local address:')
-
-
-	def unbind(self):
-		try:
-			self.socket.unbind(self.address)
-			self.isbound = False 
-			output.printf('unbound {0}'.format(self.address),'blue')
-		except:
-			output.exception(__name__,'unable to unbind address'.format(self.address),'')
-
-	
-
-
-
-
-
+def mainloop(request):
+	print request
 
 
 def instantiate():
-	return socket_zmq
+	return mainloop
 
 
 

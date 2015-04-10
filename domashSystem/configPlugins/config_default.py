@@ -46,23 +46,12 @@ class config_default:
 		except:
 			output.exception(__name__,'Cannot find config file','Check if config file is in domash root directory')
 
-	def socket(self):
+	def value(self, key):
 		try:
-			return self.__config_dict__['socket']
+			return self.__config_dict__[key]
 		except:
-			return
+			output.exception(__name__,'Cannot find the key {0} in config file'.format(key),'Check if config file is complete')
 
-	def event(self):
-		try:
-			return self.__config_dict__['event']
-		except:
-			return
-
-	def address(self):
-		try:
-			return self.__config_dict__['address']
-		except:
-			return
 
 	def print_dict():
 		print __config_dict__

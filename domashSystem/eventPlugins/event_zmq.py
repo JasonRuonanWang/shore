@@ -30,14 +30,32 @@ import zmq
 from zmq.eventloop.zmqstream import ZMQStream
 from zmq.eventloop.ioloop import IOLoop
 
+
 class event_zmq:
 
-	def __init__(self):
-		return
-	 
+	__stream__ = None
+
+	__on_recv__ = None
+
+
+
+	def reg_socket(self, socket):
+		self.__stream__ = ZMQStream(socket)
+
+	def start(self):
+		IOLoop.instance().start()
+
+	def reg_on_recv(self, func):
+		self.__on_recv__ = func
+		def on_recv(stream, msg):
+			self.__on_recv__(msg)
+			stream.send('OK')
+		self.__stream__.on_recv_stream(on_recv)
+
+		
+
 
 def instantiate():
 	return event_zmq
-
 
 
