@@ -3,11 +3,13 @@
 import zmq
 
 
-context = zmq.Context(10)
+context = zmq.Context()
 socket = context.socket(zmq.REQ)
 socket.connect('tcp://180.149.250.157:12306')
 
-while True:
-	socket.send('aa')
-	r = socket.recv()
+
+socket.send("just a test")
+r = socket.recv()
+print r
+
 

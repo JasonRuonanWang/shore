@@ -27,15 +27,21 @@
 #	 jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
 import sys
+import numpy
 sys.path.append('../domashMeta')
 import output
 
-def mainloop(request):
-	print request
+
+class mainloop_default:
+
+	def getfunc(self):
+		def mainloop(req):
+			print req
+		return mainloop
 
 
 def instantiate():
-	return mainloop
+	return mainloop_default
 
 
 

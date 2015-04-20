@@ -34,16 +34,15 @@ import output
 
 
 config = system.config.default()
-socket = eval("system.socket.{0}()".format(config.value('socket')))
+config.print_dict()
 event = eval("system.event.{0}()".format(config.value('event')))
-mainloop = eval("system.mainloop.{0}".format(config.value('mainloop')))
+mainloop = eval("system.mainloop.{0}()".format(config.value('mainloop')))
 
 
 address = config.value('address')
-socket.bind(address)
+event.bind(address)
 
-event.reg_socket(socket.socket)
-event.reg_on_recv(mainloop)
+event.reg_on_recv(mainloop.getfunc())
 event.start()
 
 

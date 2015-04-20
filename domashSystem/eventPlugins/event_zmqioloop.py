@@ -26,18 +26,21 @@
 #	 Any bugs, problems, and/or suggestions please email to 
 #	 jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
+import zmq 
+from zmq.eventloop.zmqstream import ZMQStream
+from zmq.eventloop.ioloop import IOLoop
 import sys
-import zmq
 sys.path.append('../domashMeta')
 import output
 
-class socket_zmq:
 
-	address = None
-	isbound = None
+class event:
+
+	__isbound__ = None
+	__stream__ = None
 
 	def __del__(self):
-		if self.isbound:
+		if self.__isbound__:
 			self.unbind()
 
 	def bind(self, address):
@@ -49,32 +52,33 @@ class socket_zmq:
 				self.context = zmq.Context(10)
 				self.socket = self.context.socket(zmq.REP)
 				self.socket.bind(self.address)
-				self.isbound = True
+				self.__isbound__ = True
 				output.printf('bound {0}'.format(self.address),'blue')
-				return self.socket
+				self.__stream__ = ZMQStream(self.socket)
+				return
 			except:
 				output.exception(__name__,'unable to bind address'.format(self.address),'')
 				self.address = raw_input('please re-enter the local address:')
 
-
 	def unbind(self):
 		try:
 			self.socket.unbind(self.address)
-			self.isbound = False 
+			self.__isbound__ = False 
 			output.printf('unbound {0}'.format(self.address),'blue')
 		except:
 			output.exception(__name__,'unable to unbind address'.format(self.address),'')
 
-	
+	def start(self):
+		IOLoop.instance().start()
 
-
-
-
-
+	def reg_on_recv(self, func):
+		def on_recv(stream, msg):
+			func(msg)
+			stream.send('OK')
+		self.__stream__.on_recv_stream(on_recv)
 
 
 def instantiate():
-	return socket_zmq
-
+	return event
 
 

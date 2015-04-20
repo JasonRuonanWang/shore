@@ -40,7 +40,8 @@ class config_default:
 				try:
 					left = line.split('=')[0]
 					right = line.split('=')[1].split('\n')[0]
-					self.__config_dict__.update({left:right})
+					if left[0] != '#':
+						self.__config_dict__.update({left:right})
 				except:
 					continue
 		except:
@@ -53,8 +54,8 @@ class config_default:
 			output.exception(__name__,'Cannot find the key {0} in config file'.format(key),'Check if config file is complete')
 
 
-	def print_dict():
-		print __config_dict__
+	def print_dict(self):
+		print self.__config_dict__
 
 
 def instantiate():
