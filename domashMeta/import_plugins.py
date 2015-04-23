@@ -22,7 +22,7 @@
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
 #    MA 02111-1307  USA
 #
-#	 Any bugs, problems, and/or suggestions please email to 
+#	 Any bugs, problems, and/or suggestions please email to
 #	 jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
 from glob import glob
@@ -43,18 +43,18 @@ category_name =  __file__.split('/')[-2].lower()[0:-7]
 # obtain the list of plugin files
 __files__ = glob('{0}/{1}_*.py'.format(os.path.abspath(__path__[0]), category_name))
 for _pc in __files__:
-	# obtain the plugin file name
-	plugin_filename = os.path.splitext(os.path.basename(_pc))[0]
-	# obtain the plugin name
-	plugin_name = plugin_filename.split('_')[1].lower()
-	# import the plugin as a module
-	plugin_module = __import__('{0}.{1}'.format(__name__, plugin_filename), fromlist=[__name__])
-	# define the object of the plugin instance, using the plugin name as the object name
-	exec(plugin_name + '= plugin_module.instantiate()')
-	# register the object with the dictionary
-	__plugin_dict__.update({plugin_name:eval(plugin_name)})
-	# done
-	output.printf("|- " + plugin_filename + " imported.", 'l_yellow')
+    # obtain the plugin file name
+    plugin_filename = os.path.splitext(os.path.basename(_pc))[0]
+    # obtain the plugin name
+    plugin_name = plugin_filename.split('_')[1].lower()
+    # import the plugin as a module
+    plugin_module = __import__('{0}.{1}'.format(__name__, plugin_filename), fromlist=[__name__])
+    # define the object of the plugin instance, using the plugin name as the object name
+    exec(plugin_name + '= plugin_module.get_class()')
+    # register the object with the dictionary
+    __plugin_dict__.update({plugin_name:eval(plugin_name)})
+    # done
+    output.printf("|- " + plugin_filename + " imported.", 'l_yellow')
 
 
 

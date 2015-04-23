@@ -23,62 +23,63 @@
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
 #    MA 02111-1307  USA
 #
-#	 Any bugs, problems, and/or suggestions please email to 
+#	 Any bugs, problems, and/or suggestions please email to
 #	 jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
-import zmq 
+import zmq
 from zmq.eventloop.zmqstream import ZMQStream
 from zmq.eventloop.ioloop import IOLoop
 import sys
 sys.path.append('../domashMeta')
 import output
+import event
 
 
-class event:
+class event_zmqioloop(event.event):
 
-	__isbound__ = None
-	__stream__ = None
+    def __init__(self, address):
+        self.__isbound = None
+        self.__stream = None
+        self.__url = address
+        self.__socket = None
+        self.__bind()
 
-	def __del__(self):
-		if self.__isbound__:
-			self.unbind()
+    def __del__(self):
+        if self.__isbound:
+            self.__unbind()
 
-	def bind(self, address):
+    def __bind(self):
+        while True:
+            try:
+                self.context = zmq.Context(10)
+                self.__socket = self.context.socket(zmq.REP)
+                self.__socket.bind(self.__url)
+                self.__isbound = True
+                output.printf('bound {0}'.format(self.__url),'blue')
+                self.__stream = ZMQStream(self.__socket)
+                return
+            except:
+                output.exception(__name__,'unable to bind address'.format(self.__url),'')
+                self.__url = raw_input('please re-enter the local address:')
 
-		self.address = address
+    def __unbind(self):
+        try:
+            self.__socket.unbind(self.__url)
+            self.__isbound = False
+            output.printf('unbound {0}'.format(self.__url),'blue')
+        except:
+            output.exception(__name__,'unable to unbind address'.format(self.__url),'')
 
-		while True:
-			try:
-				self.context = zmq.Context(10)
-				self.socket = self.context.socket(zmq.REP)
-				self.socket.bind(self.address)
-				self.__isbound__ = True
-				output.printf('bound {0}'.format(self.address),'blue')
-				self.__stream__ = ZMQStream(self.socket)
-				return
-			except:
-				output.exception(__name__,'unable to bind address'.format(self.address),'')
-				self.address = raw_input('please re-enter the local address:')
-
-	def unbind(self):
-		try:
-			self.socket.unbind(self.address)
-			self.__isbound__ = False 
-			output.printf('unbound {0}'.format(self.address),'blue')
-		except:
-			output.exception(__name__,'unable to unbind address'.format(self.address),'')
-
-	def start(self):
-		IOLoop.instance().start()
-
-	def reg_on_recv(self, func):
-		def on_recv(stream, msg):
-			func(msg)
-			stream.send('OK')
-		self.__stream__.on_recv_stream(on_recv)
+    def start(self):
+        def on_recv(stream, msg):
+            self.__mainloop(msg)
+            self.__stream.send('OK')
+        self.__stream.on_recv_stream(on_recv)
+        IOLoop.instance().start()
 
 
-def instantiate():
-	return event
+
+def get_class():
+    return event_zmqioloop
 
 

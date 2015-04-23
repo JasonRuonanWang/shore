@@ -23,25 +23,19 @@
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
 #    MA 02111-1307  USA
 #
-#	 Any bugs, problems, and/or suggestions please email to 
+#	 Any bugs, problems, and/or suggestions please email to
 #	 jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
-import sys
-import numpy
-sys.path.append('../domashMeta')
-import output
+
+import storage
+class storage_hdf5(storage.storage):
+    def __read(self):
+        return
+
+    def __write(self):
+        return
 
 
-class mainloop_default:
-
-	def getfunc(self):
-		def mainloop(req):
-			print req
-		return mainloop
-
-
-def instantiate():
-	return mainloop_default
-
-
+def get_class():
+    return storage_hdf5
 

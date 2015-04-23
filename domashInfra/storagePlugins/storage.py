@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#
 #    (c) University of Western Australia
 #    International Centre of Radio Astronomy Research
 #    M468/35 Stirling Hwy
@@ -26,19 +26,12 @@
 #	 Any bugs, problems, and/or suggestions please email to
 #	 jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
-import domashInfra as infra
-import domashSystem as system
-import sys
-sys.path.append('domashMeta')
-import output
+class storage:
+    def __init__(self, event):
+        event.reg_observer(self.event_handler)
 
-
-config = system.config.default()
-config.print_dict()
-address = config.value('address')
-event = eval("system.event.{0}(address)".format(config.value('event')))
-storage = eval("infra.storage.{0}(event)".format(config.value('storage')))
-event.start()
+    def event_handler(self, msg):
+        print msg
 
 
 
