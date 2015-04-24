@@ -33,13 +33,18 @@ sys.path.append('domashMeta')
 import output
 
 
-config = system.config.default()
-config.print_dict()
-address = config.value('address')
-event = eval("system.event.{0}(address)".format(config.value('event')))
-storage = eval("infra.storage.{0}(event)".format(config.value('storage')))
-event.start()
+def start_daemon():
+    config = system.config.default()
+    config.print_dict()
+    address = config.value('address')
+    event = eval("system.event.{0}(address)".format(config.value('event')))
+    storage = eval("infra.storage.{0}(event)".format(config.value('storage')))
+    event.start()
 
 
+print __name__
+
+if __name__ == "__main__":
+    start_daemon()
 
 

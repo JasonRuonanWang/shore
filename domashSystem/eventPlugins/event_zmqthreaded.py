@@ -35,6 +35,7 @@ from event import event
 
 class event_threaded(event):
 
+    __context = zmq.Context.instance()
     __isbound = False
     __socket_clients = None
     __socket_workers = None
@@ -45,17 +46,19 @@ class event_threaded(event):
         self.__url_clients = address
         self.__bind()
 
-    def __worker_routine(self, context=None):
-        context = context or zmq.Context.instance()
-        self.__socket_worker = context.socket(zmq.REP)
+    def __worker_routine(self):
+        self.__socket_worker = self.__context.socket(zmq.REP)
         self.__socket_worker.connect(self.__url_workers)
         while True:
             msg = self.__socket_worker.recv()
             self._mainloop(msg)
             self.__socket_worker.send("OK")
             if msg == "exit":
+                try:
+                    self.__context.term()
+                except:
+                    return
                 sys.exit()
-
 
     def __del__(self):
         if self.__isbound:
@@ -63,12 +66,11 @@ class event_threaded(event):
 
     def __bind(self):
         while True:
-            context = zmq.Context.instance()
-            self.__clients = context.socket(zmq.ROUTER)
-            self.__workers = context.socket(zmq.DEALER)
+            self.__socket_clients = self.__context.socket(zmq.ROUTER)
+            self.__socket_workers = self.__context.socket(zmq.DEALER)
             try:
-                self.__clients.bind(self.__url_clients)
-                self.__workers.bind(self.__url_workers)
+                self.__socket_clients.bind(self.__url_clients)
+                self.__socket_workers.bind(self.__url_workers)
                 self.__isbound = True
                 output.printf('bound {0}'.format(self.__url_clients),'blue')
                 return
@@ -88,7 +90,7 @@ class event_threaded(event):
         for i in range(1):
             thread = threading.Thread(target=self.__worker_routine, args=())
             thread.start()
-        zmq.device(zmq.QUEUE, self.__clients, self.__workers)
+        zmq.device(zmq.QUEUE, self.__socket_clients, self.__socket_workers)
 
 def get_class():
     return event_threaded

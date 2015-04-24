@@ -1,4 +1,3 @@
-#
 #    (c) University of Western Australia
 #    International Centre of Radio Astronomy Research
 #    M468/35 Stirling Hwy
@@ -33,6 +32,8 @@ import sys
 sys.path.append('../domashMeta')
 import output
 import event
+import time
+import threading
 
 
 class event_zmqioloop(event.event):
@@ -72,10 +73,18 @@ class event_zmqioloop(event.event):
 
     def start(self):
         def on_recv(stream, msg):
-            self.__mainloop(msg)
-            self.__stream.send('OK')
+            self._mainloop(msg)
+            stream.send('OK')
+            print "sent OK"
+            if msg[0] == "exit":
+                t = threading.Thread(target=self.stop)
+                t.start()
         self.__stream.on_recv_stream(on_recv)
         IOLoop.instance().start()
+
+    def stop(self):
+        time.sleep(1)
+        IOLoop.instance().stop()
 
 
 
