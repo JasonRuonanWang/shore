@@ -42,8 +42,6 @@ def start_daemon():
     event.start()
 
 
-print __name__
-
 if __name__ == "__main__":
     start_daemon()
 

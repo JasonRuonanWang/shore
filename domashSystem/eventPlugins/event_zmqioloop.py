@@ -77,12 +77,12 @@ class event_zmqioloop(event.event):
             stream.send('OK')
             print "sent OK"
             if msg[0] == "exit":
-                t = threading.Thread(target=self.stop)
+                t = threading.Thread(target=self.__stop)
                 t.start()
         self.__stream.on_recv_stream(on_recv)
         IOLoop.instance().start()
 
-    def stop(self):
+    def __stop(self):
         time.sleep(1)
         IOLoop.instance().stop()
 

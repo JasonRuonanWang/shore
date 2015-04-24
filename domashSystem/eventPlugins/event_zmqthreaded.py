@@ -32,6 +32,7 @@ sys.path.append('../domashMeta')
 import output
 import threading
 from event import event
+import time
 
 class event_threaded(event):
 
@@ -41,6 +42,7 @@ class event_threaded(event):
     __socket_workers = None
     __socket_worker = None
     __url_workers = "inproc://workers"
+    __threads = []
 
     def __init__(self, address):
         self.__url_clients = address
@@ -49,20 +51,18 @@ class event_threaded(event):
     def __worker_routine(self):
         self.__socket_worker = self.__context.socket(zmq.REP)
         self.__socket_worker.connect(self.__url_workers)
+        msg = None
         while True:
             msg = self.__socket_worker.recv()
             self._mainloop(msg)
             self.__socket_worker.send("OK")
-            if msg == "exit":
-                try:
-                    self.__context.term()
-                except:
-                    return
-                sys.exit()
+            if msg== "exit":
+                self.__socket_worker.close()
+                t = threading.Thread(target=self.__stop)
+                t.start()
+                break
+        output.printf("Worker thread is terminated!", 'blue')
 
-    def __del__(self):
-        if self.__isbound:
-            self.__unbind()
 
     def __bind(self):
         while True:
@@ -78,19 +78,25 @@ class event_threaded(event):
                 output.exception(__name__,'unable to bind address {0}'.format(self.__url_clients),'')
                 self.__url_clients = raw_input('please re-enter the local address:')
 
-    def __unbind(self):
-        try:
-            self.socket.unbind(self.__url_clients)
-            self.__isbound = False
-            output.printf('unbound {0}'.format(self.__url_clients),'blue')
-        except:
-            output.exception(__name__,'unable to unbind address'.format(self.__url_clients),'')
-
     def start(self):
         for i in range(1):
             thread = threading.Thread(target=self.__worker_routine, args=())
+            self.__threads.append(thread)
             thread.start()
-        zmq.device(zmq.QUEUE, self.__socket_clients, self.__socket_workers)
+        try:
+            zmq.device(zmq.QUEUE, self.__socket_clients, self.__socket_workers)
+        except:
+            output.printf("ZMQ Device is terminated!", 'blue')
+            return
+
+    def __stop(self):
+        self.__socket_workers.close()
+        self.__socket_clients.close()
+        time.sleep(1)
+        self.__context.term()
+        output.printf("ZMQ Context is terminated!", 'blue')
+
+
 
 def get_class():
     return event_threaded

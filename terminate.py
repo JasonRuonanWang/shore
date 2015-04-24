@@ -1,10 +1,14 @@
 #!/usr/bin/python
 
+import domashSystem as system
 import zmq
+
+config = system.config.default()
+address = config.value('address')
 
 context = zmq.Context()
 socket = context.socket(zmq.REQ)
-socket.connect('tcp://180.149.250.157:12306')
+socket.connect(address)
 
 socket.send("exit")
 r = socket.recv()
