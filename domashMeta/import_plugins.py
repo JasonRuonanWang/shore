@@ -32,6 +32,8 @@ sys.path.append('../domashMeta')
 import output
 
 
+DEBUG = True
+
 # obtain the plugin category name in a string
 category_name =  __file__.split('/')[-2].lower()[0:-7]
 # define the plugin dictionary
@@ -48,13 +50,27 @@ for _pc in __files__:
     # obtain the plugin name
     plugin_name = plugin_filename.split('_')[1].lower()
     # import the plugin as a module
-    plugin_module = __import__('{0}.{1}'.format(__name__, plugin_filename), fromlist=[__name__])
-    # define the object of the plugin instance, using the plugin name as the object name
-    exec(plugin_name + '= plugin_module.get_class()')
-    # register the object with the dictionary
-    __plugin_dict__.update({plugin_name:eval(plugin_name)})
-    # done
-    output.printf("|- " + plugin_filename + " imported.", 'l_yellow')
+
+    if DEBUG:
+        plugin_module = __import__('{0}.{1}'.format(__name__, plugin_filename), fromlist=[__name__])
+        # define the object of the plugin instance, using the plugin name as the object name
+        exec(plugin_name + '= plugin_module.get_class()')
+        # register the object with the dictionary
+        __plugin_dict__.update({plugin_name:eval(plugin_name)})
+        # done
+        output.printf("|- " + plugin_filename + " imported.", 'l_yellow')
+
+    else:
+        try:
+            plugin_module = __import__('{0}.{1}'.format(__name__, plugin_filename), fromlist=[__name__])
+            # define the object of the plugin instance, using the plugin name as the object name
+            exec(plugin_name + '= plugin_module.get_class()')
+            # register the object with the dictionary
+            __plugin_dict__.update({plugin_name:eval(plugin_name)})
+            # done
+            output.printf("|- " + plugin_filename + " imported.", 'l_yellow')
+        except:
+            output.exception(__file__,"Failed to import plugin {0}".format(plugin_filename),"Check dependent libraries")
 
 
 

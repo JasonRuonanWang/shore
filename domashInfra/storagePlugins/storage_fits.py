@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#
 #    (c) University of Western Australia
 #    International Centre of Radio Astronomy Research
 #    M468/35 Stirling Hwy
@@ -26,27 +26,18 @@
 #	 Any bugs, problems, and/or suggestions please email to
 #	 jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
-import domashInfra as infra
-import domashSystem as system
-import sys
-sys.path.append('domashMeta')
-import output
+
+from storage import storage
 
 
-def start_daemon():
-    config = system.config.default()
-    config.print_dict()
-    address = config.value('address')
-    event = eval("system.event.{0}(address)".format(config.value('event')))
+class storage_fits(storage):
 
-    for category in infra.plugin_dict:
-        for plugin in infra.plugin_dict[category]:
-            instance = eval("infra.{0}.{1}(event)".format(category, plugin))
-            output.printf('Plugin {0}.{1} instantiated and registered into the event loop.'.format(category, plugin), 'yellow')
+    def read(self):
+        print "read from storage_fits"
 
-    event.start()
+    def write(self):
+        return
 
-if __name__ == "__main__":
-    start_daemon()
-
+def get_class():
+    return storage_fits
 

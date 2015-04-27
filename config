@@ -3,6 +3,5 @@ dsocket=zmq
 #event=zmqioloop
 event=zmqthreaded
 mainloop=default
-storage=hdf5
 
 

@@ -53,9 +53,9 @@ class event_threaded(event):
         self.__socket_worker.connect(self.__url_workers)
         msg = None
         while True:
-            msg = self.__socket_worker.recv()
+            msg = self.__socket_worker.recv_json()
             self._mainloop(msg)
-            self.__socket_worker.send("OK")
+            self.__socket_worker.send_json("OK")
             if msg== "exit":
                 self.__socket_worker.close()
                 t = threading.Thread(target=self.__stop)

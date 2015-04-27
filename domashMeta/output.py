@@ -22,7 +22,7 @@
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
 #    MA 02111-1307  USA
 #
-#	 Any bugs, problems, and/or suggestions please email to 
+#	 Any bugs, problems, and/or suggestions please email to
 #	 jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
 
@@ -67,18 +67,18 @@ l_onpurple = '\033[105m'
 l_onlightblue = '\033[106m'
 l_onwhite = '\033[107m'
 
-	
+
 def exception(plugin, description, suggestion):
-	print red + bold + flash + 'Exception from plugin: ' + plugin + '! ' + endc + red + bold + 'Description: ' + description + '. Suggestion: ' + suggestion + '.' + endc 
+	print red + bold + flash + 'Exception from: ' + plugin + '! ' + endc + red + bold + 'Description: ' + description + '. Suggestion: ' + suggestion + '.' + endc
 
 def warning(plugin, description):
-	print bold + yellow + 'Warning from plugin: ' + plugin + '! Description: ' + description + '.' + endc
+	print bold + yellow + 'Warning from: ' + plugin + '! Description: ' + description + '.' + endc
 
 def printf(text, *args):
 	message = ''
 	for arg in args:
 		try:
-			message += eval(arg) 
+			message += eval(arg)
 		except:
 			exception(__name__, 'printf() does not accept argument \'' + arg + '\'', 'See domashMeta/output.py for legal arguments')
 	print message + text + endc

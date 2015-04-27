@@ -26,12 +26,24 @@
 #	 Any bugs, problems, and/or suggestions please email to
 #	 jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
-class storage:
-    def __init__(self, event):
-        event.reg_observer(self.event_handler)
+import sys
+sys.path.append('domashMeta')
+import output
+sys.path.append('domashInfra')
+from infra import infra
+
+class storage(infra):
 
     def event_handler(self, msg):
-        print msg
+        print 'parent event_handler: storage'
+        self.read()
+
+    def read(self):
+        output.printf('infra.storage.read() is a pure virtual function and you must implement it in derived class','red')
+
+    def write(self):
+        output.printf('infra.storage.write() is a pure virtual function and you must implement it in derived class','red')
+
 
 
 

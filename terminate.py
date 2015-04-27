@@ -10,8 +10,8 @@ context = zmq.Context()
 socket = context.socket(zmq.REQ)
 socket.connect(address)
 
-socket.send("exit")
-r = socket.recv()
+socket.send_json("exit")
+r = socket.recv_json()
 print r
 
 

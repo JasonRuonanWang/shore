@@ -27,14 +27,19 @@
 #	 jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
 
-import storage
-class storage_hdf5(storage.storage):
-    def __read(self):
+import h5py
+from storage import storage
+
+
+class storage_hdf5(storage):
+
+
+    def read(self):
+        print "read from storage_hdf5"
         return
 
-    def __write(self):
+    def write(self):
         return
-
 
 def get_class():
     return storage_hdf5
