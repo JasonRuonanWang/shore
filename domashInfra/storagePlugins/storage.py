@@ -35,14 +35,22 @@ from infra import infra
 class storage(infra):
 
     def event_handler(self, msg):
-        print 'parent event_handler: storage'
-        self.read()
+        if msg.has_key('to_module'):
+            if msg['to_module'] != 'storage':
+                return
+        else:
+            return
+        self.event_handler_child(msg)
+
+
+    def event_handler_child(self, msg):
+        output.printf('infra.storage.event_handler_child() is a pure virtual function and you must implement it in a derived class','red')
 
     def read(self):
-        output.printf('infra.storage.read() is a pure virtual function and you must implement it in derived class','red')
+        output.printf('infra.storage.read() is a pure virtual function and you must implement it in a derived class','red')
 
     def write(self):
-        output.printf('infra.storage.write() is a pure virtual function and you must implement it in derived class','red')
+        output.printf('infra.storage.write() is a pure virtual function and you must implement it in a derived class','red')
 
 
 

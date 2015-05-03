@@ -26,13 +26,13 @@
 #	 Any bugs, problems, and/or suggestions please email to
 #	 jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
-
 import h5py
 from storage import storage
 
-
 class storage_hdf5(storage):
 
+    def event_handler_child(self, msg):
+        print msg
 
     def read(self):
         print "read from storage_hdf5"
@@ -43,4 +43,8 @@ class storage_hdf5(storage):
 
 def get_class():
     return storage_hdf5
+
+
+
+
 

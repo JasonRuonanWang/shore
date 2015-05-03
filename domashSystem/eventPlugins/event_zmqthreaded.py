@@ -33,8 +33,9 @@ import output
 import threading
 from event import event
 import time
+import json
 
-class event_threaded(event):
+class event_zmqthreaded(event):
 
     __context = zmq.Context.instance()
     __isbound = False
@@ -54,15 +55,19 @@ class event_threaded(event):
         msg = None
         while True:
             msg = self.__socket_worker.recv_json()
-            self._mainloop(msg)
-            self.__socket_worker.send_json("OK")
-            if msg== "exit":
-                self.__socket_worker.close()
-                t = threading.Thread(target=self.__stop)
-                t.start()
-                break
-        output.printf("Worker thread is terminated!", 'blue')
-
+            if isinstance(msg, dict):
+                self.__socket_worker.send_json({"return": "OK"})
+                self.notify_observers(msg)
+                if msg.has_key('operation'):
+                    if msg['operation'] == 'exit':
+                        self.__socket_worker.close()
+                        t = threading.Thread(target=self.__stop)
+                        t.start()
+                        break
+            else:
+                self.__socket_worker.send_json({"return": "Error: Wrong JSON Object"})
+                continue
+        output.printf("system.event.zmqthreaded: Worker thread is terminated!", 'blue')
 
     def __bind(self):
         while True:
@@ -96,9 +101,12 @@ class event_threaded(event):
         self.__context.term()
         output.printf("ZMQ Context is terminated!", 'blue')
 
+    def event_handler_child():
+        pass
+
 
 
 def get_class():
-    return event_threaded
+    return event_zmqthreaded
 
 

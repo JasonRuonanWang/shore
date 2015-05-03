@@ -31,11 +31,11 @@ class infra(object):
     _push_event = None
 
     def __init__(self, event):
-        event.reg_observer(self.event_handler)
+        event.register_observer(self.event_handler)
         self.__reg_push_event(event)
 
     def __reg_push_event(self, event):
-        _push_event = event.push_event
+        _push_event = event.notify_observers
 
 
 
