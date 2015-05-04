@@ -31,7 +31,7 @@ from storage import storage
 
 class storage_hdf5(storage):
 
-    def event_handler_child(self, msg):
+    def event_handler_plugin(self, msg):
         print msg
 
     def read(self):

@@ -2,6 +2,6 @@ address=tcp://180.149.250.157:12306
 dsocket=zmq
 #event=zmqioloop
 event=zmqthreaded
-mainloop=default
+workflow=list
 
 

@@ -25,35 +25,38 @@
 #	 Any bugs, problems, and/or suggestions please email to
 #	 jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
+
 import sys
 sys.path.append('domashMeta')
 import output
+from workflow import workflow
 
-class event():
+class workflow_list(workflow):
 
-    __observers = []
+    flowlist = ['request', 'database', 'storage']
 
-    # Plugins should register this method for later pushing events to the notifier
-    # It is also called within system.event.<subclass> on receiving a request from sockets
-    def notify_observers(self, msg):
-        print 'from event loop: {0}'.format(msg)
-        for observer in self.__observers:
-            observer(msg)
+    def event_handler_plugin(self, msg):
+        next_module = self.get_next(msg['module'])
+        if next_module:
+            msg['module'] = next_module
+            msg['status'] = 'pre'
+            self._push_event(msg)
 
-    # Every plugin should call this method to register its event handler method
-    def register_observer(self, func):
-        self.__observers.append(func)
 
-    def event_handler(self, msg):
-        if msg.has_key('to_module'):
-            if msg['to_module'] != 'event':
-                return
+    def get_next(self, current):
+        index = self.flowlist.index(current)
+        if index + 1 == len(self.flowlist):
+            return None
         else:
-            return
-        self.event_handler_child(msg)
+            return self.flowlist[index + 1]
 
-    def event_handler_child(self, msg):
-        output.printf('infra.storage.event_handler_child() is a pure virtual function and you must implement it in a derived class','red')
+    def get_previous(self, current):
+        index = self.flowlist.index(current)
+        if index == 0:
+            return None
+        else:
+            return self.flowlist[index - 1]
 
 
-
+def get_class():
+    return workflow_list

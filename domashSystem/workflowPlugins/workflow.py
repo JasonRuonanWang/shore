@@ -25,35 +25,33 @@
 #	 Any bugs, problems, and/or suggestions please email to
 #	 jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
+
 import sys
 sys.path.append('domashMeta')
 import output
+sys.path.append('domashSystem')
+from system import system
 
-class event():
+class workflow(system):
 
-    __observers = []
-
-    # Plugins should register this method for later pushing events to the notifier
-    # It is also called within system.event.<subclass> on receiving a request from sockets
-    def notify_observers(self, msg):
-        print 'from event loop: {0}'.format(msg)
-        for observer in self.__observers:
-            observer(msg)
-
-    # Every plugin should call this method to register its event handler method
-    def register_observer(self, func):
-        self.__observers.append(func)
-
-    def event_handler(self, msg):
-        if msg.has_key('to_module'):
-            if msg['to_module'] != 'event':
-                return
-        else:
+    def event_handler_module(self, msg):
+        if msg.has_key('module') == False:
             return
-        self.event_handler_child(msg)
+        if msg.has_key('status') == False:
+            return
+        if msg['module'] != 'request':
+            if msg['status'] == 'pre':
+                return
+        self.event_handler_plugin(msg)
 
-    def event_handler_child(self, msg):
+    def event_handler_plugin(self, msg):
         output.printf('infra.storage.event_handler_child() is a pure virtual function and you must implement it in a derived class','red')
+
+    def am_i_called(self, current, last):
+        output.printf('system.workflow.get_next() is a pure virtual function and you must implement it in a derived class','red')
+
+    def am_i_notified(self, current, last):
+        output.printf('system.workflow.get_next() is a pure virtual function and you must implement it in a derived class','red')
 
 
 

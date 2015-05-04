@@ -32,10 +32,13 @@ class infra(object):
 
     def __init__(self, event):
         event.register_observer(self.event_handler)
-        self.__reg_push_event(event)
+        self._push_event = event.notify_observers
 
-    def __reg_push_event(self, event):
-        _push_event = event.notify_observers
+    def event_handler(self, msg):
+        if msg.has_key('status'):
+            if msg['status'] == 'pre':
+                self.event_handler_module(msg)
 
-
+    def event_handler_module(self, msg):
+        output.printf('infra.event_handler_module() is a pure virtual function and you must implement it in a derived class','red')
 

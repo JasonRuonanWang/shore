@@ -1,4 +1,3 @@
-#
 #    (c) University of Western Australia
 #    International Centre of Radio Astronomy Research
 #    M468/35 Stirling Hwy
@@ -34,16 +33,15 @@ from infra import infra
 
 class storage(infra):
 
-    def event_handler(self, msg):
-        if msg.has_key('to_module'):
-            if msg['to_module'] != 'storage':
+    def event_handler_module(self, msg):
+        if msg.has_key('from'):
+            if msg['from'] != 'storage':
                 return
         else:
             return
-        self.event_handler_child(msg)
+        self.event_handler_plugin(msg)
 
-
-    def event_handler_child(self, msg):
+    def event_handler_plugin(self, msg):
         output.printf('infra.storage.event_handler_child() is a pure virtual function and you must implement it in a derived class','red')
 
     def read(self):

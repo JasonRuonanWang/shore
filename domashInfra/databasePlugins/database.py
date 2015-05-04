@@ -29,12 +29,19 @@
 import sys
 sys.path.append('domashInfra')
 from infra import infra
+sys.path.append('domashMeta')
+import output
 
 class database(infra):
 
-    def event_handler(self, msg):
-        print 'database event handler'
+    def event_handler_module(self, msg):
+        if msg.has_key('module'):
+            if msg['module'] == 'database':
+                self.event_handler_plugin(msg)
 
+
+    def event_handler_plugin(self, msg):
+        output.printf('infra.database.event_handler_plugin() is a pure virtual function and you must implement it in a derived class','red')
 
 
 

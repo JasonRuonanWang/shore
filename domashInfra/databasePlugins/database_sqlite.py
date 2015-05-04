@@ -31,10 +31,15 @@ from database import database
 
 
 class database_sqlite(database):
+
     def __query(self):
         return
 
-
+    def event_handler_plugin(self, msg):
+        print 'aaa'
+#        print 'sqlite event handler'
+#        msg['status'] = 'post'
+#        self._push_event(msg)
 
 def get_class():
     return database_sqlite

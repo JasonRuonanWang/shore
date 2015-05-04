@@ -32,12 +32,12 @@ import sys
 sys.path.append('domashMeta')
 import output
 
-
 def start_daemon():
     config = system.config.default()
     config.print_dict()
     address = config.value('address')
     event = eval("system.event.{0}(address)".format(config.value('event')))
+    workflow = eval("system.workflow.{0}(event)".format(config.value('workflow')))
 
     for category in infra.plugin_dict:
         for plugin in infra.plugin_dict[category]:
