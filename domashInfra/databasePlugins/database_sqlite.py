@@ -36,8 +36,8 @@ class database_sqlite(database):
         return
 
     def event_handler_plugin(self, msg):
-        print 'aaa'
-#        print 'sqlite event handler'
+        print 'sqlite event handler'
+        print msg
 #        msg['status'] = 'post'
 #        self._push_event(msg)
 

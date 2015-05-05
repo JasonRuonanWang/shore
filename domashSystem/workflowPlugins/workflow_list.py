@@ -30,6 +30,7 @@ import sys
 sys.path.append('domashMeta')
 import output
 from workflow import workflow
+import copy
 
 class workflow_list(workflow):
 
@@ -38,9 +39,10 @@ class workflow_list(workflow):
     def event_handler_plugin(self, msg):
         next_module = self.get_next(msg['module'])
         if next_module:
-            msg['module'] = next_module
-            msg['status'] = 'pre'
-            self._push_event(msg)
+            msg_send = copy.copy(msg)
+            msg_send['module'] = next_module
+            msg_send['status'] = 'pre'
+            self._push_event(msg_send)
 
 
     def get_next(self, current):

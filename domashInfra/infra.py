@@ -42,3 +42,5 @@ class infra(object):
     def event_handler_module(self, msg):
         output.printf('infra.event_handler_module() is a pure virtual function and you must implement it in a derived class','red')
 
+
+
