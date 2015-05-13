@@ -25,19 +25,16 @@
 #	 Any bugs, problems, and/or suggestions please email to
 #	 jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
-class system(object):
+from guid import guid
 
-    _push_event = None
 
-    def __init__(self, event):
-        event.register_observer(self.event_handler)
-        self._push_event = event.notify_observers
+class guid_python(guid):
 
-    def event_handler(self, msg):
-        self.event_handler_module(msg)
+    def event_handler_plugin(self, msg):
+        return False
 
-    def event_handler_module(self, msg):
-        output.printf('system.event_handler_module() is a pure virtual function and you must implement it in a derived class','red')
+def get_class():
+    return guid_python
 
 
 

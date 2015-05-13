@@ -26,19 +26,33 @@
 #	 jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
 
-from storage import storage
+import sys
+sys.path.append('domashInfra')
+from infra import infra
+sys.path.append('domashMeta')
+import output
+
+class guid:
+
+    def __init__(self, event):
+        event.register_observer(self.event_handler)
+        self._push_event = event.notify_observers
+
+    def event_handler(self, msg_recv):
+        msg = copy.copy(msg_recv)
+        if not msg.has_key('module'):
+            return False
+        if msg['module'] != 'guid':
+            return False
+        if not msg.has_key('status'):
+            return False
+        if msg['status'] != 'pre':
+            return False
+
+        if self.event_handler_plugin(msg):
+            msg['status'] = 'post'
+            self._push_event(msg)
 
 
-class storage_adios(storage):
 
-
-    def read(self):
-        pass
-
-    def write(self):
-        pass
-
-
-def get_class():
-    return storage_adios
 

@@ -1,4 +1,3 @@
-#
 #    (c) University of Western Australia
 #    International Centre of Radio Astronomy Research
 #    M468/35 Stirling Hwy
@@ -32,11 +31,13 @@ from storage import storage
 
 class storage_fits(storage):
 
+    __plugin__ = 'fits'
+
     def read(self):
-        print "read from storage_fits"
+        pass
 
     def write(self):
-        return
+        pass
 
 def get_class():
     return storage_fits

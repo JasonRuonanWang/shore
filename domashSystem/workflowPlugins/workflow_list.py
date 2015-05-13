@@ -30,34 +30,33 @@ import sys
 sys.path.append('domashMeta')
 import output
 from workflow import workflow
-import copy
 
 class workflow_list(workflow):
 
-    flowlist = ['request', 'database', 'storage']
+    flowlist_read = ['request', 'database', 'storage']
+    flowlist_write = ['request', 'database', 'storage']
+    flowlist_query = ['request', 'database']
 
     def event_handler_plugin(self, msg):
-        next_module = self.get_next(msg['module'])
+        next_module = self.get_next(self.flowlist_write, msg['module'])
         if next_module:
-            msg_send = copy.copy(msg)
-            msg_send['module'] = next_module
-            msg_send['status'] = 'pre'
-            self._push_event(msg_send)
+            msg['module'] = next_module
+            msg['status'] = 'pre'
+            self._push_event(msg)
 
-
-    def get_next(self, current):
-        index = self.flowlist.index(current)
-        if index + 1 == len(self.flowlist):
+    def get_next(self, flowlist, current):
+        index = flowlist.index(current)
+        if index + 1 == len(flowlist):
             return None
         else:
-            return self.flowlist[index + 1]
+            return flowlist[index + 1]
 
-    def get_previous(self, current):
-        index = self.flowlist.index(current)
+    def get_previous(self, flowlist, current):
+        index = flowlist.index(current)
         if index == 0:
             return None
         else:
-            return self.flowlist[index - 1]
+            return flowlist[index - 1]
 
 
 def get_class():

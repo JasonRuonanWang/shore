@@ -1,4 +1,3 @@
-#
 #    (c) University of Western Australia
 #    International Centre of Radio Astronomy Research
 #    M468/35 Stirling Hwy
@@ -26,20 +25,22 @@
 #	 Any bugs, problems, and/or suggestions please email to
 #	 jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
-
+import sqlite3
 from database import database
 
 
 class database_sqlite(database):
 
-    def __query(self):
+    def create_table(self, tablename):
+        pass
+
+    def query(self):
         return
 
     def event_handler_plugin(self, msg):
-        print 'sqlite event handler'
-        print msg
-#        msg['status'] = 'post'
-#        self._push_event(msg)
+        msg['status'] = 'post'
+        msg['backend'] = 'adios'
+        self._push_event(msg)
 
 def get_class():
     return database_sqlite

@@ -25,6 +25,7 @@
 #	 Any bugs, problems, and/or suggestions please email to
 #	 jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
+
 import sys
 sys.path.append('domashMeta')
 import output
@@ -34,15 +35,18 @@ from infra import infra
 class storage(infra):
 
     def event_handler_module(self, msg):
-        if msg.has_key('from'):
-            if msg['from'] != 'storage':
-                return
-        else:
-            return
-        self.event_handler_plugin(msg)
 
-    def event_handler_plugin(self, msg):
-        output.printf('infra.storage.event_handler_child() is a pure virtual function and you must implement it in a derived class','red')
+
+        # verify if this plugin should respond
+        if not msg.has_key('backend'):
+            return False
+        if msg['backend'] != self.__class__.__name__.split('_')[-1]:
+            return False
+
+        if not msg.has_key('operation'):
+            return False
+        return True
+
 
     def read(self):
         output.printf('infra.storage.read() is a pure virtual function and you must implement it in a derived class','red')

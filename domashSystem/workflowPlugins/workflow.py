@@ -30,18 +30,22 @@ import sys
 sys.path.append('domashMeta')
 import output
 sys.path.append('domashSystem')
-from system import system
+import copy
 
-class workflow(system):
+class workflow:
 
-    def event_handler_module(self, msg):
-        if msg.has_key('module') == False:
+    def __init__(self, event):
+        event.register_observer(self.event_handler)
+        self._push_event = event.notify_observers
+
+    def event_handler(self, msg_recv):
+        msg = copy.copy(msg_recv)
+        if not msg.has_key('module'):
+            msg['module'] = 'request'
+        if not msg.has_key('status'):
+            msg['status'] = 'pre'
+        if msg['module'] != 'request' and msg['status'] == 'pre':
             return
-        if msg.has_key('status') == False:
-            return
-        if msg['module'] != 'request':
-            if msg['status'] == 'pre':
-                return
         self.event_handler_plugin(msg)
 
     def event_handler_plugin(self, msg):
