@@ -1,3 +1,4 @@
+#
 #    (c) University of Western Australia
 #    International Centre of Radio Astronomy Research
 #    M468/35 Stirling Hwy
@@ -25,34 +26,34 @@
 #	 Any bugs, problems, and/or suggestions please email to
 #	 jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
+import copy
 
-import sys
-sys.path.append('domashInfra')
-from infra import infra
-sys.path.append('domashMeta')
-import output
-
-class guid:
+class plugin(object):
 
     def __init__(self, event):
         event.register_observer(self.event_handler)
         self._push_event = event.notify_observers
 
     def event_handler(self, msg_recv):
+
         msg = copy.copy(msg_recv)
+
+        # check if this module should respond
+        print self.__class__.__name__.split('_')[0]
         if not msg.has_key('module'):
             return False
-        if msg['module'] != 'guid':
+        if msg['module'] != self.__class__.__name__.split('_')[0]:
             return False
+
+        # check if the event's status is pre processing
         if not msg.has_key('status'):
             return False
         if msg['status'] != 'pre':
             return False
 
-        if self.event_handler_plugin(msg):
+        if self.event_handler_module(msg):
             msg['status'] = 'post'
             self._push_event(msg)
-
 
 
 

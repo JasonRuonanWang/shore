@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-import domashSystem as system
+import shoreSystem as system
 import zmq
 import json
 

@@ -25,39 +25,41 @@
 #	 Any bugs, problems, and/or suggestions please email to
 #	 jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
-
+from glob import glob
+import os
 import sys
-sys.path.append('domashMeta')
+sys.path.append('shoreMeta')
 import output
-from workflow import workflow
-
-class workflow_list(workflow):
-
-    flowlist_read = ['request', 'database', 'storage']
-    flowlist_write = ['request', 'database', 'storage']
-    flowlist_query = ['request', 'database']
-
-    def event_handler_plugin(self, msg):
-        next_module = self.get_next(self.flowlist_write, msg['module'])
-        if next_module:
-            msg['module'] = next_module
-            msg['status'] = 'pre'
-            self._push_event(msg)
-
-    def get_next(self, flowlist, current):
-        index = flowlist.index(current)
-        if index + 1 == len(flowlist):
-            return None
-        else:
-            return flowlist[index + 1]
-
-    def get_previous(self, flowlist, current):
-        index = flowlist.index(current)
-        if index == 0:
-            return None
-        else:
-            return flowlist[index - 1]
 
 
-def get_class():
-    return workflow_list
+# obtain the list of plugin category directories
+__directories__ = glob('{0}/*Plugins'.format(os.path.abspath(__path__[0])))
+
+__categories__ = []
+
+plugin_dict = {}
+
+
+for _pc in __directories__:
+	# obtain the plugin category directory
+	category_dirname = os.path.splitext(os.path.basename(_pc))[0]
+	output.printf('Searching ' + category_dirname , 'bold', 'yellow')
+	# import the plugin category as a module
+	category_module = __import__('{0}.{1}'.format(__name__, category_dirname), fromlist=[__name__])
+	# define the object of the plugin category instance
+	exec(category_module.category_name + '= category_module')
+	# register all plugins of this category with the dictionary
+	plugin_dict.update({category_module.category_name:category_module.__plugin_dict__.keys()})
+	__categories__.append(category_module.category_name)
+
+
+def print_categories():
+	print __categories__
+
+def print_dictionary():
+	print plugin_dict
+
+def print_directories():
+	print __directories__
+
+

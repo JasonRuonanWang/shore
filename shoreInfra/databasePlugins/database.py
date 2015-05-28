@@ -1,4 +1,3 @@
-#
 #    (c) University of Western Australia
 #    International Centre of Radio Astronomy Research
 #    M468/35 Stirling Hwy
@@ -26,39 +25,22 @@
 #	 Any bugs, problems, and/or suggestions please email to
 #	 jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
-import copy
+import sys
+sys.path.append('domashMeta')
+import output
+from plugin import plugin
 
-class infra(object):
-
-    _push_event = None
-
-    def __init__(self, event):
-        event.register_observer(self.event_handler)
-        self._push_event = event.notify_observers
-
-    def event_handler(self, msg_recv):
-
-        msg = copy.copy(msg_recv)
-
-        # verify if this module should respond
-        if not msg.has_key('module'):
-            return False
-        if msg['module'] != self.__class__.__name__.split('_')[0]:
-            return False
-
-        # verify if the event's status is pre processing
-        if not msg.has_key('status'):
-            return False
-        if msg['status'] != 'pre':
-            return False
-
-        if self.event_handler_module(msg):
-            msg['status'] = 'post'
-            self._push_event(msg)
-
+class database(plugin):
 
     def event_handler_module(self, msg):
-        output.printf('infra.event_handler_module() is a pure virtual function and you must implement it in a derived class','red')
+        if msg.has_key('module'):
+            if msg['module'] == 'database':
+                self.event_handler_plugin(msg)
+
+
+    def event_handler_plugin(self, msg):
+        output.printf('infra.database.event_handler_plugin() is a pure virtual function and you must implement it in a derived class','red')
+
 
 
 

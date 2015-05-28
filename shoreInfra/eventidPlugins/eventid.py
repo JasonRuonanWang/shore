@@ -22,45 +22,22 @@
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
 #    MA 02111-1307  USA
 #
+#	 Any bugs, problems, and/or suggestions please email to
+#	 jason.wang@icrar.org or jason.ruonan.wang@gmail.com
+
 
 import sys
 sys.path.append('domashMeta')
 import output
 
+from plugin import plugin
 
+class eventid(plugin):
 
-class config_default:
-
-    __config_dict__ = {}
-
-    def __init__(self):
-        try:
-            config_file = open('config','r')
-            for line in config_file.readlines():
-                try:
-                    left = line.split('=')[0]
-                    right = line.split('=')[1].split('\n')[0]
-                    if left[0] != '#':
-                        self.__config_dict__.update({left:right})
-                except:
-                    continue
-        except:
-            output.exception(__name__,'Cannot find config file','Check if config file is in domash root directory')
-
-    def value(self, key):
-        try:
-            return self.__config_dict__[key]
-        except:
-            output.exception(__name__,'Cannot find the key {0} in config file'.format(key),'Check if config file is complete')
-
-
-    def print_dict(self):
-        print self.__config_dict__
-
-
-def get_class():
-    return config_default
-
+    def event_handler_module(self, msg):
+        msg['event_id'] = self.generate_id()
+        print 'eventid generated'
+        return True
 
 
 

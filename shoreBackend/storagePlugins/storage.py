@@ -25,22 +25,32 @@
 #	 Any bugs, problems, and/or suggestions please email to
 #	 jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
+
 import sys
-sys.path.append('domashInfra')
-from infra import infra
 sys.path.append('domashMeta')
 import output
+from plugin import plugin
 
-class database(infra):
+class storage(plugin):
 
     def event_handler_module(self, msg):
-        if msg.has_key('module'):
-            if msg['module'] == 'database':
-                self.event_handler_plugin(msg)
+        # check if this plugin should respond
+        if not msg.has_key('backend'):
+            return False
+        if msg['backend'] != self.__class__.__name__.split('_')[-1]:
+            return False
+
+        if not msg.has_key('operation'):
+            return False
+        return True
 
 
-    def event_handler_plugin(self, msg):
-        output.printf('infra.database.event_handler_plugin() is a pure virtual function and you must implement it in a derived class','red')
+    def read(self):
+        output.printf('infra.storage.read() is a pure virtual function and you must implement it in a derived class','red')
+
+    def write(self):
+        output.printf('infra.storage.write() is a pure virtual function and you must implement it in a derived class','red')
+
 
 
 

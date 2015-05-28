@@ -25,36 +25,17 @@
 #	 Any bugs, problems, and/or suggestions please email to
 #	 jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
-
-import sys
-sys.path.append('domashMeta')
-import output
-sys.path.append('domashInfra')
-from infra import infra
-
-class storage(infra):
-
-    def event_handler_module(self, msg):
+from eventid import eventid
+import uuid
 
 
-        # verify if this plugin should respond
-        if not msg.has_key('backend'):
-            return False
-        if msg['backend'] != self.__class__.__name__.split('_')[-1]:
-            return False
+class eventid_python(eventid):
 
-        if not msg.has_key('operation'):
-            return False
-        return True
+    def generate_id(self):
+        return uuid.uuid1()
 
-
-    def read(self):
-        output.printf('infra.storage.read() is a pure virtual function and you must implement it in a derived class','red')
-
-    def write(self):
-        output.printf('infra.storage.write() is a pure virtual function and you must implement it in a derived class','red')
-
-
+def get_class():
+    return eventid_python
 
 
 

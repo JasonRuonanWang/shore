@@ -22,19 +22,46 @@
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
 #    MA 02111-1307  USA
 #
-#	 Any bugs, problems, and/or suggestions please email to
-#	 jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
-from guid import guid
+import sys
+sys.path.append('domashMeta')
+import output
 
 
-class guid_python(guid):
 
-    def event_handler_plugin(self, msg):
-        return False
+class config_default:
+
+    __config_dict__ = {}
+
+    def __init__(self):
+        try:
+            config_file = open('config','r')
+            for line in config_file.readlines():
+                try:
+                    left = line.split('=')[0]
+                    right = line.split('=')[1].split('\n')[0]
+                    if left[0] != '#':
+                        self.__config_dict__.update({left:right})
+                except:
+                    continue
+        except:
+            output.exception(__name__,'Cannot find config file','Check if config file is in domash root directory')
+
+    def value(self, key):
+        if self.__config_dict__.has_key(key):
+            return self.__config_dict__[key]
+        else:
+            return 'default'
+
+
+
+    def print_dict(self):
+        print self.__config_dict__
+
 
 def get_class():
-    return guid_python
+    return config_default
+
 
 
 

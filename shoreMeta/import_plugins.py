@@ -28,7 +28,7 @@
 from glob import glob
 import os
 import sys
-sys.path.append('../domashMeta')
+sys.path.append('../shoreMeta')
 import output
 
 

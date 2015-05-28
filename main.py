@@ -26,10 +26,11 @@
 #	 Any bugs, problems, and/or suggestions please email to
 #	 jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
-import domashInfra as infra
-import domashSystem as system
+import shoreSystem as system
+import shoreInfra as infra
+import shoreBackend as backend
 import sys
-sys.path.append('domashMeta')
+sys.path.append('shoreMeta')
 import output
 
 def start_daemon():
@@ -37,12 +38,14 @@ def start_daemon():
     config.print_dict()
     address = config.value('address')
     event = eval("system.event.{0}(address)".format(config.value('event')))
-    workflow = eval("system.workflow.{0}(event)".format(config.value('workflow')))
 
     for category in infra.plugin_dict:
+        print category
         for plugin in infra.plugin_dict[category]:
             instance = eval("infra.{0}.{1}(event)".format(category, plugin))
             output.printf('Plugin {0}.{1} instantiated and registered into the event loop.'.format(category, plugin), 'yellow')
+
+
 
     event.start()
 
