@@ -36,7 +36,6 @@ class eventid(plugin):
 
     def event_handler_module(self, msg):
         msg['event_id'] = self.generate_id()
-        print 'eventid generated'
         return True
 
 

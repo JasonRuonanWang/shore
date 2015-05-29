@@ -39,7 +39,6 @@ class plugin(object):
         msg = copy.copy(msg_recv)
 
         # check if this module should respond
-        print self.__class__.__name__.split('_')[0]
         if not msg.has_key('module'):
             return False
         if msg['module'] != self.__class__.__name__.split('_')[0]:

@@ -40,11 +40,17 @@ def start_daemon():
     event = eval("system.event.{0}(address)".format(config.value('event')))
 
     for category in infra.plugin_dict:
-        print category
+        confv = config.value(category)
         for plugin in infra.plugin_dict[category]:
-            instance = eval("infra.{0}.{1}(event)".format(category, plugin))
-            output.printf('Plugin {0}.{1} instantiated and registered into the event loop.'.format(category, plugin), 'yellow')
+            if plugin == confv:
+                instance = eval("infra.{0}.{1}(event)".format(category, plugin))
+                output.printf('Plugin {0}.{1} instantiated and registered into the event loop.'.format(category, plugin), 'yellow')
 
+
+    for category in backend.plugin_dict:
+        for plugin in backend.plugin_dict[category]:
+            instance = eval("backend.{0}.{1}(event)".format(category, plugin))
+            output.printf('Plugin {0}.{1} instantiated and registered into the event loop.'.format(category, plugin), 'yellow')
 
 
     event.start()
