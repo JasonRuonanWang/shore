@@ -1,1 +1,1 @@
-../../domashMeta/import_plugins.py
+../../shoreMeta/import_plugins.py

@@ -26,13 +26,10 @@
 #	 jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
 import zmq
-import sys
-sys.path.append('../domashMeta')
-import output
 import threading
-from event import event
 import time
 import json
+from event import event
 
 class event_zmqthreaded(event):
 
@@ -46,9 +43,9 @@ class event_zmqthreaded(event):
 
     def __init__(self, address):
         self.__url_clients = address
-        self.__bind()
+        self.bind()
 
-    def __worker_routine(self):
+    def worker_routine(self):
         self.__socket_worker = self.__context.socket(zmq.REP)
         self.__socket_worker.connect(self.__url_workers)
         msg = None
@@ -60,15 +57,15 @@ class event_zmqthreaded(event):
                 if msg.has_key('operation'):
                     if msg['operation'] == 'exit':
                         self.__socket_worker.close()
-                        t = threading.Thread(target=self.__stop)
+                        t = threading.Thread(target=self.stop)
                         t.start()
                         break
             else:
                 self.__socket_worker.send_json({"return": "Error: Wrong JSON Object"})
                 continue
-        output.printf("system.event.zmqthreaded: Worker thread is terminated!", 'blue')
+#        output.printf("system.event.zmqthreaded: Worker thread is terminated!", 'blue')
 
-    def __bind(self):
+    def bind(self):
         while True:
             self.__socket_clients = self.__context.socket(zmq.ROUTER)
             self.__socket_workers = self.__context.socket(zmq.DEALER)
@@ -76,32 +73,31 @@ class event_zmqthreaded(event):
                 self.__socket_clients.bind(self.__url_clients)
                 self.__socket_workers.bind(self.__url_workers)
                 self.__isbound = True
-                output.printf('bound {0}'.format(self.__url_clients),'blue')
+#                output.printf('bound {0}'.format(self.__url_clients),'blue')
                 return
             except:
-                output.exception(__name__,'unable to bind address {0}'.format(self.__url_clients),'')
+#                output.exception(__name__,'unable to bind address {0}'.format(self.__url_clients),'')
                 self.__url_clients = raw_input('please re-enter the local address:')
 
     def start(self):
         for i in range(1):
-            thread = threading.Thread(target=self.__worker_routine, args=())
+            thread = threading.Thread(target=self.worker_routine, args=())
             self.__threads.append(thread)
             thread.start()
         try:
             zmq.device(zmq.QUEUE, self.__socket_clients, self.__socket_workers)
         except:
-            output.printf("ZMQ Device is terminated!", 'blue')
+#            output.printf("ZMQ Device is terminated!", 'blue')
             return
 
-    def __stop(self):
+    def stop(self):
         self.__socket_workers.close()
         self.__socket_clients.close()
         time.sleep(1)
         self.__context.term()
-        output.printf("ZMQ Context is terminated!", 'blue')
+#        output.printf("ZMQ Context is terminated!", 'blue')
 
-    def event_handler_child():
-        pass
+
 
 
 

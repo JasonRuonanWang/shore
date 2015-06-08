@@ -25,35 +25,37 @@
 #	 Any bugs, problems, and/or suggestions please email to
 #	 jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
-import sys
-sys.path.append('domashMeta')
-import output
 
-class event():
+import sys
+sys.path.append('shoreMeta')
+from plugin import plugin
+
+class event(plugin):
 
     __observers = []
 
     # Plugins should register this method for later pushing events to the notifier
     # It is also called within system.event.<subclass> on receiving a request from sockets
     def notify_observers(self, msg):
-        print msg
         for observer in self.__observers:
             observer(msg)
+
+    def print_observers(self):
+        for observer in self.__observers:
+            print observer
 
     # Every plugin should call this method to register its event handler method
     def register_observer(self, func):
         self.__observers.append(func)
 
+    # overwrite event_handler because event plugins have different behaviours than general plugins
     def event_handler(self, msg):
-        if msg.has_key('to_module'):
-            if msg['to_module'] != 'event':
-                return
-        else:
-            return
-        self.event_handler_child(msg)
+        if not self.msg_kv_match(msg, 'module', self.__class__.__name__.split('_')[0]):
+            return False
+        if self.msg_kv_match(msg, 'command', 'terminate'):
+            self.stop()
 
-    def event_handler_child(self, msg):
-        output.printf('infra.storage.event_handler_child() is a pure virtual function and you must implement it in a derived class','red')
+
 
 
 

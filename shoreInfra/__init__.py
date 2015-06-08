@@ -1,1 +1,1 @@
-../domashMeta/import_category.py
+../shoreMeta/import_category.py

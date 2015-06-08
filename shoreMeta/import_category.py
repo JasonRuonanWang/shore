@@ -27,9 +27,6 @@
 
 from glob import glob
 import os
-import sys
-sys.path.append('shoreMeta')
-import output
 
 
 # obtain the list of plugin category directories
@@ -43,7 +40,6 @@ plugin_dict = {}
 for _pc in __directories__:
 	# obtain the plugin category directory
 	category_dirname = os.path.splitext(os.path.basename(_pc))[0]
-	output.printf('Searching ' + category_dirname , 'bold', 'yellow')
 	# import the plugin category as a module
 	category_module = __import__('{0}.{1}'.format(__name__, category_dirname), fromlist=[__name__])
 	# define the object of the plugin category instance

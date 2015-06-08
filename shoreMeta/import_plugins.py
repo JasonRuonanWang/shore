@@ -27,9 +27,6 @@
 
 from glob import glob
 import os
-import sys
-sys.path.append('../shoreMeta')
-import output
 
 
 DEBUG = True
@@ -58,7 +55,6 @@ for _pc in __files__:
         # register the object with the dictionary
         __plugin_dict__.update({plugin_name:eval(plugin_name)})
         # done
-        output.printf("|- " + plugin_filename + " imported.", 'l_yellow')
 
     else:
         try:
@@ -68,9 +64,8 @@ for _pc in __files__:
             # register the object with the dictionary
             __plugin_dict__.update({plugin_name:eval(plugin_name)})
             # done
-            output.printf("|- " + plugin_filename + " imported.", 'l_yellow')
         except:
-            output.exception(__file__,"Failed to import plugin {0}".format(plugin_filename),"Check dependent libraries")
+            pass
 
 
 

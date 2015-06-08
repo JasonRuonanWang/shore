@@ -28,9 +28,6 @@
 import zmq
 from zmq.eventloop.zmqstream import ZMQStream
 from zmq.eventloop.ioloop import IOLoop
-import sys
-sys.path.append('../domashMeta')
-import output
 import event
 import time
 import threading
@@ -49,27 +46,28 @@ class event_zmqioloop(event.event):
         if self.__isbound:
             self.__unbind()
 
-    def __bind(self):
+    def bind(self):
         while True:
             try:
                 self.context = zmq.Context(10)
                 self.__socket = self.context.socket(zmq.REP)
                 self.__socket.bind(self.__url)
                 self.__isbound = True
-                output.printf('bound {0}'.format(self.__url),'blue')
+#                output.printf('bound {0}'.format(self.__url),'blue')
                 self.__stream = ZMQStream(self.__socket)
                 return
             except:
-                output.exception(__name__,'unable to bind address'.format(self.__url),'')
+#                output.exception(__name__,'unable to bind address'.format(self.__url),'')
                 self.__url = raw_input('please re-enter the local address:')
 
-    def __unbind(self):
+    def unbind(self):
         try:
             self.__socket.unbind(self.__url)
             self.__isbound = False
-            output.printf('unbound {0}'.format(self.__url),'blue')
+#            output.printf('unbound {0}'.format(self.__url),'blue')
         except:
-            output.exception(__name__,'unable to unbind address'.format(self.__url),'')
+#            output.exception(__name__,'unable to unbind address'.format(self.__url),'')
+            pass
 
     def start(self):
         def on_recv(stream, msg):
@@ -82,7 +80,7 @@ class event_zmqioloop(event.event):
         self.__stream.on_recv_stream(on_recv)
         IOLoop.instance().start()
 
-    def __stop(self):
+    def stop(self):
         time.sleep(1)
         IOLoop.instance().stop()
 

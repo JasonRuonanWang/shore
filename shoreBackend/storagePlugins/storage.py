@@ -26,9 +26,6 @@
 #	 jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
 
-import sys
-sys.path.append('domashMeta')
-import output
 from plugin import plugin
 
 class storage(plugin):
@@ -45,11 +42,6 @@ class storage(plugin):
         return True
 
 
-    def read(self):
-        output.printf('infra.storage.read() is a pure virtual function and you must implement it in a derived class','red')
-
-    def write(self):
-        output.printf('infra.storage.write() is a pure virtual function and you must implement it in a derived class','red')
 
 
 

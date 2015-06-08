@@ -29,29 +29,23 @@
 import shoreSystem as system
 import shoreInfra as infra
 import shoreBackend as backend
-import sys
-sys.path.append('shoreMeta')
-import output
 
 def start_daemon():
     config = system.config.default()
     config.print_dict()
     address = config.value('address')
     event = eval("system.event.{0}(address)".format(config.value('event')))
+    log = eval("system.log.{0}(event)".format(config.value('log')))
 
     for category in infra.plugin_dict:
         confv = config.value(category)
         for plugin in infra.plugin_dict[category]:
             if plugin == confv:
                 instance = eval("infra.{0}.{1}(event)".format(category, plugin))
-                output.printf('Plugin {0}.{1} instantiated and registered into the event loop.'.format(category, plugin), 'yellow')
-
 
     for category in backend.plugin_dict:
         for plugin in backend.plugin_dict[category]:
             instance = eval("backend.{0}.{1}(event)".format(category, plugin))
-            output.printf('Plugin {0}.{1} instantiated and registered into the event loop.'.format(category, plugin), 'yellow')
-
 
     event.start()
 

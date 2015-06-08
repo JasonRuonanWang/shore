@@ -37,10 +37,6 @@ class database_sqlite(database):
     def query(self):
         return
 
-    def event_handler_plugin(self, msg):
-        msg['status'] = 'post'
-        msg['backend'] = 'adios'
-        self._push_event(msg)
 
 def get_class():
     return database_sqlite

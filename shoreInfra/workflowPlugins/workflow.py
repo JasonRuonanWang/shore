@@ -27,17 +27,13 @@
 
 
 import sys
-sys.path.append('domashMeta')
-import output
-sys.path.append('domashSystem')
+sys.path.append('shoreMeta')
+from plugin import plugin
 import copy
 
-class workflow:
+class workflow(plugin):
 
-    def __init__(self, event):
-        event.register_observer(self.event_handler)
-        self._push_event = event.notify_observers
-
+    # overwrite plugin.event_handler
     def event_handler(self, msg_recv):
         msg = copy.copy(msg_recv)
         if not msg.has_key('module'):
@@ -48,14 +44,6 @@ class workflow:
             return
         self.event_handler_plugin(msg)
 
-    def event_handler_plugin(self, msg):
-        output.printf('infra.storage.event_handler_child() is a pure virtual function and you must implement it in a derived class','red')
-
-    def am_i_called(self, current, last):
-        output.printf('system.workflow.get_next() is a pure virtual function and you must implement it in a derived class','red')
-
-    def am_i_notified(self, current, last):
-        output.printf('system.workflow.get_next() is a pure virtual function and you must implement it in a derived class','red')
 
 
 

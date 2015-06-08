@@ -32,27 +32,32 @@ class plugin(object):
 
     def __init__(self, event):
         event.register_observer(self.event_handler)
-        self._push_event = event.notify_observers
+        self.push_event = event.notify_observers
+        event.notify_observers({'module':'log','status':'pre','log':'print','color':'yellow','text':'{0} imported'.format(self.__class__.__name__)})
 
     def event_handler(self, msg_recv):
-
         msg = copy.copy(msg_recv)
 
         # check if this module should respond
-        if not msg.has_key('module'):
-            return False
-        if msg['module'] != self.__class__.__name__.split('_')[0]:
+        if not self.msg_kv_match(msg, 'module', self.__class__.__name__.split('_')[0]):
             return False
 
         # check if the event's status is pre processing
-        if not msg.has_key('status'):
-            return False
-        if msg['status'] != 'pre':
+        if not self.msg_kv_match(msg, 'status', 'pre'):
             return False
 
+        # event_handler_module must return True to send msg back to workflow
         if self.event_handler_module(msg):
             msg['status'] = 'post'
-            self._push_event(msg)
+            self.push_event(msg)
+
+    def msg_kv_match(self, msg, k, v):
+        if not msg.has_key(k):
+            return False
+        if msg[k] != v:
+            return False
+        return True
+
 
 
 

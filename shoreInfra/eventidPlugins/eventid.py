@@ -28,8 +28,6 @@
 
 import sys
 sys.path.append('domashMeta')
-import output
-
 from plugin import plugin
 
 class eventid(plugin):

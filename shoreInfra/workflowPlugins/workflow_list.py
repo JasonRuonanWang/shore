@@ -28,7 +28,6 @@
 
 import sys
 sys.path.append('domashMeta')
-import output
 from workflow import workflow
 
 class workflow_list(workflow):
@@ -42,7 +41,7 @@ class workflow_list(workflow):
         if next_module:
             msg['module'] = next_module
             msg['status'] = 'pre'
-            self._push_event(msg)
+            self.push_event(msg)
 
     def get_next(self, flowlist, current):
         index = flowlist.index(current)

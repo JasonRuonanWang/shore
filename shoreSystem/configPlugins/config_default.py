@@ -23,9 +23,6 @@
 #    MA 02111-1307  USA
 #
 
-import sys
-sys.path.append('domashMeta')
-import output
 
 
 
