@@ -32,61 +32,63 @@ from plugin import plugin
 
 class log(plugin):
 
-    endc = '\033[0m'
+    style_code={
+           'endc' : '\033[0m',
+           'bold' : '\033[1m',
+           'shadow' : '\033[2m',
+           'normal' : '\033[3m',
+           'underline' : '\033[4m',
+           'flash' : '\033[5m',
+           'reverse' : '\033[7m',
 
-    bold = '\033[1m'
-    shadow = '\033[2m'
-    normal = '\033[3m'
-    underline = '\033[4m'
-    flash = '\033[5m'
-    reverse = '\033[7m'
+           'red' : '\033[31m',
+           'green' : '\033[32m',
+           'yellow' : '\033[33m',
+           'purple' : '\033[34m',
+           'pink' : '\033[35m',
+           'blue' : '\033[36m',
+           'white' : '\033[37m',
+           'default' : '\033[38m',
 
-    red = '\033[31m'
-    green = '\033[32m'
-    yellow = '\033[33m'
-    purple = '\033[34m'
-    pink = '\033[35m'
-    blue = '\033[36m'
-    white = '\033[37m'
+           'onred' : '\033[41m',
+           'ongreen' : '\033[42m',
+           'onyellow' : '\033[43m',
+           'onblue' : '\033[44m',
+           'onpurple' : '\033[45m',
+           'onlightblue' : '\033[46m',
+           'onwhite' : '\033[47m',
 
-    onred = '\033[41m'
-    ongreen = '\033[42m'
-    onyellow = '\033[43m'
-    onblue = '\033[44m'
-    onpurple = '\033[45m'
-    onlightblue = '\033[46m'
-    onwhite = '\033[47m'
+           ############
+           ############
+           # These do not seem to work in standard Linux command line environment
+           # but only works for Mac
+           'l_red' : '\033[91m',
+           'l_green' : '\033[92m',
+           'l_yellow' : '\033[93m',
+           'l_purple' : '\033[94m',
+           'l_pink' : '\033[95m',
+           'l_blue' : '\033[96m',
+           'l_white' : '\033[97m',
 
-    ############
-    ############
-    # These do not seem to work in standard Linux command line environment
-    l_red = '\033[91m'
-    l_green = '\033[92m'
-    l_yellow = '\033[93m'
-    l_purple = '\033[94m'
-    l_pink = '\033[95m'
-    l_blue = '\033[96m'
-    l_white = '\033[97m'
-
-    l_onred = '\033[101m'
-    l_ongreen = '\033[102m'
-    l_onyellow = '\033[103m'
-    l_onblue = '\033[104m'
-    l_onpurple = '\033[105m'
-    l_onlightblue = '\033[106m'
-    l_onwhite = '\033[107m'
-    ############
-    ############
-
+           'l_onred' : '\033[101m',
+           'l_ongreen' : '\033[102m',
+           'l_onyellow' : '\033[103m',
+           'l_onblue' : '\033[104m',
+           'l_onpurple' : '\033[105m',
+           'l_onlightblue' : '\033[106m',
+           'l_onwhite' : '\033[107m'
+            ############
+            ############
+    }
 
     def event_handler_module(self, msg):
         if msg.has_key('log'):
             if msg['log'] == 'print':
-                self.printf(msg)
+                self.on_printf(msg)
             elif msg['log'] == 'exception':
-                self.exception(msg)
+                self.on_exception(msg)
             elif msg['log'] == 'warning':
-                self.warning(msg)
+                self.on_warning(msg)
         return False
 
 

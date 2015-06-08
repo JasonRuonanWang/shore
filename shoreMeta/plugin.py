@@ -1,4 +1,3 @@
-#
 #    (c) University of Western Australia
 #    International Centre of Radio Astronomy Research
 #    M468/35 Stirling Hwy
@@ -33,7 +32,7 @@ class plugin(object):
     def __init__(self, event):
         event.register_observer(self.event_handler)
         self.push_event = event.notify_observers
-        event.notify_observers({'module':'log','status':'pre','log':'print','color':'yellow','text':'{0} imported'.format(self.__class__.__name__)})
+        self.printf('{0} instantiated and registered to event channel.'.format(self.__class__.__name__), color='yellow')
 
     def event_handler(self, msg_recv):
         msg = copy.copy(msg_recv)
@@ -58,6 +57,17 @@ class plugin(object):
             return False
         return True
 
+    def printf(self, text, color='default', style='default'):
+        if self.module_name() == 'log':
+            self.on_printf({'module':'log','status':'pre','log':'print','color':color,'style':style,'text':text})
+        else:
+            self.push_event({'module':'log','status':'pre','log':'print','color':color,'style':style,'text':text})
+
+    def plugin_name(self):
+        return self.__class__.__name__.split('_')[1]
+
+    def module_name(self):
+        return self.__class__.__name__.split('_')[0]
 
 
 

@@ -37,15 +37,15 @@ def start_daemon():
     event = eval("system.event.{0}(address)".format(config.value('event')))
     log = eval("system.log.{0}(event)".format(config.value('log')))
 
-    for category in infra.plugin_dict:
-        confv = config.value(category)
-        for plugin in infra.plugin_dict[category]:
+    for module in infra.plugin_dict:
+        confv = config.value(module)
+        for plugin in infra.plugin_dict[module]:
             if plugin == confv:
-                instance = eval("infra.{0}.{1}(event)".format(category, plugin))
+                instance = eval("infra.{0}.{1}(event)".format(module, plugin))
 
-    for category in backend.plugin_dict:
-        for plugin in backend.plugin_dict[category]:
-            instance = eval("backend.{0}.{1}(event)".format(category, plugin))
+    for module in backend.plugin_dict:
+        for plugin in backend.plugin_dict[module]:
+            instance = eval("backend.{0}.{1}(event)".format(module, plugin))
 
     event.start()
 
