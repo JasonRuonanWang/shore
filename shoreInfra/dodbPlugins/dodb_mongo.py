@@ -30,13 +30,24 @@ from pymongo import MongoClient
 
 class dodb_mongo(dodb):
 
-    def __init__(self):
+    __isDBinited = False
+    __db = None
+
+    def initDB(self):
         client = MongoClient()
-        db = client.shore
+        self.__db = client.shore
         print "mongodb connected"
 
-    def query(self, doid, column, row):
+    def query(self, doid, column=None, row=None):
+        if not self.__isDBinited:
+            self.initDB()
+            self.__isDBinited = True
+        print self.__db
         return
+
+    def event_handler_module(self,msg):
+        self.query(msg['doid'])
+
 
 def get_class():
     return dodb_mongo
