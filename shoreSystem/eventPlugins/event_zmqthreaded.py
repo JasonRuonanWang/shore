@@ -29,6 +29,7 @@ import zmq
 import threading
 import time
 import json
+import os
 from event import event
 
 class event_zmqthreaded(event):

@@ -32,12 +32,12 @@ from workflow import workflow
 
 class workflow_list(workflow):
 
-    flowlist_read = ['request', 'eventid', 'database', 'storage']
-    flowlist_write = ['request', 'eventid', 'database', 'storage']
-    flowlist_query = ['request', 'eventid', 'database']
+    flowlist_get = ['request', 'eventid', 'dodb', 'storage']
+    flowlist_put = ['request', 'eventid', 'dodb', 'storage']
+    flowlist_query = ['request', 'eventid', 'dodb']
 
     def event_handler_plugin(self, msg):
-        next_module = self.get_next(self.flowlist_write, msg['module'])
+        next_module = self.get_next(self.flowlist_put, msg['module'])
         if next_module:
             msg['module'] = next_module
             msg['status'] = 'pre'

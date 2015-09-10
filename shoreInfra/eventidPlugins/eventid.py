@@ -34,6 +34,7 @@ class eventid(plugin):
 
     def event_handler_module(self, msg):
         msg['event_id'] = self.generate_id()
+        self.printf('request received: {0}'.format(msg))
         return True
 
 

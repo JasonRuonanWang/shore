@@ -1,11 +1,10 @@
 #!/usr/bin/python
 
-import shoreSystem as system
 import zmq
 import json
+import os
 
-config = system.config.default()
-address = config.value('address')
+address = os.environ['SHORE_DAEMON_ADDRESS']
 
 context = zmq.Context()
 socket = context.socket(zmq.REQ)

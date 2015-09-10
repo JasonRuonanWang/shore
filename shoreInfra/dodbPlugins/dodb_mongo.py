@@ -25,19 +25,19 @@
 #	 Any bugs, problems, and/or suggestions please email to
 #	 jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
-import sys
-sys.path.append('shoreMeta')
-from plugin import plugin
+from dodb import dodb
+from pymongo import MongoClient
 
-class database(plugin):
+class dodb_mongo(dodb):
 
-    def event_handler_module(self, msg):
-        if msg.has_key('module'):
-            if msg['module'] == 'database':
-                self.event_handler_plugin(msg)
+    def __init__(self):
+        client = MongoClient()
+        db = client.shore
+        print "mongodb connected"
 
+    def query(self, doid, column, row):
+        return
 
-
-
-
+def get_class():
+    return dodb_mongo
 

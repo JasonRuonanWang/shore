@@ -25,19 +25,17 @@
 #	 Any bugs, problems, and/or suggestions please email to
 #	 jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
-import sqlite3
-from database import database
+import sys
+sys.path.append('shoreMeta')
+from plugin import plugin
+
+class dodb(plugin):
+    def event_handler_module(self, msg):
+        print msg
+        return True
 
 
-class database_sqlite(database):
-
-    def create_table(self, tablename):
-        pass
-
-    def query(self):
-        return
 
 
-def get_class():
-    return database_sqlite
+
 

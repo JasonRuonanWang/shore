@@ -42,7 +42,7 @@ class config_default:
                 except:
                     continue
         except:
-            output.exception(__name__,'Cannot find config file','Check if config file is in domash root directory')
+            pass
 
     def value(self, key):
         if self.__config_dict__.has_key(key):

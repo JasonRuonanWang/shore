@@ -26,14 +26,16 @@
 #	 Any bugs, problems, and/or suggestions please email to
 #	 jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
+import os
 import shoreSystem as system
 import shoreInfra as infra
 import shoreBackend as backend
 
 def start_daemon():
     config = system.config.default()
-    config.print_dict()
-    address = config.value('address')
+#    address = config.value('address')
+    address = os.environ['SHORE_DAEMON_ADDRESS']
+
     event = eval("system.event.{0}(address)".format(config.value('event')))
     log = eval("system.log.{0}(event)".format(config.value('log')))
 
@@ -43,9 +45,12 @@ def start_daemon():
             if plugin == confv:
                 instance = eval("infra.{0}.{1}(event)".format(module, plugin))
 
+    infra.print_dictionary()
+
     for module in backend.plugin_dict:
         for plugin in backend.plugin_dict[module]:
             instance = eval("backend.{0}.{1}(event)".format(module, plugin))
+
 
     event.start()
 
