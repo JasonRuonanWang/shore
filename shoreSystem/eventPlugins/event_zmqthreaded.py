@@ -54,13 +54,13 @@ class event_zmqthreaded(event):
             msg = self.__socket_worker.recv_json()
             if isinstance(msg, dict):
                 self.__socket_worker.send_json({"return": "OK"})
-                self.notify_observers(msg)
                 if msg.has_key('operation'):
                     if msg['operation'] == 'exit':
                         self.__socket_worker.close()
                         t = threading.Thread(target=self.stop)
                         t.start()
                         break
+                self.notify_observers(msg)
             else:
                 self.__socket_worker.send_json({"return": "Error: Wrong JSON Object"})
                 continue

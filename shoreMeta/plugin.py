@@ -57,11 +57,12 @@ class plugin(object):
             return False
         return True
 
-    def printf(self, text, color='default', style='default'):
+    def printf(self, text, color='default', style='default', source=''):
+        msg = {'module':'log','status':'pre','log':'print','color':color,'style':style,'text':text,'source':source}
         if self.module_name() == 'log':
-            self.on_printf({'module':'log','status':'pre','log':'print','color':color,'style':style,'text':text})
+            self.on_printf(msg)
         else:
-            self.push_event({'module':'log','status':'pre','log':'print','color':color,'style':style,'text':text})
+            self.push_event(msg)
 
     def plugin_name(self):
         return self.__class__.__name__.split('_')[1]

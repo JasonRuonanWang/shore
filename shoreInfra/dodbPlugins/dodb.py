@@ -30,12 +30,26 @@ sys.path.append('shoreMeta')
 from plugin import plugin
 
 class dodb(plugin):
+
+    def put(self, doid, column, row):
+        print self.query_do(doid)
+        return
+
+    def get(self, doid, column, row):
+        return
+
     def event_handler_module(self, msg):
-        print msg
+        if not msg.has_key('doid'):
+            self.printf('Error: query dodb without having valid data object ID', color='red', source=__name__)
+            return False
+        if not msg.has_key('operation'):
+            self.printf('Error: msg does not specify operation to do', color='red', source=__name__)
+            return False
+
+        if msg['operation'] == 'put':
+            self.put(msg['doid'], msg['column'], msg['row'])
+
         return True
-
-
-
 
 
 

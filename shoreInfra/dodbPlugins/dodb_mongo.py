@@ -30,23 +30,31 @@ from pymongo import MongoClient
 
 class dodb_mongo(dodb):
 
-    __isDBinited = False
     __db = None
 
-    def initDB(self):
-        client = MongoClient()
-        self.__db = client.shore
-        print "mongodb connected"
+    def init_db(self):
+        if not self.__db:
+            client = MongoClient()
+            self.__db = client.shore
 
-    def query(self, doid, column=None, row=None):
-        if not self.__isDBinited:
-            self.initDB()
-            self.__isDBinited = True
-        print self.__db
+    def query_do(self, doid):
+        self.init_db()
+        cursor = self.__db.do.find({'doid':doid})
+        if cursor.count() == 0:
+            return None
+        elif cursor.count() == 1:
+            return cursor[0]
+        else:
+            self.printf('Warning: Data Object {0} has multiple records in dodb'.format(doid), color='yellow', source=__name__)
+            return cursor[0]
+
+    def query_col(self, doid, column):
+        self.init_db()
         return
 
-    def event_handler_module(self,msg):
-        self.query(msg['doid'])
+    def query_row(self, doid, column, row):
+        self.init_db()
+        return
 
 
 def get_class():

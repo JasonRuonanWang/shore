@@ -78,6 +78,9 @@ class log_default(log):
         if msg.has_key('text'):
             text += msg['text']
         text += self.style_code['endc']
+        if msg.has_key('source'):
+            if msg['source'] is not '':
+                text = 'From ' + msg['source'] + ':' + text
         print text
 
 
