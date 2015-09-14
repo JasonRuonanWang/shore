@@ -82,13 +82,7 @@ class log(plugin):
     }
 
     def event_handler_module(self, msg):
-        if msg.has_key('log'):
-            if msg['log'] == 'print':
-                self.on_printf(msg)
-            elif msg['log'] == 'exception':
-                self.on_exception(msg)
-            elif msg['log'] == 'warning':
-                self.on_warning(msg)
+        self.log_func(msg)
         return False
 
 

@@ -36,7 +36,7 @@ class event(plugin):
 
     # Plugins should register this method for later pushing events to the notifier
     # It is also called within system.event.<subclass> on receiving a request from sockets
-    def notify_observers(self, msg):
+    def push_event(self, msg):
         for observer in self.__observers:
             observer(msg)
 

@@ -37,6 +37,25 @@ class dodb_mongo(dodb):
             client = MongoClient()
             self.__db = client.shore
 
+    def insert_do(self, doid, column, row):
+        self.init_db()
+        self.__db.do.insert_one({'doid':doid, 'columns':[column], 'rows':row})
+
+    def update_do(self, doid, column, row):
+        self.init_db()
+        self.__db.do.update(
+                {'doid':doid},
+                {
+                    '$max':{'rows':row},
+                    '$addToSet':{'columns':[column]}
+                    })
+
+    def update_column(self, doid, column):
+        self.init_db()
+
+    def insert_column(self, doid, column):
+        self.init_db()
+
     def query_do(self, doid):
         self.init_db()
         cursor = self.__db.do.find({'doid':doid})
@@ -45,10 +64,10 @@ class dodb_mongo(dodb):
         elif cursor.count() == 1:
             return cursor[0]
         else:
-            self.printf('Warning: Data Object {0} has multiple records in dodb'.format(doid), color='yellow', source=__name__)
+            self.log('Warning: Data Object {0} has multiple records in dodb'.format(doid), category='warning', source=__name__)
             return cursor[0]
 
-    def query_col(self, doid, column):
+    def query_column(self, doid, column):
         self.init_db()
         return
 

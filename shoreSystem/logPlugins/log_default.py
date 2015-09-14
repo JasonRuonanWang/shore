@@ -26,61 +26,31 @@
 #	 jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
 from log import log
-
+import time
 
 class log_default(log):
 
-    def on_exception(self,msg):
-        text = ''
-        if msg.has_key('file'):
-            text  = self.style_code['red']
-            text += self.style_code['bold']
-            text += self.style_code['flash']
-            text += 'Exception from: ' + msg['file'] + '! '
-            text += self.style_code['endc']
-        if msg.has_key('description'):
-            text += self.style_code['red']
-            text += self.style_code['bold']
-            text += 'Description: ' + msg['description'] + '.'
-            text += self.style_code['endc']
-        if msg.has_key('suggestion'):
-            text += self.style_code['red']
-            text += self.style_code['bold']
-            text += 'Suggestion: ' + msg['suggestion'] + '.'
-            text += self.style_code['endc']
-        print text
+    def log_func(self,msg):
+        text = '[' + time.strftime("%a, %d %b %Y %H:%M:%S") + '] '
+        if msg.has_key('source'):
+            if msg['source']:
+                text += 'From ' + msg['source'] + ':'
+        if msg.has_key('category'):
+            if msg['category']:
+                if msg['category'] == 'system':
+                    text += self.style_code['blue'] + 'SYSTEM '
+            else:
+                text += self.style_code['default'] + 'EVENT '
 
-    def on_warning(self,msg):
-        text = ''
-        if msg.has_key('file'):
-            text  = self.style_code['yellow']
-            text += self.style_code['bold']
-            text += self.style_code['flash']
-            text += 'Warning from: ' + msg['file'] + '! '
-            text += self.style_code['endc']
-        if msg.has_key('description'):
-            text += self.style_code['yellow']
-            text += self.style_code['bold']
-            text += 'Description: ' + msg['description'] + '.'
-            text += self.style_code['endc']
-        if msg.has_key('suggestion'):
-            text += self.style_code['yellow']
-            text += self.style_code['bold']
-            text += 'Suggestion: ' + msg['suggestion'] + '.'
-            text += self.style_code['endc']
-        print text
-
-    def on_printf(self,msg):
         if msg.has_key('color'):
-            text = self.style_code[msg['color']]
+            if msg['color']:
+                text += self.style_code[msg['color']]
         if msg.has_key('style'):
-            text += self.style_code[msg['style']]
+            if msg['style']:
+                text += self.style_code[msg['style']]
         if msg.has_key('text'):
             text += msg['text']
         text += self.style_code['endc']
-        if msg.has_key('source'):
-            if msg['source'] is not '':
-                text = 'From ' + msg['source'] + ':' + text
         print text
 
 

@@ -45,6 +45,7 @@ class event_zmqthreaded(event):
     def __init__(self, address):
         self.__url_clients = address
         self.bind()
+        self.register_observer(self.event_handler)
 
     def worker_routine(self):
         self.__socket_worker = self.__context.socket(zmq.REP)
@@ -60,11 +61,11 @@ class event_zmqthreaded(event):
                         t = threading.Thread(target=self.stop)
                         t.start()
                         break
-                self.notify_observers(msg)
+                self.push_event(msg)
             else:
                 self.__socket_worker.send_json({"return": "Error: Wrong JSON Object"})
                 continue
-#        output.printf("system.event.zmqthreaded: Worker thread is terminated!", 'blue')
+        self.log("system.event.zmqthreaded: Worker thread is terminated!",category='system')
 
     def bind(self):
         while True:
@@ -74,10 +75,10 @@ class event_zmqthreaded(event):
                 self.__socket_clients.bind(self.__url_clients)
                 self.__socket_workers.bind(self.__url_workers)
                 self.__isbound = True
-#                output.printf('bound {0}'.format(self.__url_clients),'blue')
+                self.log('bound {0}'.format(self.__url_clients),category='system')
                 return
             except:
-#                output.exception(__name__,'unable to bind address {0}'.format(self.__url_clients),'')
+                self.log('unable to bind address {0}'.format(self.__url_clients),source=__name__,category='error')
                 self.__url_clients = raw_input('please re-enter the local address:')
 
     def start(self):
@@ -88,7 +89,7 @@ class event_zmqthreaded(event):
         try:
             zmq.device(zmq.QUEUE, self.__socket_clients, self.__socket_workers)
         except:
-#            output.printf("ZMQ Device is terminated!", 'blue')
+            self.log("ZMQ Device is terminated!", category='system')
             return
 
     def stop(self):
@@ -96,7 +97,7 @@ class event_zmqthreaded(event):
         self.__socket_clients.close()
         time.sleep(1)
         self.__context.term()
-#        output.printf("ZMQ Context is terminated!", 'blue')
+        self.log("ZMQ Context is terminated!", category='system')
 
 
 

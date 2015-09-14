@@ -31,8 +31,8 @@ class plugin(object):
 
     def __init__(self, event):
         event.register_observer(self.event_handler)
-        self.push_event = event.notify_observers
-        self.printf('{0} instantiated and registered to event channel.'.format(self.__class__.__name__), color='yellow')
+        self.push_event = event.push_event
+        self.log('{0} instantiated and registered to event channel.'.format(self.__class__.__name__), category='system')
 
     def event_handler(self, msg_recv):
         msg = copy.copy(msg_recv)
@@ -57,10 +57,16 @@ class plugin(object):
             return False
         return True
 
-    def printf(self, text, color='default', style='default', source=''):
-        msg = {'module':'log','status':'pre','log':'print','color':color,'style':style,'text':text,'source':source}
+    def log(self, text, category=None, source=None, color=None, style=None):
+        msg = { 'module':'log',
+                'status':'pre',
+                'color':color,
+                'style':style,
+                'text':text,
+                'source':source,
+                'category':category}
         if self.module_name() == 'log':
-            self.on_printf(msg)
+            self.log_func(msg)
         else:
             self.push_event(msg)
 
