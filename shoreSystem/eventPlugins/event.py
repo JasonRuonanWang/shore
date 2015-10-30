@@ -22,8 +22,8 @@
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
 #    MA 02111-1307  USA
 #
-#	 Any bugs, problems, and/or suggestions please email to
-#	 jason.wang@icrar.org or jason.ruonan.wang@gmail.com
+#    Any bugs, problems, and/or suggestions please email to
+#    jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
 import sys
 sys.path.append('shoreMeta')
@@ -36,7 +36,6 @@ class event(plugin):
     # Plugins should register this method for later pushing events to the notifier
     # It is also called within system.event.<subclass> on receiving a request from sockets
     def push_event(self, msg):
-        print msg
         for observer in self.__observers:
             observer(msg)
 

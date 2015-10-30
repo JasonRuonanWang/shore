@@ -30,7 +30,6 @@ from authen import authen
 class authen_null(authen):
 
     def authen(self, msg):
-        print "authenticated"
         return True
 
 

@@ -32,7 +32,6 @@ from plugin import plugin
 class authen(plugin):
 
     def event_handler_module(self, msg):
-        print "authenticating"
         return self.authen(msg)
 
 
