@@ -22,31 +22,26 @@
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
 #    MA 02111-1307  USA
 #
-#	 Any bugs, problems, and/or suggestions please email to
-#	 jason.wang@icrar.org or jason.ruonan.wang@gmail.com
+#    Any bugs, problems, and/or suggestions please email to
+#    jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
-import sys
-sys.path.append('shoreMeta')
-from plugin import plugin
 
-class event(plugin):
 
-    __observers = []
+import zmq
+import threading
+import time
+import json
+import os
+from transport import transport
 
-    # Plugins should register this method for later pushing events to the notifier
-    # It is also called within system.event.<subclass> on receiving a request from sockets
-    def push_event(self, msg):
-        print msg
-        for observer in self.__observers:
-            observer(msg)
+class transport_zmqthreaded(transport):
+    def receive(self):
+        pass
 
-    def print_observers(self):
-        for observer in self.__observers:
-            print observer
 
-    # Every plugin should call this method to register its event handler method
-    def register_observer(self, func):
-        self.__observers.append(func)
+def get_class():
+    return transport_zmqthreaded
+
 
 
 

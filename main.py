@@ -45,12 +45,14 @@ def start_daemon():
             if plugin == confv:
                 instance = eval("infra.{0}.{1}(event)".format(module, plugin))
 
-    infra.print_dictionary()
-
     for module in backend.plugin_dict:
         for plugin in backend.plugin_dict[module]:
             instance = eval("backend.{0}.{1}(event)".format(module, plugin))
 
+
+    print system.plugin_dict
+    print infra.plugin_dict
+    print backend.plugin_dict
 
     event.start()
 

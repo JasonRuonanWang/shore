@@ -22,38 +22,19 @@
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
 #    MA 02111-1307  USA
 #
-#	 Any bugs, problems, and/or suggestions please email to
-#	 jason.wang@icrar.org or jason.ruonan.wang@gmail.com
+#    Any bugs, problems, and/or suggestions please email to
+#    jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
 import sys
 sys.path.append('shoreMeta')
 from plugin import plugin
 
-class dodb(plugin):
-
-    def put(self, doid, column, row, shape=None):
-        self.update_do(doid, column, int(row)+1)
-        self.update_column(doid, column, shape)
-
-    def get(self, doid, column, row):
-        return
+class authen(plugin):
 
     def event_handler_module(self, msg):
-        if not msg.has_key('doid'):
-            self.log('query dodb without having valid data object ID', category='error', source=__name__)
-            return False
-        if not msg.has_key('operation'):
-            self.log('msg does not specify operation to do', category='error', source=__name__)
-            return False
+        print "authenticating"
+        return self.authen(msg)
 
-        if msg['operation'] == 'put':
-            if not msg.has_key('shape'):
-                msg['shape'] = None
-            self.put(msg['doid'], msg['column'], msg['row'], msg['shape'])
-        elif msg['operation'] == 'get':
-            self.get(msg['doid'], msg['column'], msg['row'])
-
-        return True
 
 
 

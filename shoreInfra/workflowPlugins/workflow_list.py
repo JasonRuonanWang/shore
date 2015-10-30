@@ -26,14 +26,12 @@
 #	 jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
 
-import sys
-sys.path.append('domashMeta')
 from workflow import workflow
 
 class workflow_list(workflow):
 
     flowlist_get = ['request', 'eventid', 'dodb', 'storage']
-    flowlist_put = ['request', 'eventid', 'dodb', 'storage']
+    flowlist_put = ['request', 'authen', 'eventid', 'event', 'dodb', 'storage']
     flowlist_query = ['request', 'eventid', 'dodb']
 
     def event_handler_plugin(self, msg):

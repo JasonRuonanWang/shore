@@ -31,16 +31,20 @@ import time
 class log_default(log):
 
     def log_func(self,msg):
-        text = '[' + time.strftime("%a, %d %b %Y %H:%M:%S") + '] '
+        text = self.style_code['shadow'] + '[' + time.strftime("%a, %d %b %Y %H:%M:%S") + '] ' + self.style_code['endc']
         if msg.has_key('source'):
             if msg['source']:
-                text += 'From ' + msg['source'] + ':'
+                text += 'From file ' + msg['source'] + ' '
         if msg.has_key('category'):
             if msg['category']:
                 if msg['category'] == 'system':
-                    text += self.style_code['blue'] + 'SYSTEM '
+                    text += self.style_code['pink'] + '<SYSTEM> '
+                elif msg['category'] == 'error':
+                    text += self.style_code['red'] + '<ERROR> '
+                elif msg['category'] == 'warning':
+                    text += self.style_code['yellow'] + '<WARNING> '
             else:
-                text += self.style_code['default'] + 'EVENT '
+                text += self.style_code['blue'] + '<EVENT> '
 
         if msg.has_key('color'):
             if msg['color']:
