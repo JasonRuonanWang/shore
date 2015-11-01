@@ -22,26 +22,28 @@
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
 #    MA 02111-1307  USA
 #
-#    Any bugs, problems, and/or suggestions please email to
-#    jason.wang@icrar.org or jason.ruonan.wang@gmail.com
-
-
+#	 Any bugs, problems, and/or suggestions please email to
+#	 jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
 import zmq
 import threading
 import time
-from transport import transport
+from event import event
 
-class transport_zmqthreaded(transport):
+class event_zmqthreaded(event):
 
     __context = zmq.Context.instance()
     __isbound = False
     __socket_clients = None
     __socket_workers = None
-    __url_workers = "inproc://transport_workers"
+    __url_workers = "inproc://event_workers"
     __threads = []
     __looping = True
 
+    def __init__(self, address):
+        self.__url_clients = address
+        self.bind()
+        self.register_observer(self.event_handler)
 
     def event_handler_module(self, msg):
         if msg.has_key('zmq_worker'):
@@ -100,10 +102,6 @@ class transport_zmqthreaded(transport):
         self.__context.term()
         self.log("ZMQ Context is terminated!", category='system')
 
-
 def get_class():
-    return transport_zmqthreaded
-
-
-
+    return event_zmqthreaded
 

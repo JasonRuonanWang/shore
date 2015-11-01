@@ -29,10 +29,23 @@ import sys
 sys.path.append('shoreMeta')
 from plugin import plugin
 
-class transport(plugin):
+class event(plugin):
 
-    def event_handler_module(self, msg):
-        return True
+    __observers = []
+
+    # Plugins should register this method for later pushing events to the notifier
+    # It is also called within system.event.<subclass> on receiving a request from sockets
+    def push_event(self, msg):
+        for observer in self.__observers:
+            observer(msg)
+
+    def print_observers(self):
+        for observer in self.__observers:
+            print observer
+
+    # Every plugin should call this method to register its event handler method
+    def register_observer(self, func):
+        self.__observers.append(func)
 
 
 

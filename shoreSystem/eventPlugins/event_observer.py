@@ -30,13 +30,13 @@ import threading
 import time
 from event import event
 
-class event_zmqthreaded(event):
+class event_observer(event):
 
     __context = zmq.Context.instance()
     __isbound = False
     __socket_clients = None
     __socket_workers = None
-    __url_workers = "inproc://workers"
+    __url_workers = "inproc://event_workers"
     __threads = []
     __looping = True
 
@@ -103,5 +103,5 @@ class event_zmqthreaded(event):
         self.log("ZMQ Context is terminated!", category='system')
 
 def get_class():
-    return event_zmqthreaded
+    return event_observer
 

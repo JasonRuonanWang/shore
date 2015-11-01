@@ -25,14 +25,37 @@
 #    Any bugs, problems, and/or suggestions please email to
 #    jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
-import sys
-sys.path.append('shoreMeta')
-from plugin import plugin
 
-class transport(plugin):
+from config import config
 
-    def event_handler_module(self, msg):
-        return True
+class config_textfile(config):
+
+    def __init_plugin(self):
+        try:
+            config_file = open('config','r')
+            for line in config_file.readlines():
+                try:
+                    left = line.split('=')[0]
+                    right = line.split('=')[1].split('\n')[0]
+                    if left[0] != '#':
+                        self.__config_dict__.update({left:right})
+                except:
+                    continue
+        except:
+            pass
+
+    def value(self, key):
+        if self.__config_dict__.has_key(key):
+            return self.__config_dict__[key]
+        else:
+            return 'default'
+
+    def print_dict(self):
+        print self.__config_dict__
+
+def get_class():
+    return config_textfile
+
 
 
 

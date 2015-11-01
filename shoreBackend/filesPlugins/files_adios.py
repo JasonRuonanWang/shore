@@ -1,4 +1,3 @@
-#
 #    (c) University of Western Australia
 #    International Centre of Radio Astronomy Research
 #    M468/35 Stirling Hwy
@@ -26,12 +25,12 @@
 #	 Any bugs, problems, and/or suggestions please email to
 #	 jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
-import h5py
-from storage import storage
 
-class storage_hdf5(storage):
+from files import files
 
-    __plugin__ = 'hdf5'
+
+class files_adios(files):
+
 
     def read(self):
         pass
@@ -39,10 +38,7 @@ class storage_hdf5(storage):
     def write(self):
         pass
 
+
 def get_class():
-    return storage_hdf5
-
-
-
-
+    return files_adios
 

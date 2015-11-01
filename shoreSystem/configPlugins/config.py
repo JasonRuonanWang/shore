@@ -22,23 +22,26 @@
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
 #    MA 02111-1307  USA
 #
-#	 Any bugs, problems, and/or suggestions please email to
-#	 jason.wang@icrar.org or jason.ruonan.wang@gmail.com
+#    Any bugs, problems, and/or suggestions please email to
+#    jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
 
-from storage import storage
+import sys
+sys.path.append('shoreMeta')
+from plugin import plugin
+
+class config(plugin):
+
+    __config_dict__ = {}
+
+    def value(self, key):
+        if self.__config_dict__.has_key(key):
+            return self.__config_dict__[key]
+        else:
+            return 'default'
+
+    def print_dict(self):
+        print self.__config_dict__
 
 
-class storage_fits(storage):
-
-    __plugin__ = 'fits'
-
-    def read(self):
-        pass
-
-    def write(self):
-        pass
-
-def get_class():
-    return storage_fits
 

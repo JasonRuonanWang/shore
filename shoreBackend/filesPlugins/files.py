@@ -1,4 +1,3 @@
-#!/usr/bin/python
 #    (c) University of Western Australia
 #    International Centre of Radio Astronomy Research
 #    M468/35 Stirling Hwy
@@ -26,35 +25,18 @@
 #	 Any bugs, problems, and/or suggestions please email to
 #	 jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
-import os
-import shoreSystem as system
-import shoreInfra as infra
-import shoreBackend as backend
+import sys
+sys.path.append('shoreBackend')
+from storage import storage
 
-def start_daemon():
+class files(storage):
 
-    address = os.environ['SHORE_DAEMON_ADDRESS']
-    event = system.event.observer(address)
-    config = system.config.default(event)
-    log = eval("system.log.{0}(event)".format(config.value('log')))
+    def aaa():
+        pass
 
-    for module in infra.plugin_dict:
-        confv = config.value(module)
-        for plugin in infra.plugin_dict[module]:
-            if plugin == confv:
-                instance = eval("infra.{0}.{1}(event)".format(module, plugin))
 
-    for module in backend.plugin_dict:
-        for plugin in backend.plugin_dict[module]:
-            instance = eval("backend.{0}.{1}(event)".format(module, plugin))
 
-    print system.plugin_dict
-    print infra.plugin_dict
-    print backend.plugin_dict
 
-    event.start()
 
-if __name__ == "__main__":
-    start_daemon()
 
 
