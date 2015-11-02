@@ -33,10 +33,6 @@ class plugin(object):
         event.register_observer(self.event_handler)
         self.push_event = event.push_event
         self.log('{0} instantiated and registered to event channel.'.format(self.__class__.__name__), category='system')
-        self.__init_plugin()
-
-    def __init_plugin(self):
-        return
 
     def event_handler(self, msg_recv):
         msg = copy.copy(msg_recv)

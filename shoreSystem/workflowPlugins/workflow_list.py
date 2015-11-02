@@ -26,24 +26,42 @@
 #	 jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
 
-import sys
-sys.path.append('shoreMeta')
-from plugin import plugin
-import copy
+from workflow import workflow
 
-class workflow(plugin):
+class workflow_list(workflow):
 
-    # overwrite plugin.event_handler
-    def event_handler(self, msg_recv):
-        msg = copy.copy(msg_recv)
-        if not msg.has_key('module'):
-            msg['module'] = 'request'
-        if not msg.has_key('status'):
+    __flowlist={}
+    __flowlist['get'] = ['authen', 'eventid', 'dodb', 'storage']
+    __flowlist['put'] = ['authen', 'eventid', 'event', 'dodb', 'storage']
+    __flowlist['query'] = ['eventid', 'dodb']
+
+    def event_handler_plugin(self, msg):
+        next_module = self.get_next(msg['operation'], msg['module'])
+        if next_module:
+            msg['module'] = next_module
             msg['status'] = 'pre'
-        if msg['module'] != 'request' and msg['status'] == 'pre':
-            return
-        self.event_handler_plugin(msg)
+            return True
+        return False
+
+    def get_next(self, operation, current):
+        index = self.__flowlist[operation].index(current)
+        if index + 1 == len(self.__flowlist[operation]):
+            return None
+        else:
+            return self.__flowlist[operation][index + 1]
+
+    def get_previous(self, flowlist, current):
+        index = flowlist.index(current)
+        if index == 0:
+            return None
+        else:
+            return flowlist[index - 1]
+
+    def get_first(self, operation):
+        return self.__flowlist[operation][0]
 
 
+def get_class():
+    return workflow_list
 
 

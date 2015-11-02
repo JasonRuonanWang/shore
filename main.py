@@ -23,8 +23,8 @@
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
 #    MA 02111-1307  USA
 #
-#	 Any bugs, problems, and/or suggestions please email to
-#	 jason.wang@icrar.org or jason.ruonan.wang@gmail.com
+#    Any bugs, problems, and/or suggestions please email to
+#    jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
 import os
 import shoreSystem as system
@@ -38,6 +38,7 @@ def start_daemon():
     event = system.event.observer()
     config = system.config.default(event)
     log = eval("system.log.{0}(event)".format(config.value('log')))
+    workflow = eval("system.workflow.{0}(event)".format(config.value('workflow')))
 
     for module in infra.plugin_dict:
         confv = config.value(module)
@@ -57,5 +58,4 @@ def start_daemon():
 
 if __name__ == "__main__":
     start_daemon()
-
 

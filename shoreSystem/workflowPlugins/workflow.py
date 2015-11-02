@@ -26,37 +26,33 @@
 #	 jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
 
-from workflow import workflow
+import sys
+sys.path.append('shoreMeta')
+from plugin import plugin
+import copy
 
-class workflow_list(workflow):
+class workflow(plugin):
 
-    flowlist_get = ['request', 'eventid', 'dodb', 'storage']
-    flowlist_put = ['request', 'authen', 'eventid', 'event', 'dodb', 'storage']
-    flowlist_query = ['request', 'eventid', 'dodb']
+    # overwrite plugin.event_handler
+    def event_handler(self, msg_recv):
+        msg = copy.copy(msg_recv)
+        if not msg.has_key('operation'):
+            return False
 
-    def event_handler_plugin(self, msg):
-        next_module = self.get_next(self.flowlist_put, msg['module'])
-        if next_module:
-            msg['module'] = next_module
-            msg['status'] = 'pre'
-            self.push_event(msg)
+        oper = msg['operation']
+        if oper == 'put' or oper == 'get' or oper == 'query':
+            if not msg.has_key('module'):
+                msg['module'] = self.get_first(oper)
+                msg['status'] = 'pre'
+                self.push_event(msg)
+                return
+            if msg['status'] == 'post':
+                if self.event_handler_plugin(msg):
+                    self.push_event(msg)
+                    return
 
-    def get_next(self, flowlist, current):
-        index = flowlist.index(current)
-        if index + 1 == len(flowlist):
-            return None
-        else:
-            return flowlist[index + 1]
-
-    def get_previous(self, flowlist, current):
-        index = flowlist.index(current)
-        if index == 0:
-            return None
-        else:
-            return flowlist[index - 1]
+        print "workflow {0}".format(msg)
 
 
-def get_class():
-    return workflow_list
 
 

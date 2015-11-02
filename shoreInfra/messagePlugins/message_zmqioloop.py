@@ -28,12 +28,12 @@
 import zmq
 from zmq.eventloop.zmqstream import ZMQStream
 from zmq.eventloop.ioloop import IOLoop
-import event
 import time
 import threading
+from message import message
 
 
-class event_zmqioloop(event.event):
+class message_zmqioloop(message):
 
     def __init__(self, address):
         self.__isbound = None
@@ -87,6 +87,6 @@ class event_zmqioloop(event.event):
 
 
 def get_class():
-    return event_zmqioloop
+    return message_zmqioloop
 
 

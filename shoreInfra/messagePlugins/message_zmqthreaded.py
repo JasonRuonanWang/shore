@@ -22,54 +22,29 @@
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
 #    MA 02111-1307  USA
 #
-#	 Any bugs, problems, and/or suggestions please email to
-#	 jason.wang@icrar.org or jason.ruonan.wang@gmail.com
+#    Any bugs, problems, and/or suggestions please email to
+#    jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
 import zmq
-import threading
 import time
-from event import event
+from message import message
 
-class event_zmqthreaded(event):
+class message_zmqthreaded(message):
 
     __context = zmq.Context.instance()
     __isbound = False
     __socket_clients = None
     __socket_workers = None
-    __url_workers = "inproc://event_workers"
+    __url_workers = "inproc://message_workers"
     __threads = []
     __looping = True
 
-    def __init__(self, address):
-        self.__url_clients = address
-        self.bind()
-        self.register_observer(self.event_handler)
 
-    def event_handler_module(self, msg):
+    def respond(self, msg):
         if msg.has_key('zmq_worker'):
             msg['zmq_worker'].send_json({"event_id": str(msg['event_id'])})
-        if self.msg_kv_match(msg, 'operation', 'admin'):
-            if self.msg_kv_match(msg, 'command', 'terminate'):
-                t = threading.Thread(target=self.stop_thread)
-                t.start()
-                self.__looping = False
-            return False
-        return True
-
-    def worker_routine(self):
-        __socket_worker = self.__context.socket(zmq.REP)
-        __socket_worker.connect(self.__url_workers)
-        msg = None
-        while self.__looping:
-            try:
-                msg = __socket_worker.recv_json()
-            except:
-                self.log("system.event.zmqthreaded: Worker recv_json() is broken!",category='system')
-            if isinstance(msg, dict):
-                msg['zmq_worker'] = __socket_worker # send worker with msg so that it can be used for sending reply when pushed back to event module
-                self.push_event(msg)
-        __socket_worker.close()
-        self.log("system.event.zmqthreaded: Worker thread is terminated!",category='system')
+        else:
+            self.log('No zmq_worker handler in msg',category='error', source=__name__)
 
     def bind(self):
         while True:
@@ -85,11 +60,22 @@ class event_zmqthreaded(event):
                 self.log('unable to bind address {0}'.format(self.__url_clients),source=__name__,category='error')
                 self.__url_clients = raw_input('please re-enter the local address:')
 
-    def start(self):
-        for i in range(2):
-            thread = threading.Thread(target=self.worker_routine, args=())
-            self.__threads.append(thread)
-            thread.start()
+    def start_thread(self):
+        __socket_worker = self.__context.socket(zmq.REP)
+        __socket_worker.connect(self.__url_workers)
+        msg = None
+        while self.__looping:
+            try:
+                msg = __socket_worker.recv_json()
+            except:
+                self.log("system.event.zmqthreaded: Worker recv_json() is broken!",category='system')
+            if isinstance(msg, dict):
+                msg['zmq_worker'] = __socket_worker # send worker with msg so that it can be used for sending reply when pushed back to event module
+                self.push_event(msg)
+        __socket_worker.close()
+        self.log("system.event.zmqthreaded: Worker thread is terminated!",category='system')
+
+    def start_plugin(self):
         try:
             zmq.device(zmq.QUEUE, self.__socket_clients, self.__socket_workers)
         except:
@@ -103,5 +89,5 @@ class event_zmqthreaded(event):
         self.log("ZMQ Context is terminated!", category='system')
 
 def get_class():
-    return event_zmqthreaded
+    return message_zmqthreaded
 
