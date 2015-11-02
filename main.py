@@ -34,7 +34,8 @@ import shoreBackend as backend
 def start_daemon():
 
     address = os.environ['SHORE_DAEMON_ADDRESS']
-    event = system.event.observer(address)
+
+    event = system.event.observer()
     config = system.config.default(event)
     log = eval("system.log.{0}(event)".format(config.value('log')))
 
@@ -52,7 +53,7 @@ def start_daemon():
     print infra.plugin_dict
     print backend.plugin_dict
 
-    event.start()
+
 
 if __name__ == "__main__":
     start_daemon()

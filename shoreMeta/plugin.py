@@ -69,10 +69,7 @@ class plugin(object):
                 'text':text,
                 'source':source,
                 'category':category}
-        if self.module_name() == 'log':
-            self.log_func(msg)
-        else:
-            self.push_event(msg)
+        self.push_event(msg)
 
     def plugin_name(self):
         return self.__class__.__name__.split('_')[1]

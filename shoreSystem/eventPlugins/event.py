@@ -31,21 +31,17 @@ from plugin import plugin
 
 class event(plugin):
 
-    __observers = []
-
-    # Plugins should register this method for later pushing events to the notifier
-    # It is also called within system.event.<subclass> on receiving a request from sockets
-    def push_event(self, msg):
-        for observer in self.__observers:
-            observer(msg)
-
-    def print_observers(self):
-        for observer in self.__observers:
-            print observer
+    def __init__(self):
+        self.observers = []
 
     # Every plugin should call this method to register its event handler method
     def register_observer(self, func):
-        self.__observers.append(func)
+        self.observers.append(func)
+
+    def print_observers(self):
+        for observer in self.observers:
+            print observer
+
 
 
 
