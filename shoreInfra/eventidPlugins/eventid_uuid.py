@@ -29,13 +29,13 @@ from eventid import eventid
 import uuid
 
 
-class eventid_python(eventid):
+class eventid_uuid(eventid):
 
     def generate_id(self):
         return uuid.uuid1()
 
 def get_class():
-    return eventid_python
+    return eventid_uuid
 
 
 

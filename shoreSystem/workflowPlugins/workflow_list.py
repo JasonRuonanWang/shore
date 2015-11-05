@@ -33,7 +33,7 @@ class workflow_list(workflow):
     __flowlist={}
     __flowlist['get'] = ['authen', 'eventid', 'dodb', 'storage']
     __flowlist['put'] = ['authen', 'eventid', 'event', 'dodb', 'storage']
-    __flowlist['query'] = ['eventid', 'dodb']
+    __flowlist['query'] = ['authen', 'eventid', 'dodb']
 
     def event_handler_plugin(self, msg):
         next_module = self.get_next(msg['operation'], msg['module'])

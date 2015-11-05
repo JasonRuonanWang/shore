@@ -28,7 +28,7 @@
 from log import log
 import time
 
-class log_default(log):
+class log_standard(log):
 
     def log_func(self,msg):
         text = self.style_code['shadow'] + '[' + time.strftime("%a, %d %b %Y %H:%M:%S") + '] ' + self.style_code['endc']
@@ -59,6 +59,6 @@ class log_default(log):
 
 
 def get_class():
-    return log_default
+    return log_standard
 
 

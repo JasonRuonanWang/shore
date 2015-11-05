@@ -34,9 +34,7 @@ class message(plugin):
 
     def __init__(self, event):
         plugin.__init__(self,event)
-        msg = {}
-        msg['operation'] = 'put'
-        print msg
+        msg = {'operation':'admin', 'module':'message', 'config':'message_address'}
         self.push_event(msg)
 
     def event_handler_module(self, msg):

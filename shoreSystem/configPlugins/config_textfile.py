@@ -44,15 +44,6 @@ class config_textfile(config):
         except:
             pass
 
-    def value(self, key):
-        if self.__config_dict__.has_key(key):
-            return self.__config_dict__[key]
-        else:
-            return 'default'
-
-    def print_dict(self):
-        print self.__config_dict__
-
 def get_class():
     return config_textfile
 

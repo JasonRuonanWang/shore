@@ -35,10 +35,12 @@ def start_daemon():
 
     address = os.environ['SHORE_DAEMON_ADDRESS']
 
+    config = system.config.default()
     event = system.event.observer()
-    config = system.config.default(event)
     log = eval("system.log.{0}(event)".format(config.value('log')))
     workflow = eval("system.workflow.{0}(event)".format(config.value('workflow')))
+
+    print config.value('log')
 
     for module in infra.plugin_dict:
         confv = config.value(module)
@@ -53,8 +55,6 @@ def start_daemon():
     print system.plugin_dict
     print infra.plugin_dict
     print backend.plugin_dict
-
-
 
 if __name__ == "__main__":
     start_daemon()

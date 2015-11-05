@@ -32,16 +32,36 @@ from plugin import plugin
 
 class config(plugin):
 
-    __config_dict__ = {}
+    def __init__(self):
+        self.__config_dict__ = {
+            # system
+            'log':'standard',
+            'event':'observer',
+            'workflow':'list',
+            # infrastructure
+            'authen':'null',
+            'dodb':'mongo',
+            'eventid':'uuid',
+            'message':'zmqthreaded',
+            'transport':'zmqthreaded',
+        }
 
     def value(self, key):
         if self.__config_dict__.has_key(key):
             return self.__config_dict__[key]
         else:
-            return 'default'
+            print 'Error: Key {0} not found in config!'.format(key)
 
     def print_dict(self):
         print self.__config_dict__
+
+    def event_handler(self, msg):
+        if not msg.has_key('config'):
+            return False
+
+
+
+
 
 
 
