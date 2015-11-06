@@ -32,42 +32,45 @@ import threading
 
 class message(plugin):
 
-    def __init__(self, event):
-        plugin.__init__(self,event)
-        msg = {'operation':'admin', 'module':'message', 'config':'message_address'}
-        self.push_event(msg)
+    _threads = []
 
-    def event_handler_module(self, msg):
-        # if admin event
+    def event_handler_admin(self, msg):
         if self.msg_kv_match(msg, 'operation', 'admin'):
-            if self.msg_kv_match(msg, 'command', 'init'):
-                if msg.has_key['message_address']:
-                    self.__url_clients = msg['message_address']
+            if self.msg_kv_match(msg, 'command', 'start'):
+                if msg.has_key('message_address'):
+                    self._url_clients = msg['message_address']
                     self.bind()
                     self.start()
+                    return False
                 else:
-                    self.log('tyring to start message module without a valid address', category='error', source=__name__)
+                    if not msg.has_key('config'):
+                        msg['config']='message_address'
+                        self.push_event(msg, self.__class__.__name__)
+                    return False
             if self.msg_kv_match(msg, 'command', 'terminate'):
                 self.stop()
-            # don't push the message back into the event queue
+                return False
             return False
+        return
 
+    def event_handler_workflow(self, msg):
         self.respond(msg)
         return True
 
     def start(self):
+        self._looping = True
         for i in range(2):
-            thread = threading.Thread(target=self.worker_routine, args=())
-            self.__threads.append(thread)
+            thread = threading.Thread(target=self.start_thread)
+            self._threads.append(thread)
             thread.start()
-        self.start_plugin()
 
-    def start_plugin(self):
-        return
+        thread = threading.Thread(target=self.start_plugin)
+        thread.start()
 
     def stop(self):
+        self._looping = False
+        print self._looping
         t = threading.Thread(target=self.stop_thread)
         t.start()
-        self.__looping = False
 
 

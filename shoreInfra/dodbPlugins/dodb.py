@@ -38,7 +38,10 @@ class dodb(plugin):
     def get(self, doid, column, row):
         return
 
-    def event_handler_module(self, msg):
+    def event_handler_admin(self, msg):
+        return
+
+    def event_handler_workflow(self, msg):
         if not msg.has_key('doid'):
             self.log('query dodb without having valid data object ID', category='error', source=__name__)
             return False

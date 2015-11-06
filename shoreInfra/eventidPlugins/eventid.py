@@ -32,7 +32,10 @@ from plugin import plugin
 
 class eventid(plugin):
 
-    def event_handler_module(self, msg):
+    def event_handler_admin(self, msg):
+        return
+
+    def event_handler_workflow(self, msg):
         msg['event_id'] = self.generate_id()
         self.log('request received: {0}'.format(msg))
         return True

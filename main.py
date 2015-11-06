@@ -27,6 +27,7 @@
 #    jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
 import os
+import time
 import shoreSystem as system
 import shoreInfra as infra
 import shoreBackend as backend
@@ -35,26 +36,22 @@ def start_daemon():
 
     address = os.environ['SHORE_DAEMON_ADDRESS']
 
-    config = system.config.default()
     event = system.event.observer()
+    config = system.config.default(event)
     log = eval("system.log.{0}(event)".format(config.value('log')))
     workflow = eval("system.workflow.{0}(event)".format(config.value('workflow')))
 
-    print config.value('log')
-
     for module in infra.plugin_dict:
-        confv = config.value(module)
         for plugin in infra.plugin_dict[module]:
-            if plugin == confv:
+            if plugin == config.value(module):
                 instance = eval("infra.{0}.{1}(event)".format(module, plugin))
 
     for module in backend.plugin_dict:
         for plugin in backend.plugin_dict[module]:
             instance = eval("backend.{0}.{1}(event)".format(module, plugin))
 
-    print system.plugin_dict
-    print infra.plugin_dict
-    print backend.plugin_dict
+    event.push_event({'operation':'admin', 'module':'message', 'command':'start'}, __name__)
+
 
 if __name__ == "__main__":
     start_daemon()

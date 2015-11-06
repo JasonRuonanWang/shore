@@ -31,13 +31,11 @@ from message import message
 
 class message_zmqthreaded(message):
 
-    __context = zmq.Context.instance()
-    __isbound = False
-    __socket_clients = None
-    __socket_workers = None
-    __url_workers = "inproc://message_workers"
-    __threads = []
-    __looping = True
+    _context = zmq.Context.instance()
+    _socket_clients = None
+    _socket_workers = None
+    _url_workers = "inproc://message_workers"
+    _looping = False
 
 
     def respond(self, msg):
@@ -48,44 +46,45 @@ class message_zmqthreaded(message):
 
     def bind(self):
         while True:
-            self.__socket_clients = self.__context.socket(zmq.ROUTER)
-            self.__socket_workers = self.__context.socket(zmq.DEALER)
+            self._socket_clients = self._context.socket(zmq.ROUTER)
+            self._socket_workers = self._context.socket(zmq.DEALER)
             try:
-                self.__socket_clients.bind(self.__url_clients)
-                self.__socket_workers.bind(self.__url_workers)
-                self.__isbound = True
-                self.log('bound {0}'.format(self.__url_clients),category='system')
+                self._socket_clients.bind(self._url_clients)
+                self._socket_workers.bind(self._url_workers)
+                self.log('bound {0}'.format(self._url_clients),category='system')
                 return
             except:
-                self.log('unable to bind address {0}'.format(self.__url_clients),source=__name__,category='error')
-                self.__url_clients = raw_input('please re-enter the local address:')
+                self.log('unable to bind address {0}'.format(self._url_clients),source=__name__,category='error')
+                pass
 
     def start_thread(self):
-        __socket_worker = self.__context.socket(zmq.REP)
-        __socket_worker.connect(self.__url_workers)
+        _socket_worker = self._context.socket(zmq.REP)
+        _socket_worker.connect(self._url_workers)
         msg = None
-        while self.__looping:
+        while self._looping:
             try:
-                msg = __socket_worker.recv_json()
+                msg = _socket_worker.recv_json()
+                if isinstance(msg, dict):
+                    msg['zmq_worker'] = _socket_worker # send worker with msg so that it can be used for sending reply when pushed back to event module
+                    self.push_event(msg, self.__class__.__name__)
             except:
+                self._looping = False
                 self.log("system.event.zmqthreaded: Worker recv_json() is broken!",category='system')
-            if isinstance(msg, dict):
-                msg['zmq_worker'] = __socket_worker # send worker with msg so that it can be used for sending reply when pushed back to event module
-                self.push_event(msg)
-        __socket_worker.close()
+        _socket_worker.close()
         self.log("system.event.zmqthreaded: Worker thread is terminated!",category='system')
 
     def start_plugin(self):
         try:
-            zmq.device(zmq.QUEUE, self.__socket_clients, self.__socket_workers)
+            zmq.device(zmq.QUEUE, self._socket_clients, self._socket_workers)
         except:
             self.log("ZMQ Device is terminated!", category='system')
 
     def stop_thread(self):
-        self.__socket_workers.close()
+        print self._looping
         time.sleep(1)
-        self.__socket_clients.close()
-        self.__context.term()
+        self._socket_workers.close()
+        self._socket_clients.close()
+        self._context.term()
         self.log("ZMQ Context is terminated!", category='system')
 
 def get_class():

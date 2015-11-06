@@ -35,20 +35,28 @@ class plugin(object):
         self.log('{0} instantiated and registered to event channel.'.format(self.__class__.__name__), category='system')
 
     def event_handler(self, msg_recv):
+        if not msg_recv.has_key('operation'):
+            return False
         msg = copy.copy(msg_recv)
+        if self.msg_kv_match(msg, 'operation', 'admin'):
+            self.event_handler_admin(msg)
+        else:
+            # check if this module should respond
+            if not self.msg_kv_match(msg, 'module', self.__class__.__name__.split('_')[0]):
+                return False
+            # check if the event's status is pre processing
+            if not self.msg_kv_match(msg, 'status', 'pre'):
+                return False
+            # event_handler_workflow must return True to send msg back to workflow
+            if self.event_handler_workflow(msg):
+                msg['status'] = 'post'
+                self.push_event(msg, self.__class__.__name__)
 
-        # check if this module should respond
-        if not self.msg_kv_match(msg, 'module', self.__class__.__name__.split('_')[0]):
-            return False
+    def event_handler_admin(self, msg):
+        return
 
-        # check if the event's status is pre processing
-        if not self.msg_kv_match(msg, 'status', 'pre'):
-            return False
-
-        # event_handler_module must return True to send msg back to workflow
-        if self.event_handler_module(msg):
-            msg['status'] = 'post'
-            self.push_event(msg)
+    def event_handler_workflow(self, msg):
+        return
 
     def msg_kv_match(self, msg, k, v):
         if not msg.has_key(k):
@@ -58,14 +66,15 @@ class plugin(object):
         return True
 
     def log(self, text, category=None, source=None, color=None, style=None):
-        msg = { 'module':'log',
-                'status':'pre',
-                'color':color,
-                'style':style,
-                'text':text,
-                'source':source,
-                'category':category}
-        self.push_event(msg)
+        msg = {
+            'operation':'admin',
+            'module':'log',
+            'color':color,
+            'style':style,
+            'text':text,
+            'source':source,
+            'category':category}
+        self.push_event(msg, self.__class__.__name__)
 
     def plugin_name(self):
         return self.__class__.__name__.split('_')[1]

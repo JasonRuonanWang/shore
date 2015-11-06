@@ -31,8 +31,10 @@ from plugin import plugin
 
 class transport(plugin):
 
-    def event_handler_module(self, msg):
+    def event_handler_workflow(self, msg):
         return True
 
+    def event_handler_admin(self, msg):
+        return
 
 

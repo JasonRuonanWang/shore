@@ -32,7 +32,8 @@ class event_observer(event):
 
     # Plugins should register this method for later pushing events to the notifier
     # It is also called within system.event.<subclass> on receiving a request from sockets
-    def push_event(self, msg):
+    def push_event(self, msg, from_module):
+        msg['from_module'] = from_module
         for observer in self.observers:
             observer(msg)
 

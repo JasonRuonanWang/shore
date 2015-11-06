@@ -29,9 +29,7 @@
 from config import config
 
 class config_default(config):
-
-    def __init_plugin(self):
-        return
+    pass
 
 def get_class():
     return config_default

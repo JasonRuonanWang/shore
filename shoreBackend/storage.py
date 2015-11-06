@@ -30,14 +30,9 @@ from plugin import plugin
 
 class storage(plugin):
 
-    def event_handler_module(self, msg):
+    def event_handler_workflow(self, msg):
         # check if this plugin should respond
-        if not msg.has_key('backend'):
-            return False
-        if msg['backend'] != self.__class__.__name__.split('_')[-1]:
-            return False
-
-        if not msg.has_key('operation'):
+        if not self.msg_kv_match('backend', self.plugin_name()):
             return False
         return True
 

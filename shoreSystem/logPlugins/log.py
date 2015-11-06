@@ -81,9 +81,11 @@ class log(plugin):
             ############
     }
 
-    def event_handler_module(self, msg):
-        self.log_func(msg)
-        return False
+    def event_handler_admin(self, msg):
+        if self.msg_kv_match(msg, 'module', 'log'):
+            self.log_func(msg)
+            pass
+
 
 
 

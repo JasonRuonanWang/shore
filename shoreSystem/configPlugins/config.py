@@ -26,13 +26,18 @@
 #    jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
 
+import os
 import sys
+import copy
 sys.path.append('shoreMeta')
 from plugin import plugin
 
 class config(plugin):
 
-    def __init__(self):
+    def __init__(self, event):
+        plugin.__init__(self,event)
+        message_address = os.environ['SHORE_DAEMON_ADDRESS']
+        transport_address = message_address.split(':')[0] + ':' + message_address.split(':')[1] + ':' + str(int(message_address.split(':')[2]) + 1)
         self.__config_dict__ = {
             # system
             'log':'standard',
@@ -43,7 +48,9 @@ class config(plugin):
             'dodb':'mongo',
             'eventid':'uuid',
             'message':'zmqthreaded',
+            'message_address':message_address,
             'transport':'zmqthreaded',
+            'transport_address':transport_address,
         }
 
     def value(self, key):
@@ -55,9 +62,17 @@ class config(plugin):
     def print_dict(self):
         print self.__config_dict__
 
-    def event_handler(self, msg):
+    def event_handler(self, msg_recv):
+        msg = copy.copy(msg_recv)
         if not msg.has_key('config'):
             return False
+        if not self.__config_dict__.has_key(msg['config']):
+            return False
+        if msg.has_key(msg['config']):
+            return False
+        msg[msg['config']] = self.__config_dict__[msg['config']]
+        self.push_event(msg, self.__class__.__name__)
+
 
 
 

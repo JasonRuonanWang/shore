@@ -45,12 +45,12 @@ class workflow(plugin):
             if not msg.has_key('module'):
                 msg['module'] = self.get_first(oper)
                 msg['status'] = 'pre'
-                self.push_event(msg)
+                self.push_event(msg, self.__class__.__name__)
                 return
             # in case status is post, get to the next module
             if msg['status'] == 'post':
                 if self.event_handler_plugin(msg):
-                    self.push_event(msg)
+                    self.push_event(msg, self.__class__.__name__)
                     return
 
 

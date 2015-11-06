@@ -31,9 +31,11 @@ from plugin import plugin
 
 class authen(plugin):
 
-    def event_handler_module(self, msg):
+    def event_handler_workflow(self, msg):
         return self.authen(msg)
 
+    def event_handler_admin(self, msg):
+        return
 
 
 
