@@ -48,6 +48,7 @@ class message(plugin):
                         self.push_event(msg, self.__class__.__name__)
                     return False
             if self.msg_kv_match(msg, 'command', 'terminate'):
+                self.respond(msg)
                 self.stop()
                 return False
             return False
@@ -69,7 +70,6 @@ class message(plugin):
 
     def stop(self):
         self._looping = False
-        print self._looping
         t = threading.Thread(target=self.stop_thread)
         t.start()
 

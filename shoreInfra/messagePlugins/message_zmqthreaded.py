@@ -40,7 +40,10 @@ class message_zmqthreaded(message):
 
     def respond(self, msg):
         if msg.has_key('zmq_worker'):
-            msg['zmq_worker'].send_json({"event_id": str(msg['event_id'])})
+            if msg.has_key('event_id'):
+                msg['zmq_worker'].send_json({"event_id": str(msg['event_id'])})
+            elif msg.has_key('command'):
+                msg['zmq_worker'].send_json({msg['command']: 'OK'})
         else:
             self.log('No zmq_worker handler in msg',category='error', source=__name__)
 

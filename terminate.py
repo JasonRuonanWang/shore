@@ -12,7 +12,7 @@ socket.connect(address)
 
 socket.send_json({'command':'terminate','operation':'admin'})
 msg = socket.recv_json()
-msg['event_id'] = uuid.UUID(msg['event_id']).hex
+#msg['event_id'] = uuid.UUID(msg['event_id']).hex
 print msg
 
 
