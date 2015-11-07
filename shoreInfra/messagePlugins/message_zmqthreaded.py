@@ -37,15 +37,17 @@ class message_zmqthreaded(message):
     _url_workers = "inproc://message_workers"
     _looping = False
 
-
     def respond(self, msg):
         if msg.has_key('zmq_worker'):
             if msg.has_key('event_id'):
                 msg['zmq_worker'].send_json({"event_id": str(msg['event_id'])})
             elif msg.has_key('command'):
                 msg['zmq_worker'].send_json({msg['command']: 'OK'})
+            else:
+                msg['zmq_worker'].send_json({'Unknown': 'OK'})
         else:
             self.log('No zmq_worker handler in msg',category='error', source=__name__)
+        pass
 
     def bind(self):
         while True:
@@ -72,9 +74,9 @@ class message_zmqthreaded(message):
                     self.push_event(msg, self.__class__.__name__)
             except:
                 self._looping = False
-                self.log("system.event.zmqthreaded: Worker recv_json() is broken!",category='system')
+                self.log("Worker recv_json() is broken!", source = self.plugin_name(), category='system')
         _socket_worker.close()
-        self.log("system.event.zmqthreaded: Worker thread is terminated!",category='system')
+        self.log("Worker thread is terminated!", source = self.plugin_name(), category='system')
 
     def start_plugin(self):
         try:
