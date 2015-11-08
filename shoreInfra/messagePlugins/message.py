@@ -35,24 +35,22 @@ class message(plugin):
     _threads = []
 
     def event_handler_admin(self, msg):
-        if self.msg_kv_match(msg, 'operation', 'admin'):
-            if self.msg_kv_match(msg, 'command', 'start'):
-                if msg.has_key('message_address'):
-                    self._url_clients = msg['message_address']
-                    self.bind()
-                    self.start()
-                    return False
-                else:
-                    if not msg.has_key('config'):
-                        msg['config']='message_address'
-                        self.push_event(msg, self.__class__.__name__)
-                    return False
-            if self.msg_kv_match(msg, 'command', 'terminate'):
-                self.respond(msg)
-                self.stop()
+        if self.msg_kv_match(msg, 'command', 'start'):
+            if msg.has_key('message_address'):
+                self._url_clients = msg['message_address']
+                self.bind()
+                self.start()
                 return False
+            else:
+                if not msg.has_key('config'):
+                    msg['config']='message_address'
+                    self.push_event(msg, self.__class__.__name__)
+                return False
+        if self.msg_kv_match(msg, 'command', 'terminate'):
+            self.respond(msg)
+            self.stop()
             return False
-        return
+        return False
 
     def event_handler_workflow(self, msg):
         self.respond(msg)

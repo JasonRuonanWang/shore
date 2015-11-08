@@ -50,7 +50,7 @@ def start_daemon():
         for plugin in backend.plugin_dict[module]:
             instance = eval("backend.{0}.{1}(event)".format(module, plugin))
 
-    event.push_event({'operation':'admin', 'module':'message', 'command':'start'}, __name__)
+    event.push_event({'operation':'admin', 'command':'start'}, __name__)
 
 
 if __name__ == "__main__":

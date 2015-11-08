@@ -65,7 +65,25 @@ class plugin(object):
             return False
         return True
 
+
+    def plugin_name(self):
+        return self.__class__.__name__.split('_')[1]
+
+    def module_name(self):
+        return self.__class__.__name__.split('_')[0]
+
+    def class_name(self):
+        return self.__class__.__name__
+
+    def file_name(self):
+        return __file__
+
+    def name(self):
+        return self.class_name()
+
     def log(self, text, category=None, source=None, color=None, style=None):
+        if source == None:
+            source = self.name()
         msg = {
             'operation':'admin',
             'module':'log',
@@ -75,12 +93,3 @@ class plugin(object):
             'source':source,
             'category':category}
         self.push_event(msg, self.__class__.__name__)
-
-    def plugin_name(self):
-        return self.__class__.__name__.split('_')[1]
-
-    def module_name(self):
-        return self.__class__.__name__.split('_')[0]
-
-
-

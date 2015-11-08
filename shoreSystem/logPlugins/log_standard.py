@@ -31,10 +31,11 @@ import time
 class log_standard(log):
 
     def log_func(self,msg):
-        text = self.style_code['shadow'] + '[' + time.strftime("%a, %d %b %Y %H:%M:%S") + '] ' + self.style_code['endc']
+        text = self.style_code['shadow'] + '[' + time.strftime("%a, %d %b %Y %H:%M:%S") + '] '
         if msg.has_key('source'):
             if msg['source']:
-                text += 'From file ' + msg['source'] + ' '
+                text += 'From ' + msg['source'] + ' '
+        text += self.style_code['endc']
         if msg.has_key('category'):
             if msg['category']:
                 if msg['category'] == 'system':

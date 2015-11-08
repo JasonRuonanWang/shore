@@ -46,7 +46,7 @@ class message_zmqthreaded(message):
             else:
                 msg['zmq_worker'].send_json({'Unknown': 'OK'})
         else:
-            self.log('No zmq_worker handler in msg',category='error', source=__name__)
+            self.log('No zmq_worker handler in msg',category='error')
         pass
 
     def bind(self):
@@ -56,10 +56,10 @@ class message_zmqthreaded(message):
             try:
                 self._socket_clients.bind(self._url_clients)
                 self._socket_workers.bind(self._url_workers)
-                self.log('bound {0}'.format(self._url_clients),category='system')
+                self.log('bound {0}'.format(self._url_clients), category='system')
                 return
             except:
-                self.log('unable to bind address {0}'.format(self._url_clients),source=__name__,category='error')
+                self.log('unable to bind address {0}'.format(self._url_clients), category='error')
                 pass
 
     def start_thread(self):
@@ -74,9 +74,9 @@ class message_zmqthreaded(message):
                     self.push_event(msg, self.__class__.__name__)
             except:
                 self._looping = False
-                self.log("Worker recv_json() is broken!", source = self.plugin_name(), category='system')
+                self.log("Worker recv_json() is broken!", category='system')
         _socket_worker.close()
-        self.log("Worker thread is terminated!", source = self.plugin_name(), category='system')
+        self.log("Worker thread is terminated!", category='system')
 
     def start_plugin(self):
         try:
@@ -85,7 +85,6 @@ class message_zmqthreaded(message):
             self.log("ZMQ Device is terminated!", category='system')
 
     def stop_thread(self):
-        print self._looping
         time.sleep(1)
         self._socket_workers.close()
         self._socket_clients.close()

@@ -28,13 +28,46 @@
 import sys
 sys.path.append('shoreMeta')
 from plugin import plugin
+import threading
 
 class transport(plugin):
 
-    def event_handler_workflow(self, msg):
-        return True
+    _threads = []
 
     def event_handler_admin(self, msg):
-        return
+        if self.msg_kv_match(msg, 'command', 'start'):
+            if msg.has_key('transport_address'):
+                self._url_clients = msg['transport_address']
+                self.bind()
+                self.start()
+                return False
+            else:
+                if not msg.has_key('config'):
+                    msg['config']='transport_address'
+                    self.push_event(msg, self.__class__.__name__)
+                return False
+        if self.msg_kv_match(msg, 'command', 'terminate'):
+            self.stop()
+            return False
+        return False
+
+    def event_handler_workflow(self, msg):
+        self.respond(msg)
+        return True
+
+    def start(self):
+        self._looping = True
+        for i in range(1):
+            thread = threading.Thread(target=self.start_thread)
+            self._threads.append(thread)
+            thread.start()
+
+        thread = threading.Thread(target=self.start_plugin)
+        thread.start()
+
+    def stop(self):
+        self._looping = False
+        t = threading.Thread(target=self.stop_thread)
+        t.start()
 
 
