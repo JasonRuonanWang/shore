@@ -58,7 +58,7 @@ class message(plugin):
 
     def start(self):
         self._looping = True
-        for i in range(1):
+        for i in range(4):
             thread = threading.Thread(target=self.start_thread)
             self._threads.append(thread)
             thread.start()
