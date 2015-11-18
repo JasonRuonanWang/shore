@@ -50,12 +50,12 @@ for _pc in __directories__:
 
 
 def print_categories():
-	print __categories__
+	print (__categories__)
 
 def print_dictionary():
-	print plugin_dict
+	print (plugin_dict)
 
 def print_directories():
-	print __directories__
+	print (__directories__)
 
 

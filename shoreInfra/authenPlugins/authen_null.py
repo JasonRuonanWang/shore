@@ -25,6 +25,8 @@
 #    Any bugs, problems, and/or suggestions please email to
 #    jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
+import sys
+sys.path.append('shoreInfra/authenPlugins')
 from authen import authen
 
 class authen_null(authen):

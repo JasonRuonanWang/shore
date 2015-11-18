@@ -42,15 +42,15 @@ class dodb(plugin):
         return
 
     def event_handler_workflow(self, msg):
-        if not msg.has_key('doid'):
+        if not 'doid' in msg:
             self.log('query dodb without having valid data object ID', category='error', source=__name__)
             return False
-        if not msg.has_key('operation'):
+        if not 'operation' in msg:
             self.log('msg does not specify operation to do', category='error', source=__name__)
             return False
 
         if msg['operation'] == 'put':
-            if not msg.has_key('shape'):
+            if not 'shape' in msg:
                 msg['shape'] = None
             self.put(msg['doid'], msg['column'], msg['row'], msg['shape'])
         elif msg['operation'] == 'get':

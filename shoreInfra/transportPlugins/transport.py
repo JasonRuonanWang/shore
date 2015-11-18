@@ -36,13 +36,13 @@ class transport(plugin):
 
     def event_handler_admin(self, msg):
         if self.msg_kv_match(msg, 'command', 'start'):
-            if msg.has_key('transport_address'):
+            if 'transport_address' in msg:
                 self._url_clients = msg['transport_address']
                 self.bind()
                 self.start()
                 return False
             else:
-                if not msg.has_key('config'):
+                if not 'config' in msg:
                     msg['config']='transport_address'
                     self.push_event(msg, self.__class__.__name__)
                 return False

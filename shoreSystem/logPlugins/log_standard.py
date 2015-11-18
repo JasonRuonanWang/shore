@@ -25,6 +25,8 @@
 #	 Any bugs, problems, and/or suggestions please email to
 #	 jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
+import sys
+sys.path.append('shoreSystem/logPlugins')
 from log import log
 import time
 
@@ -32,11 +34,11 @@ class log_standard(log):
 
     def log_func(self,msg):
         text = self.style_code['shadow'] + '[' + time.strftime("%a, %d %b %Y %H:%M:%S") + '] '
-        if msg.has_key('source'):
+        if 'source' in msg:
             if msg['source']:
                 text += 'From ' + msg['source'] + ' '
         text += self.style_code['endc']
-        if msg.has_key('category'):
+        if 'category' in msg:
             if msg['category']:
                 if msg['category'] == 'system':
                     text += self.style_code['pink'] + '<SYSTEM> '
@@ -47,16 +49,16 @@ class log_standard(log):
             else:
                 text += self.style_code['blue'] + '<EVENT> '
 
-        if msg.has_key('color'):
+        if 'color' in msg:
             if msg['color']:
                 text += self.style_code[msg['color']]
-        if msg.has_key('style'):
+        if 'style' in msg:
             if msg['style']:
                 text += self.style_code[msg['style']]
-        if msg.has_key('text'):
+        if 'text' in msg:
             text += msg['text']
         text += self.style_code['endc']
-        print text
+        print (text)
 
 
 def get_class():

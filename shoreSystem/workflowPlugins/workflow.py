@@ -36,13 +36,13 @@ class workflow(plugin):
     # overwrite plugin.event_handler
     def event_handler(self, msg_recv):
         msg = copy.copy(msg_recv)
-        if not msg.has_key('operation'):
+        if not 'operation' in msg:
             return False
 
         oper = msg['operation']
         if oper == 'put' or oper == 'get' or oper == 'query':
             # in case there isn't 'module' key, add it and start from the beginning of the workflow
-            if not msg.has_key('module'):
+            if not 'module' in msg:
                 msg['module'] = self.get_first(oper)
                 msg['status'] = 'pre'
                 self.push_event(msg, self.__class__.__name__)

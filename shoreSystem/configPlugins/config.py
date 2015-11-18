@@ -54,21 +54,21 @@ class config(plugin):
         }
 
     def value(self, key):
-        if self.__config_dict__.has_key(key):
+        if key in self.__config_dict__:
             return self.__config_dict__[key]
         else:
-            print 'Error: Key {0} not found in config!'.format(key)
+            print ('Error: Key {0} not found in config!'.format(key))
 
     def print_dict(self):
-        print self.__config_dict__
+        print (self.__config_dict__)
 
     def event_handler(self, msg_recv):
         msg = copy.copy(msg_recv)
-        if not msg.has_key('config'):
+        if not 'config' in msg:
             return False
-        if not self.__config_dict__.has_key(msg['config']):
+        if not msg['config'] in self.__config_dict__:
             return False
-        if msg.has_key(msg['config']):
+        if msg['config'] in msg:
             return False
         msg[msg['config']] = self.__config_dict__[msg['config']]
         self.push_event(msg, self.__class__.__name__)

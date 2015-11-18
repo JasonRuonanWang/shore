@@ -25,23 +25,10 @@
 #    Any bugs, problems, and/or suggestions please email to
 #    jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
-import sys
-sys.path.append('shoreMeta')
-from plugin import plugin
 
-class event(plugin):
+import zmq
 
-    def __init__(self):
-        self.observers = []
-
-    # Every plugin should call this method to register its event handler method
-    def register_observer(self, func):
-        self.observers.append(func)
-
-    def print_observers(self):
-        for observer in self.observers:
-            print (observer)
-
-
+def shorePut(doid, column, row, shape, data):
+    print 'put'
 
 

@@ -1,9 +1,15 @@
-PYINC=-I/System/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7
-PYLIB=-L/System/Library/Frameworks/Python.framework/Versions/2.7/lib
+install:lib
+ifdef LIBPATH
+	cp libShoreClient.so $(LIBPATH)/shoreClient/lib 
+	cp shoreClient.h $(LIBPATH)/shoreClient/include
+endif
 
-a:
+lib:
 	cython *.pyx
-	cc *.c $(PYINC) $(PYLIB) -lpython2.7 --shared -o libShoreClient.so
+	cc *.c -lpython2.7 --shared -o libShoreClient.so
 
 cl:
 	rm -rf *.so *.o
+
+clean:cl
+	rm -rf *.c *.h

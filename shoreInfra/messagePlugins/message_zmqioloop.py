@@ -30,6 +30,8 @@ from zmq.eventloop.zmqstream import ZMQStream
 from zmq.eventloop.ioloop import IOLoop
 import time
 import threading
+import sys
+sys.path.append('shoreInfra/messagePlugins')
 from message import message
 
 
@@ -73,7 +75,6 @@ class message_zmqioloop(message):
         def on_recv(stream, msg):
             self._mainloop(msg)
             stream.send('OK')
-            print "sent OK"
             if msg[0] == "exit":
                 t = threading.Thread(target=self.__stop)
                 t.start()

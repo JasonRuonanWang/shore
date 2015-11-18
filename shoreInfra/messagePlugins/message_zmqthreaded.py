@@ -38,10 +38,10 @@ class message_zmqthreaded(message):
     _looping = False
 
     def respond(self, msg):
-        if msg.has_key('zmq_worker'):
-            if msg.has_key('event_id'):
+        if 'zmq_worker' in msg:
+            if 'event_id' in msg:
                 msg['zmq_worker'].send_json({"event_id": str(msg['event_id'])})
-            elif msg.has_key('command'):
+            elif 'command' in msg:
                 msg['zmq_worker'].send_json({msg['command']: 'OK'})
             else:
                 msg['zmq_worker'].send_json({'Unknown': 'OK'})

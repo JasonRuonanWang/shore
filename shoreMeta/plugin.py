@@ -35,7 +35,7 @@ class plugin(object):
         self.log('{0} instantiated and registered to event channel.'.format(self.__class__.__name__), category='system')
 
     def event_handler(self, msg_recv):
-        if not msg_recv.has_key('operation'):
+        if not 'operation' in msg_recv:
             return False
         msg = copy.copy(msg_recv)
         if self.msg_kv_match(msg, 'operation', 'admin'):
@@ -59,7 +59,7 @@ class plugin(object):
         return
 
     def msg_kv_match(self, msg, k, v):
-        if not msg.has_key(k):
+        if not k in msg:
             return False
         if msg[k] != v:
             return False
