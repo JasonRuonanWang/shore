@@ -2,6 +2,7 @@ install:lib
 ifdef LIBPATH
 	cp libShoreClient.so $(LIBPATH)/shoreClient/lib 
 	cp shoreClient.h $(LIBPATH)/shoreClient/include
+	cp ../shoreClient.py $(LIBPATH)/shoreClient/python
 endif
 
 lib:

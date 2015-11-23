@@ -25,30 +25,32 @@
 #    Any bugs, problems, and/or suggestions please email to
 #    jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
+import sys
+sys.path.append('../')
+import shoreClient
+import numpy as np
+import operator
+import functools
 
-import os
-import zmq
 
-socket = None
+cdef public void shoreZmqInitCy():
+    shoreClient.shoreZmqInit()
 
-def shoreZmqInit():
-    global socket
-    address = os.environ['SHORE_DAEMON_ADDRESS']
-    context = zmq.Context()
-    socket = context.socket(zmq.REQ)
-    socket.connect(address)
+cdef public void shorePutCy(const char *doid, const char* column, unsigned int rowid, unsigned int *shape_c, void *data_c):
+    shape = []
+    for i in range(0, shape_c[0]):
+        shape.append(shape_c[i+1])
+    cdef int shape_t=functools.reduce(operator.mul, shape, 1)
 
-def shorePut(doid, column, row, shape, data):
-    global socket
-    msg = {
-        'operation' : 'put',
-        'doid' : doid,
-        'column' : column,
-        'row' : row,
-        'shape' : shape
-    }
-    print socket
-    socket.send_json(msg)
-    ret = socket.recv_json();
-    print ret
+
+    cdef int[:] data = <int[:shape_t]>data_c
+#    my_array_np = np.asarray(my_array)
+#    my_array_np_rs = my_array_np.reshape(shape)
+
+
+    shoreClient.shorePut(doid, column, rowid, shape, data)
+
+
+
+
 
