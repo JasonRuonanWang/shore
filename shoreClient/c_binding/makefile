@@ -7,7 +7,7 @@ endif
 
 lib:
 	cython *.pyx
-	cc *.c -lpython2.7 --shared -o libShoreClient.so
+	cc -std=c99 *.c -lpython2.7 --shared -o libShoreClient.so
 
 cl:
 	rm -rf *.so *.o

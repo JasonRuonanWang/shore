@@ -28,6 +28,7 @@
 
 import os
 import zmq
+import numpy as np
 
 socket = None
 
@@ -51,5 +52,10 @@ def shorePut(doid, column, row, shape, dtype, data):
     socket.send_json(msg)
     ret = socket.recv_json();
     print ret
-    print data
+    data_np = np.asarray(data)
+    data_np_rs = data_np.reshape(shape)
+    print data[0]
+    print data_np[0]
+    print data_np_rs[0]
+    print data_np_rs
 
