@@ -19,7 +19,7 @@
 #endif
 
 __PYX_EXTERN_C DL_IMPORT(void) shoreZmqInitCy(void);
-__PYX_EXTERN_C DL_IMPORT(void) shorePutCy(char const *, char const *, unsigned int, unsigned int *, void *);
+__PYX_EXTERN_C DL_IMPORT(void) shorePutCy(char const *, char const *, unsigned int, unsigned int *, int, void const *);
 
 #endif /* !__PYX_HAVE_API__shoreClientCy */
 

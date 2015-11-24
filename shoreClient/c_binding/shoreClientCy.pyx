@@ -25,6 +25,7 @@
 #    Any bugs, problems, and/or suggestions please email to
 #    jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
+
 import sys
 sys.path.append('../')
 import shoreClient
@@ -33,23 +34,39 @@ import operator
 import functools
 
 
+shorePutCyDict = {}
+
+
 cdef public void shoreZmqInitCy():
     shoreClient.shoreZmqInit()
 
-cdef public void shorePutCy(const char *doid, const char* column, unsigned int rowid, unsigned int *shape_c, void *data_c):
+cdef void shorePutScaler(const char *doid, const char* column, unsigned int rowid, unsigned int *shape_c, int dtype, const void *data_c):
+    data = data_c[0]
+    shoreClient.shorePut(doid, column, rowid, None, dtype, data)
+
+
+cdef void shorePutArray(const char *doid, const char* column, unsigned int rowid, unsigned int *shape_c, int dtype, const void *data_c):
+    cdef int shape_t
+    cdef int[:] data
     shape = []
     for i in range(0, shape_c[0]):
         shape.append(shape_c[i+1])
-    cdef int shape_t=functools.reduce(operator.mul, shape, 1)
+    shape_t=functools.reduce(operator.mul, shape, 1)
+    data = <int[:shape_t]>data_c
+    data_np = np.asarray(data)
+    data_np_rs = data_np.reshape(shape)
+    shoreClient.shorePut(doid, column, rowid, shape, dtype, data)
+    print data_c[0]
+    print data[0]
+    print data_np[0]
+    print data_np_rs[0]
 
 
-    cdef int[:] data = <int[:shape_t]>data_c
-#    my_array_np = np.asarray(my_array)
-#    my_array_np_rs = my_array_np.reshape(shape)
-
-
-    shoreClient.shorePut(doid, column, rowid, shape, data)
-
+cdef public void shorePutCy(const char *doid, const char* column, unsigned int rowid, unsigned int *shape_c, int dtype, const void *data_c):
+    if shape_c:
+        shorePutArray(doid, column, rowid, shape_c, dtype, data_c)
+    else:
+        shorePutScaler(doid, column, rowid, shape_c, dtype, data_c)
 
 
 

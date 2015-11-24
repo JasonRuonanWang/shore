@@ -38,17 +38,18 @@ def shoreZmqInit():
     socket = context.socket(zmq.REQ)
     socket.connect(address)
 
-def shorePut(doid, column, row, shape, data):
+def shorePut(doid, column, row, shape, dtype, data):
     global socket
     msg = {
         'operation' : 'put',
         'doid' : doid,
         'column' : column,
         'row' : row,
-        'shape' : shape
+        'shape' : shape,
+        'datatype' : dtype,
     }
-    print socket
     socket.send_json(msg)
     ret = socket.recv_json();
     print ret
+    print data
 
