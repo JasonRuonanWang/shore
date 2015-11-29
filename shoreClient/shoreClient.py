@@ -25,22 +25,27 @@
 #    Any bugs, problems, and/or suggestions please email to
 #    jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
-
 import os
 import zmq
 import numpy as np
+import cPickle as pickle
 
-socket = None
+message_socket = None
+transport_socket = None
 
 def shoreZmqInit():
-    global socket
-    address = os.environ['SHORE_DAEMON_ADDRESS']
+    global message_socket
+    global transport_socket
+    message_address = os.environ['SHORE_DAEMON_ADDRESS']
+    transport_address = message_address.split(':')[0] + ':' + message_address.split(':')[1] + ':' + str(int(message_address.split(':')[2]) + 1)
     context = zmq.Context()
-    socket = context.socket(zmq.REQ)
-    socket.connect(address)
+    message_socket = context.socket(zmq.REQ)
+    message_socket.connect(message_address)
+    transport_socket = context.socket(zmq.REQ)
+    transport_socket.connect(transport_address)
 
 def shorePut(doid, column, row, shape, dtype, data):
-    global socket
+    global message_socket
     msg = {
         'operation' : 'put',
         'doid' : doid,
@@ -49,13 +54,17 @@ def shorePut(doid, column, row, shape, dtype, data):
         'shape' : shape,
         'datatype' : dtype,
     }
-    socket.send_json(msg)
-    ret = socket.recv_json();
+    message_socket.send_json(msg)
+    ret = message_socket.recv_json();
     print ret
-    data_np = np.asarray(data)
-    data_np_rs = data_np.reshape(shape)
-    print data[0]
-    print data_np[0]
-    print data_np_rs[0]
-    print data_np_rs
+
+    if shape:
+        data_np = np.asarray(data)
+        data_np_rs = data_np.reshape(shape)
+        data_s = pickle.dumps(data_np_rs)
+        print data_s
+        print data[0]
+        print data_np[0]
+        print data_np_rs[0]
+        print data_np_rs
 

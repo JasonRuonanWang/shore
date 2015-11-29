@@ -38,12 +38,14 @@ class workflow(plugin):
         msg = copy.copy(msg_recv)
         if not 'operation' in msg:
             return False
-
         oper = msg['operation']
+        if not 'workflow' in msg:
+            return False
+        work = msg['workflow']
         if oper == 'put' or oper == 'get' or oper == 'query':
             # in case there isn't 'module' key, add it and start from the beginning of the workflow
             if not 'module' in msg:
-                msg['module'] = self.get_first(oper)
+                msg['module'] = self.get_first(oper,work)
                 msg['status'] = 'pre'
                 self.push_event(msg, self.__class__.__name__)
                 return

@@ -73,10 +73,3 @@ class config(plugin):
         msg[msg['config']] = self.__config_dict__[msg['config']]
         self.push_event(msg, self.__class__.__name__)
 
-
-
-
-
-
-
-

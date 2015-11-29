@@ -32,34 +32,31 @@ from workflow import workflow
 class workflow_list(workflow):
 
     __flowlist={}
-    __flowlist['get'] = ['authen', 'eventid', 'dodb', 'storage']
-    __flowlist['put'] = ['authen', 'eventid', 'message', 'dodb', None, 'transport', 'storage']
+    __flowlist['put'] = {}
+    __flowlist['put']['message'] = ['authen', 'eventid', 'message', 'dodb']
+    __flowlist['put']['transport'] = ['transport', 'storage']
+    __flowlist['get'] = {}
+    __flowlist['get']['message'] = ['authen', 'eventid', 'dodb', 'storage']
+    __flowlist['get']['transport'] = []
     __flowlist['query'] = ['authen', 'eventid', 'dodb']
 
     def event_handler_plugin(self, msg):
-        next_module = self.get_next(msg['operation'], msg['module'])
+        next_module = self.get_next(msg['operation'], msg['workflow'], msg['module'])
         if next_module:
             msg['module'] = next_module
             msg['status'] = 'pre'
             return True
         return False
 
-    def get_next(self, operation, current):
-        index = self.__flowlist[operation].index(current)
-        if index + 1 == len(self.__flowlist[operation]):
+    def get_next(self, operation, workflow, current):
+        index = self.__flowlist[operation][workflow].index(current)
+        if index + 1 == len(self.__flowlist[operation][workflow]):
             return None
         else:
-            return self.__flowlist[operation][index + 1]
+            return self.__flowlist[operation][workflow][index + 1]
 
-    def get_previous(self, flowlist, current):
-        index = flowlist.index(current)
-        if index == 0:
-            return None
-        else:
-            return flowlist[index - 1]
-
-    def get_first(self, operation):
-        return self.__flowlist[operation][0]
+    def get_first(self, operation, workflow):
+        return self.__flowlist[operation][workflow][0]
 
 
 def get_class():

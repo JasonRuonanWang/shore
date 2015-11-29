@@ -73,6 +73,7 @@ class transport_zmqthreaded(transport):
             try:
                 msg = _socket_worker.recv_json()
                 if isinstance(msg, dict):
+                    msg['workflow'] = 'transport'
                     msg['zmq_worker'] = _socket_worker # send worker with msg so that it can be used for sending reply when pushed back to event module
                     self.push_event(msg, self.__class__.__name__)
             except:
