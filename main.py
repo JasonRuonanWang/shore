@@ -38,20 +38,19 @@ def start_daemon():
 
     event = system.event.observer()
     config = system.config.default(event)
-    log = eval("system.log.{0}(event)".format(config.value('log')))
-    workflow = eval("system.workflow.{0}(event)".format(config.value('workflow')))
+    log = eval("system.log.{0}(event, config)".format(config.value('log')))
+    workflow = eval("system.workflow.{0}(event, config)".format(config.value('workflow')))
 
     for module in infra.plugin_dict:
         for plugin in infra.plugin_dict[module]:
             if plugin == config.value(module):
-                instance = eval("infra.{0}.{1}(event)".format(module, plugin))
+                instance = eval("infra.{0}.{1}(event, config)".format(module, plugin))
 
     for module in backend.plugin_dict:
         for plugin in backend.plugin_dict[module]:
-            instance = eval("backend.{0}.{1}(event)".format(module, plugin))
+            instance = eval("backend.{0}.{1}(event, config)".format(module, plugin))
 
     event.push_event({'operation':'admin', 'command':'start'}, __name__)
-
 
 if __name__ == "__main__":
     start_daemon()

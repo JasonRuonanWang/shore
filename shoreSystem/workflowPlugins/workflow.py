@@ -51,9 +51,11 @@ class workflow(plugin):
                 return
             # in case status is post, get to the next module
             if msg['status'] == 'post':
-                if self.event_handler_plugin(msg):
+                next_module = self.get_next(msg['operation'], msg['workflow'], msg['module'])
+                if next_module:
+                    msg['module'] = next_module
+                    msg['status'] = 'pre'
                     self.push_event(msg, self.__class__.__name__)
-                    return
 
 
 

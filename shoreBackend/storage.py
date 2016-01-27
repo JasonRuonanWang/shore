@@ -22,18 +22,23 @@
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
 #    MA 02111-1307  USA
 #
-#	 Any bugs, problems, and/or suggestions please email to
-#	 jason.wang@icrar.org or jason.ruonan.wang@gmail.com
+#    Any bugs, problems, and/or suggestions please email to
+#    jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
-
+import sys
+sys.path.append('shoreMeta')
 from plugin import plugin
 
 class storage(plugin):
 
+    def __init__(self, event, config):
+        plugin.__init__(self, event, config)
+        self.module_name = 'storage'
+
     def event_handler_workflow(self, msg):
-        # check if this plugin should respond
-        if not self.msg_kv_match('backend', self.plugin_name()):
+        if not self.msg_kv_match(msg, 'backend', self.plugin_name()):
             return False
+        self.write(msg)
         return True
 
 

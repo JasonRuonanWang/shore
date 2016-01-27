@@ -29,9 +29,11 @@ import copy
 
 class plugin(object):
 
-    def __init__(self, event):
+    def __init__(self, event, config):
+        self.module_name = self.__class__.__name__.split('_')[0]
         event.register_observer(self.event_handler)
         self.push_event = event.push_event
+        self.config = config.value
         self.log('{0} instantiated and registered to event channel.'.format(self.__class__.__name__), category='system')
 
     def event_handler(self, msg_recv):
@@ -42,7 +44,7 @@ class plugin(object):
             self.event_handler_admin(msg)
         else:
             # check if this module should respond
-            if not self.msg_kv_match(msg, 'module', self.__class__.__name__.split('_')[0]):
+            if not self.msg_kv_match(msg, 'module', self.module_name):
                 return False
             # check if the event's status is pre processing
             if not self.msg_kv_match(msg, 'status', 'pre'):
@@ -56,6 +58,7 @@ class plugin(object):
         return
 
     def event_handler_workflow(self, msg):
+        self.log(category='warning', text='plugin.event_handler_workflow is called, which should have been overload')
         return
 
     def msg_kv_match(self, msg, k, v):
@@ -64,7 +67,6 @@ class plugin(object):
         if msg[k] != v:
             return False
         return True
-
 
     def plugin_name(self):
         return self.__class__.__name__.split('_')[1]

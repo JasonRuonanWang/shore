@@ -37,7 +37,8 @@ class files_adios(files):
     def read(self):
         pass
 
-    def write(self):
+    def write(self, msg):
+        print 'adios.write'
         pass
 
 

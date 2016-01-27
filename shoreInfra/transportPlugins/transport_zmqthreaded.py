@@ -31,6 +31,7 @@ import zmq
 import sys
 sys.path.append('shoreInfra/transportPlugins')
 from transport import transport
+import cPickle as pickle
 
 class transport_zmqthreaded(transport):
 
@@ -71,9 +72,12 @@ class transport_zmqthreaded(transport):
         msg = None
         while self._looping:
             try:
-                msg = _socket_worker.recv_json()
+                msg_recv = _socket_worker.recv()
+                msg = pickle.loads(msg_recv)
                 if isinstance(msg, dict):
                     msg['workflow'] = 'transport'
+                    msg['operation'] = 'put'
+                    msg['backend'] = 'hdf5'
                     msg['zmq_worker'] = _socket_worker # send worker with msg so that it can be used for sending reply when pushed back to event module
                     self.push_event(msg, self.__class__.__name__)
             except:

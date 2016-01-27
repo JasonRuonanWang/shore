@@ -22,8 +22,8 @@
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
 #    MA 02111-1307  USA
 #
-#	 Any bugs, problems, and/or suggestions please email to
-#	 jason.wang@icrar.org or jason.ruonan.wang@gmail.com
+#    Any bugs, problems, and/or suggestions please email to
+#    jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
 import sys
 sys.path.append('shoreMeta')
@@ -31,7 +31,7 @@ from plugin import plugin
 
 class dodb(plugin):
 
-    def put(self, doid, column, row, shape=None):
+    def put(self, doid, column, row, shape):
         self.update_do(doid, column, int(row)+1)
         self.update_column(doid, column, shape)
 
@@ -52,6 +52,10 @@ class dodb(plugin):
         if msg['operation'] == 'put':
             if not 'shape' in msg:
                 msg['shape'] = None
+            if not 'column' in msg:
+                msg['column'] = None
+            if not 'row' in msg:
+                msg['row'] = None
             self.put(msg['doid'], msg['column'], msg['row'], msg['shape'])
         elif msg['operation'] == 'get':
             self.get(msg['doid'], msg['column'], msg['row'])

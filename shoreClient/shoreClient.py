@@ -55,16 +55,16 @@ def shorePut(doid, column, row, shape, dtype, data):
         'datatype' : dtype,
     }
     message_socket.send_json(msg)
-    ret = message_socket.recv_json();
+    ret = message_socket.recv_json()
     print ret
 
-    if shape:
-        data_np = np.asarray(data)
-        data_np_rs = data_np.reshape(shape)
-        data_s = pickle.dumps(data_np_rs)
-        print data_s
-        print data[0]
-        print data_np[0]
-        print data_np_rs[0]
-        print data_np_rs
+    if 'event_id' in ret:
+        if shape:
+            data_np = np.asarray(data)
+            data_np_rs = data_np.reshape(shape)
+            print data_np_rs
+            pkg_dict = {'event_id':ret['event_id'], 'data':data_np_rs}
+            pkg_pickled = pickle.dumps(pkg_dict)
+            transport_socket.send(pkg_pickled)
+            ret = transport_socket.recv()
 

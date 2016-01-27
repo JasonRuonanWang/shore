@@ -22,8 +22,8 @@
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
 #    MA 02111-1307  USA
 #
-#	 Any bugs, problems, and/or suggestions please email to
-#	 jason.wang@icrar.org or jason.ruonan.wang@gmail.com
+#    Any bugs, problems, and/or suggestions please email to
+#    jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
 import sys
 sys.path.append('shoreSystem/workflowPlugins')
@@ -34,19 +34,11 @@ class workflow_list(workflow):
     __flowlist={}
     __flowlist['put'] = {}
     __flowlist['put']['message'] = ['authen', 'eventid', 'message', 'dodb']
-    __flowlist['put']['transport'] = ['transport', 'storage']
+    __flowlist['put']['transport'] = ['storage','transport']
     __flowlist['get'] = {}
     __flowlist['get']['message'] = ['authen', 'eventid', 'dodb', 'storage']
     __flowlist['get']['transport'] = []
     __flowlist['query'] = ['authen', 'eventid', 'dodb']
-
-    def event_handler_plugin(self, msg):
-        next_module = self.get_next(msg['operation'], msg['workflow'], msg['module'])
-        if next_module:
-            msg['module'] = next_module
-            msg['status'] = 'pre'
-            return True
-        return False
 
     def get_next(self, operation, workflow, current):
         index = self.__flowlist[operation][workflow].index(current)
@@ -57,7 +49,6 @@ class workflow_list(workflow):
 
     def get_first(self, operation, workflow):
         return self.__flowlist[operation][workflow][0]
-
 
 def get_class():
     return workflow_list

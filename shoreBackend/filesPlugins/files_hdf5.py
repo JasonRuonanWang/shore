@@ -1,4 +1,3 @@
-#
 #    (c) University of Western Australia
 #    International Centre of Radio Astronomy Research
 #    M468/35 Stirling Hwy
@@ -23,8 +22,8 @@
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
 #    MA 02111-1307  USA
 #
-#	 Any bugs, problems, and/or suggestions please email to
-#	 jason.wang@icrar.org or jason.ruonan.wang@gmail.com
+#    Any bugs, problems, and/or suggestions please email to
+#    jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
 import h5py
 from files import files
@@ -34,12 +33,12 @@ class files_hdf5(files):
     def read(self):
         pass
 
-    def write(self):
+    def write(self, msg):
+        print 'hdf5.write'
         pass
 
 def get_class():
     return files_hdf5
-
 
 
 

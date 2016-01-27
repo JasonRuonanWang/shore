@@ -34,7 +34,8 @@ class files_fits(files):
     def read(self):
         pass
 
-    def write(self):
+    def write(self, msg):
+        print 'fits.write'
         pass
 
 def get_class():
