@@ -51,8 +51,9 @@ class config(plugin):
             'message_address':message_address,
             'transport':'zmqthreaded',
             'transport_address':transport_address,
+            'queue':'dict',
             # backend
-            'fileroot':'/scratch/shoreroot'
+            'fsroot':'/scratch/shoreroot'
         }
 
     def value(self, key):

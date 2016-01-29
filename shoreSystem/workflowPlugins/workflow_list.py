@@ -33,8 +33,8 @@ class workflow_list(workflow):
 
     __flowlist={}
     __flowlist['put'] = {}
-    __flowlist['put']['message'] = ['authen', 'eventid', 'message', 'dodb']
-    __flowlist['put']['transport'] = ['storage','transport']
+    __flowlist['put']['message'] = ['authen', 'eventid', 'dodb', 'queue', 'message']
+    __flowlist['put']['transport'] = ['queue', 'storage', 'transport']
     __flowlist['get'] = {}
     __flowlist['get']['message'] = ['authen', 'eventid', 'dodb', 'storage']
     __flowlist['get']['transport'] = []

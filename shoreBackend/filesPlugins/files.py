@@ -31,8 +31,10 @@ from storage import storage
 
 class files(storage):
 
-    def place_holder(self):
-        pass
+    def __init__(self, event, config):
+        storage.__init__(self, event, config)
+        self.fsroot = self.config('fsroot')
+
 
 
 

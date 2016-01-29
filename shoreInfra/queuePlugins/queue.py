@@ -25,22 +25,23 @@
 #    Any bugs, problems, and/or suggestions please email to
 #    jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
-import h5py
-from files import files
+import sys
+sys.path.append('shoreMeta')
+from plugin import plugin
 
-class files_hdf5(files):
+class queue(plugin):
 
-    def read(self):
-        pass
+    def event_handler_admin(self, msg):
+        return
 
-    def write(self, msg):
-        print 'hdf5'
-#        print msg['doid']
-#        f = h5py.File(msg['doid'],'w')
-        pass
-
-def get_class():
-    return files_hdf5
+    def event_handler_workflow(self, msg):
+        if not 'workflow' in msg:
+            return False
+        if msg['workflow'] == 'message':
+            self.put(msg)
+        elif msg['workflow'] == 'transport':
+            self.get(msg)
+        return True
 
 
 

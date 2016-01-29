@@ -25,22 +25,31 @@
 #    Any bugs, problems, and/or suggestions please email to
 #    jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
-import h5py
-from files import files
+import uuid
+import sys
+sys.path.append('shoreInfra/queuePlugins')
+from queue import queue
 
-class files_hdf5(files):
+class queue_dict(queue):
 
-    def read(self):
-        pass
+    queue_dict = {}
 
-    def write(self, msg):
-        print 'hdf5'
-#        print msg['doid']
-#        f = h5py.File(msg['doid'],'w')
-        pass
+    def put(self,msg):
+        self.queue_dict[msg['event_id']] = msg
+
+    def get(self,msg):
+        event_id = uuid.UUID(msg['event_id'])
+        print msg
+        print self.queue_dict[event_id]
+        del self.queue_dict[event_id]['zmq_worker']
+        del self.queue_dict[event_id]['status']
+        del self.queue_dict[event_id]['workflow']
+        msg.update(self.queue_dict[event_id])
+        print msg
+
 
 def get_class():
-    return files_hdf5
+    return queue_dict
 
 
 
