@@ -74,8 +74,10 @@ class message_zmqthreaded(message):
                     msg['zmq_worker'] = _socket_worker # send worker with msg so that it can be used for sending reply when pushed back to event module
                     self.push_event(msg, self.__class__.__name__)
             except Exception as e:
+                import traceback, os.path
+                top = traceback.extract_stack()[-1]
+                print ', '.join([type(e).__name__, os.path.basename(top[0]), str(top[1])])
                 self._looping = False
-                print(e)
                 self.log("Worker recv_json() is broken!", category='system')
         _socket_worker.close()
         self.log("Worker thread is terminated!", category='system')

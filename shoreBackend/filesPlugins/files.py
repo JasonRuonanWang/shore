@@ -26,6 +26,7 @@
 #    jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
 import sys
+import os
 sys.path.append('shoreBackend')
 from storage import storage
 
@@ -34,7 +35,9 @@ class files(storage):
     def __init__(self, event, config):
         storage.__init__(self, event, config)
         self.fsroot = self.config('fsroot')
-
+        self.filepath = self.fsroot + '/' + self.plugin_name()
+        if not os.path.exists(self.filepath):
+            os.makedirs(self.filepath)
 
 
 

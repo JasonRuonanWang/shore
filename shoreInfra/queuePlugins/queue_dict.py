@@ -39,13 +39,11 @@ class queue_dict(queue):
 
     def get(self,msg):
         event_id = uuid.UUID(msg['event_id'])
-        print msg
-        print self.queue_dict[event_id]
         del self.queue_dict[event_id]['zmq_worker']
         del self.queue_dict[event_id]['status']
         del self.queue_dict[event_id]['workflow']
         msg.update(self.queue_dict[event_id])
-        print msg
+        del self.queue_dict[event_id]
 
 
 def get_class():

@@ -26,16 +26,43 @@
 #    jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
 import sys
+import numpy
 sys.path.append('shoreMeta')
 from plugin import plugin
 
 class dodb(plugin):
 
-    def put(self, doid, column, row, shape):
-        self.update_do(doid, column, int(row)+1)
-        self.update_column(doid, column, shape)
+    dtype_shore_to_raw={0:'bool',
+           1:'char',
+           2:'unsigned char',
+           3:'short',
+           4:'unsigned short',
+           5:'int',
+           6:'unsigned int',
+           7:'float',
+           8:'double',
+           9:'complex',
+           10:'double complex',
+           11:'string'}
 
-    def get(self, doid, column, row):
+    dtype_shore_to_numpy={0:numpy.bool,
+           1:numpy.int8,
+           2:numpy.uint8,
+           3:numpy.int16,
+           4:numpy.uint16,
+           5:numpy.int32,
+           6:numpy.uint32,
+           7:numpy.float32,
+           8:numpy.float64,
+           9:numpy.complex64,
+           10:numpy.complex128,
+           11:None}
+
+    def put(self, msg):
+        self.update_do(msg)
+        self.update_column(msg)
+
+    def get(self, msg):
         return
 
     def event_handler_admin(self, msg):
@@ -56,9 +83,9 @@ class dodb(plugin):
                 msg['column'] = None
             if not 'row' in msg:
                 msg['row'] = None
-            self.put(msg['doid'], msg['column'], msg['row'], msg['shape'])
+            self.put(msg)
         elif msg['operation'] == 'get':
-            self.get(msg['doid'], msg['column'], msg['row'])
+            self.get(msg)
 
         return True
 

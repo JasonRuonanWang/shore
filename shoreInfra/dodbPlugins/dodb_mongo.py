@@ -39,48 +39,46 @@ class dodb_mongo(dodb):
             client = MongoClient()
             self.__db = client.shore
 
-    def update_do(self, doid, column, row):
+    def update_do(self, msg):
         self.init_db()
         self.__db.do.update(
-                {'doid':doid},
+                {'doid':msg['doid']},
                 {
-                    '$max':{'rows':row},
-                    '$addToSet':{'columns':column}
+                    '$max':{'rows':msg['row']},
+                    '$addToSet':{'columns':msg['column']}
                     },
                 upsert=True
                 )
 
-    def insert_column(self, doid, column, shape):
+    def update_column(self, msg):
         self.init_db()
-        self.__db.column.insert_one({'doid':doid, 'column':column, 'shape':shape})
-
-    def update_column(self, doid, column, shape):
-        self.init_db()
-        cursor = self.__db.column.find({'doid':doid, 'column':column})
+        msg['datatype'] = self.dtype_shore_to_numpy[msg['datatype']]
+        cursor = self.__db.column.find({'doid':msg['doid'], 'column':msg['column']})
         if cursor.count() == 0:
-            self.__db.column.insert_one({'doid':doid, 'column':column, 'shape':shape})
+            print msg['doid'], msg['column'], msg['shape'], msg['datatype']
+            self.__db.column.insert_one({'doid':msg['doid'], 'column':msg['column'], 'shape':msg['shape'], 'datatype':msg['datatype'].__name__ })
         else:
-            if cursor[0]['shape'] != shape:
-                self.__db.column.update({'doid':doid, 'column':column}, {'$set':{'shape':None}})
+            if cursor[0]['shape'] != msg['shape']:
+                self.__db.column.update({'doid':msg['doid'], 'column':msg['column']}, {'$set':{'shape':None}})
         if cursor.count() > 1:
-            self.log('Warning: Data Object {0} Column {1} has multiple records in dodb.column'.format(doid,column), category='warning', source=__name__)
+            self.log('Warning: Data Object {0} Column {1} has multiple records in dodb.column'.format(msg['doid'],msg['column']), category='warning', source=__name__)
 
-    def query_do(self, doid):
+    def query_do(self, msg):
         self.init_db()
-        cursor = self.__db.do.find({'doid':doid})
+        cursor = self.__db.do.find({'doid':msg['doid']})
         if cursor.count() == 0:
             return None
         elif cursor.count() == 1:
             return cursor[0]
         else:
-            self.log('Warning: Data Object {0} has multiple records in dodb.do'.format(doid), category='warning', source=__name__)
+            self.log('Warning: Data Object {0} has multiple records in dodb.do'.format(msg['doid']), category='warning', source=__name__)
             return cursor[0]
 
-    def query_column(self, doid, column):
+    def query_column(self, msg):
         self.init_db()
         return
 
-    def query_row(self, doid, column, row):
+    def query_row(self, msg):
         self.init_db()
         return
 

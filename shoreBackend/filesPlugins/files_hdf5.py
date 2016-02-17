@@ -26,18 +26,34 @@
 #    jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
 import h5py
+import numpy
 from files import files
 
 class files_hdf5(files):
+
+    def __init__(self, event, config):
+        files.__init__(self, event, config)
+        self.min_rows = 100
 
     def read(self):
         pass
 
     def write(self, msg):
-        print 'hdf5'
-#        print msg['doid']
-#        f = h5py.File(msg['doid'],'w')
-        pass
+        filename = self.filepath + '/' + msg['doid']
+        f = h5py.File(filename)
+
+        datasetName = msg['column']
+        shape = [self.min_rows] + msg['shape']
+        maxshape = [None] + msg['shape']
+
+        if datasetName not in f:
+            f.create_dataset(datasetName, shape, msg['datatype'], maxshape=maxshape)
+
+        if msg['row'] >= f[datasetName].shape[0]:
+            nr_rows = (int(msg['row'] / self.min_rows) + 1) * self.min_rows
+            f[datasetName].resize([nr_rows] + msg['shape'])
+
+        f[datasetName][msg['row'],:] = msg['data']
 
 def get_class():
     return files_hdf5

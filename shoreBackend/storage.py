@@ -31,6 +31,19 @@ from plugin import plugin
 
 class storage(plugin):
 
+    dtype={0:'bool',
+           1:'char',
+           2:'unsigned char',
+           3:'short',
+           4:'unsigned short',
+           5:'int',
+           6:'unsigned int',
+           7:'float',
+           8:'double',
+           9:'complex',
+           10:'double complex',
+           11:'string'}
+
     def __init__(self, event, config):
         plugin.__init__(self, event, config)
         self.module_name = 'storage'
@@ -38,7 +51,12 @@ class storage(plugin):
     def event_handler_workflow(self, msg):
         if not self.msg_kv_match(msg, 'backend', self.plugin_name()):
             return False
-        self.write(msg)
+
+        operation = msg.get('operation', None)
+        if operation == 'put':
+            self.write(msg)
+        elif operation == 'get':
+            self.read(msg)
         return True
 
 
