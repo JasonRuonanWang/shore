@@ -54,7 +54,11 @@ class storage(plugin):
 
         operation = msg.get('operation', None)
         if operation == 'put':
-            self.write(msg)
+            if self.write(msg):
+                msg['return'] = 'OK'
+            else:
+                if 'return' not in msg:
+                    msg['return'] = 'ERROR'
         elif operation == 'get':
             self.read(msg)
         return True

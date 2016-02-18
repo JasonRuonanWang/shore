@@ -26,7 +26,6 @@
 #    jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
 import h5py
-import numpy
 from files import files
 
 class files_hdf5(files):
@@ -45,8 +44,11 @@ class files_hdf5(files):
         datasetName = msg['column']
         shape = [self.min_rows] + msg['shape']
         maxshape = [None] + msg['shape']
-
-        if datasetName not in f:
+        if datasetName in f:
+            if f[datasetName].dtype != msg['datatype']:
+                msg['return'] = 'datatype does not match'
+                return False
+        else:
             f.create_dataset(datasetName, shape, msg['datatype'], maxshape=maxshape)
 
         if msg['row'] >= f[datasetName].shape[0]:
@@ -54,6 +56,8 @@ class files_hdf5(files):
             f[datasetName].resize([nr_rows] + msg['shape'])
 
         f[datasetName][msg['row'],:] = msg['data']
+
+        return True
 
 def get_class():
     return files_hdf5

@@ -66,5 +66,8 @@ def shorePut(doid, column, row, shape, dtype, data):
             pkg_dict = {'event_id':ret['event_id'], 'data':data_np_rs}
             pkg_pickled = pickle.dumps(pkg_dict)
             transport_socket.send(pkg_pickled)
-            ret = transport_socket.recv()
+            ret = transport_socket.recv_json()
+            print ret
+        else:
+            pass
 

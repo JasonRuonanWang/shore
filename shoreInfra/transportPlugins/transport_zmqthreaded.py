@@ -43,15 +43,17 @@ class transport_zmqthreaded(transport):
 
     def respond(self, msg):
         if 'zmq_worker' in msg:
+            msg_send = {}
             if 'event_id' in msg:
-                msg['zmq_worker'].send_json({"event_id": str(msg['event_id'])})
+                msg_send['event_id'] = str(msg['event_id'])
             elif 'command' in msg:
-                msg['zmq_worker'].send_json({msg['command']: 'OK'})
-            else:
-                msg['zmq_worker'].send_json({'Unknown': 'OK'})
+                msg_send['command'] = msg['command']
+            if 'return' in msg:
+                msg_send['return'] = msg['return']
+
+            msg['zmq_worker'].send_json(msg_send)
         else:
             self.log('No zmq_worker handler in msg',category='error')
-        pass
 
     def bind(self):
         while True:
@@ -64,7 +66,6 @@ class transport_zmqthreaded(transport):
                 return
             except:
                 self.log('unable to bind address {0}'.format(self._url_clients), category='error')
-                pass
 
     def start_thread(self):
         _socket_worker = self._context.socket(zmq.REP)
