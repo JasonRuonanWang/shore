@@ -48,6 +48,9 @@ class files_hdf5(files):
             if f[datasetName].dtype != msg['datatype']:
                 msg['return'] = 'datatype does not match'
                 return False
+            if f[datasetName].shape[1:] != msg['shape'][1:]:
+                msg['return'] = 'shape does not match'
+                return False
         else:
             f.create_dataset(datasetName, shape, msg['datatype'], maxshape=maxshape)
 
