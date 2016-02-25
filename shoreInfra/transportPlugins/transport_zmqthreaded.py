@@ -25,8 +25,6 @@
 #    Any bugs, problems, and/or suggestions please email to
 #    jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
-
-
 import zmq
 import sys, os
 sys.path.append('shoreInfra/transportPlugins')
@@ -44,14 +42,13 @@ class transport_zmqthreaded(transport):
     def respond(self, msg):
         if 'zmq_worker' in msg:
             msg_send = {}
-            if 'event_id' in msg:
-                msg_send['event_id'] = str(msg['event_id'])
+            if 'data' in msg:
+                msg_send['data'] = msg['data']
             elif 'command' in msg:
                 msg_send['command'] = msg['command']
             if 'return' in msg:
                 msg_send['return'] = msg['return']
-
-            msg['zmq_worker'].send_json(msg_send)
+            msg['zmq_worker'].send(pickle.dumps(msg_send))
         else:
             self.log('No zmq_worker handler in msg',category='error')
 
@@ -84,10 +81,9 @@ class transport_zmqthreaded(transport):
             except Exception as e:
                 exc_type, exc_obj, exc_tb = sys.exc_info()
                 fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-                print(exc_type, fname, exc_tb.tb_lineno)
-                print(e)
+                print(e, exc_type, fname, exc_tb.tb_lineno)
                 self._looping = False
-                self.log("Worker recv_json() is broken!", category='system')
+                self.log("Worker recv() is broken!", category='system')
         _socket_worker.close()
         self.log("Worker thread is terminated!", category='system')
 
@@ -101,10 +97,6 @@ class transport_zmqthreaded(transport):
         self._socket_workers.close()
         self._socket_clients.close()
 
-
 def get_class():
     return transport_zmqthreaded
-
-
-
 

@@ -44,8 +44,32 @@ def shoreZmqInit():
     transport_socket = context.socket(zmq.REQ)
     transport_socket.connect(transport_address)
 
+def shoreGet(doid, column, row):
+    # message
+    msg = {
+        'operation' : 'get',
+        'doid' : doid,
+        'column' : column,
+        'row' : row,
+    }
+    message_socket.send_json(msg)
+    ret = message_socket.recv_json()
+    print ret
+    # transport
+    if 'event_id' in ret:
+        pkg_dict = {'event_id':ret['event_id']}
+        pkg_pickled = pickle.dumps(pkg_dict)
+        transport_socket.send(pkg_pickled)
+        ret = transport_socket.recv()
+        ret = pickle.loads(ret)
+        print ret
+        if 'data' in ret:
+            return ret['data']
+        else:
+            print ('Error: no data found')
+
 def shorePut(doid, column, row, shape, dtype, data):
-    global message_socket
+    # message
     msg = {
         'operation' : 'put',
         'doid' : doid,
@@ -56,8 +80,8 @@ def shorePut(doid, column, row, shape, dtype, data):
     }
     message_socket.send_json(msg)
     ret = message_socket.recv_json()
-    print ret
 
+    # transport
     if 'event_id' in ret:
         if shape:
             data_np = np.asarray(data)
@@ -66,7 +90,8 @@ def shorePut(doid, column, row, shape, dtype, data):
             pkg_dict = {'event_id':ret['event_id'], 'data':data_np_rs}
             pkg_pickled = pickle.dumps(pkg_dict)
             transport_socket.send(pkg_pickled)
-            ret = transport_socket.recv_json()
+            ret = transport_socket.recv()
+            ret = pickle.loads(ret)
             print ret
         else:
             pass

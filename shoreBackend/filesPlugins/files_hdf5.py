@@ -34,8 +34,11 @@ class files_hdf5(files):
         files.__init__(self, event, config)
         self.min_rows = 100
 
-    def read(self):
-        pass
+    def read(self, msg):
+        filename = self.filepath + '/' + msg['doid']
+        f = h5py.File(filename)
+        datasetName = msg['column']
+        msg['data'] = f[datasetName][:]
 
     def write(self, msg):
         filename = self.filepath + '/' + msg['doid']
@@ -48,7 +51,7 @@ class files_hdf5(files):
             if f[datasetName].dtype != msg['datatype']:
                 msg['return'] = 'datatype does not match'
                 return False
-            if f[datasetName].shape[1:] != msg['shape'][1:]:
+            if list(f[datasetName].shape[1:]) != msg['shape']:
                 msg['return'] = 'shape does not match'
                 return False
         else:

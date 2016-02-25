@@ -68,11 +68,11 @@ class dodb_mongo(dodb):
         cursor = self.__db.do.find({'doid':msg['doid']})
         if cursor.count() == 0:
             return None
-        elif cursor.count() == 1:
-            return cursor[0]
         else:
-            self.log('Warning: Data Object {0} has multiple records in dodb.do'.format(msg['doid']), category='warning', source=__name__)
-            return cursor[0]
+            if cursor.count() > 1:
+                self.log('Warning: Data Object {0} has multiple records in dodb.do'.format(msg['doid']), category='warning', source=__name__)
+#            print cursor[0]
+#            print type(cursor[0])
 
     def query_column(self, msg):
         self.init_db()

@@ -63,7 +63,8 @@ class dodb(plugin):
         self.update_column(msg)
 
     def get(self, msg):
-        return
+        self.query_do(msg)
+        self.query_column(msg)
 
     def event_handler_admin(self, msg):
         return
