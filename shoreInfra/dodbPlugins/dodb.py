@@ -60,15 +60,21 @@ class dodb(plugin):
 
     def query(self,msg):
         dic = {'doid':msg['doid']}
-        res_list = self.db_query('do', dic)
-        if len(res_list) == 0:
-            msg['return'] = 0
-        else:
-            msg['return'] = res_list[0]
-            if len(res_list) > 1:
+        do_list = self.db_query('do', dic)
+        if 'return' not in msg:
+            msg['return'] = {}
+        if len(do_list) > 0:
+            msg['return']['do'] = do_list[0]
+            if len(do_list) > 1:
                 self.log('doid {0} found multiple records'.format(msg['doid']), category='error', source=__name__)
 
-
+        if 'column' in msg:
+            dic = {'doid':msg['doid'], 'column':msg['column']}
+            column_list = self.db_query('column', dic)
+            if len(column_list) > 0:
+                msg['return']['column'] = column_list[0]
+                if len(column_list) > 1:
+                    self.log('doid {0}, column {1} found multiple records'.format(msg['doid'],msg['column']), category='error', source=__name__)
 
     def event_handler_admin(self, msg):
         return
@@ -80,7 +86,8 @@ class dodb(plugin):
 
         operation = msg.get('operation')
         if operation == 'put':
-            pass
+            self.update_do(msg)
+            self.update_column(msg)
         elif operation == 'get':
             self.query(msg)
         elif operation == 'query':

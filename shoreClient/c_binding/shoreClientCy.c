@@ -1430,6 +1430,7 @@ static char __pyx_k_DComplex[] = "DComplex";
 static char __pyx_k_Ellipsis[] = "Ellipsis";
 static char __pyx_k_itemsize[] = "itemsize";
 static char __pyx_k_operator[] = "operator";
+static char __pyx_k_shoreGet[] = "shoreGet";
 static char __pyx_k_shorePut[] = "shorePut";
 static char __pyx_k_TypeError[] = "TypeError";
 static char __pyx_k_enumerate[] = "enumerate";
@@ -1546,6 +1547,7 @@ static PyObject *__pyx_kp_u_s;
 static PyObject *__pyx_n_s_shape;
 static PyObject *__pyx_n_s_shoreClient;
 static PyObject *__pyx_n_s_shoreDataType;
+static PyObject *__pyx_n_s_shoreGet;
 static PyObject *__pyx_n_s_shorePut;
 static PyObject *__pyx_n_s_shoreZmqInit;
 static PyObject *__pyx_n_s_short;
@@ -3842,8 +3844,8 @@ static void __pyx_f_13shoreClientCy_shorePutArray(char const *__pyx_v_doid, char
  *         shorePutArrayDComplex(doid, column, rowid, shape, dtype, data_c, nelements)
  * 
  * cdef void shorePutScalar(const char *doid, const char* column, const unsigned int rowid, const unsigned int *shape_c, const int dtype, const void *data_c):             # <<<<<<<<<<<<<<
- *         data = data_c[0]
- *         shoreClient.shorePut(doid, column, rowid, None, dtype, data)
+ *     data = data_c[0]
+ *     shoreClient.shorePut(doid, column, rowid, None, dtype, data)
  */
 
 static void __pyx_f_13shoreClientCy_shorePutScalar(char const *__pyx_v_doid, char const *__pyx_v_column, unsigned int const __pyx_v_rowid, CYTHON_UNUSED unsigned int const *__pyx_v_shape_c, int const __pyx_v_dtype, void const *__pyx_v_data_c) {
@@ -3866,8 +3868,8 @@ static void __pyx_f_13shoreClientCy_shorePutScalar(char const *__pyx_v_doid, cha
   /* "shoreClientCy.pyx":118
  * 
  * cdef void shorePutScalar(const char *doid, const char* column, const unsigned int rowid, const unsigned int *shape_c, const int dtype, const void *data_c):
- *         data = data_c[0]             # <<<<<<<<<<<<<<
- *         shoreClient.shorePut(doid, column, rowid, None, dtype, data)
+ *     data = data_c[0]             # <<<<<<<<<<<<<<
+ *     shoreClient.shorePut(doid, column, rowid, None, dtype, data)
  * 
  */
   __pyx_t_1 = __Pyx_void_to_None((__pyx_v_data_c[0])); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 118; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
@@ -3877,8 +3879,8 @@ static void __pyx_f_13shoreClientCy_shorePutScalar(char const *__pyx_v_doid, cha
 
   /* "shoreClientCy.pyx":119
  * cdef void shorePutScalar(const char *doid, const char* column, const unsigned int rowid, const unsigned int *shape_c, const int dtype, const void *data_c):
- *         data = data_c[0]
- *         shoreClient.shorePut(doid, column, rowid, None, dtype, data)             # <<<<<<<<<<<<<<
+ *     data = data_c[0]
+ *     shoreClient.shorePut(doid, column, rowid, None, dtype, data)             # <<<<<<<<<<<<<<
  * 
  * cdef public void shorePutCy(const char *doid, const char* column, const unsigned int rowid, const unsigned int *shape_c, const int dtype, const void *data_c):
  */
@@ -3940,8 +3942,8 @@ static void __pyx_f_13shoreClientCy_shorePutScalar(char const *__pyx_v_doid, cha
  *         shorePutArrayDComplex(doid, column, rowid, shape, dtype, data_c, nelements)
  * 
  * cdef void shorePutScalar(const char *doid, const char* column, const unsigned int rowid, const unsigned int *shape_c, const int dtype, const void *data_c):             # <<<<<<<<<<<<<<
- *         data = data_c[0]
- *         shoreClient.shorePut(doid, column, rowid, None, dtype, data)
+ *     data = data_c[0]
+ *     shoreClient.shorePut(doid, column, rowid, None, dtype, data)
  */
 
   /* function exit code */
@@ -3962,7 +3964,7 @@ static void __pyx_f_13shoreClientCy_shorePutScalar(char const *__pyx_v_doid, cha
 }
 
 /* "shoreClientCy.pyx":121
- *         shoreClient.shorePut(doid, column, rowid, None, dtype, data)
+ *     shoreClient.shorePut(doid, column, rowid, None, dtype, data)
  * 
  * cdef public void shorePutCy(const char *doid, const char* column, const unsigned int rowid, const unsigned int *shape_c, const int dtype, const void *data_c):             # <<<<<<<<<<<<<<
  *     if shape_c:  #if array
@@ -4008,7 +4010,7 @@ void shorePutCy(char const *__pyx_v_doid, char const *__pyx_v_column, unsigned i
  *     else:        #if scalar
  *         shorePutScalar(doid, column, rowid, shape_c, dtype, data_c)             # <<<<<<<<<<<<<<
  * 
- * cdef public void shoreGetCy(const char *doid, const char* column, const unsigned int rowid, unsigned int *shape_c, int *dtype, void *data_c):
+ * 
  */
   /*else*/ {
     __pyx_f_13shoreClientCy_shorePutScalar(__pyx_v_doid, __pyx_v_column, __pyx_v_rowid, __pyx_v_shape_c, __pyx_v_dtype, __pyx_v_data_c);
@@ -4016,7 +4018,7 @@ void shorePutCy(char const *__pyx_v_doid, char const *__pyx_v_column, unsigned i
   __pyx_L3:;
 
   /* "shoreClientCy.pyx":121
- *         shoreClient.shorePut(doid, column, rowid, None, dtype, data)
+ *     shoreClient.shorePut(doid, column, rowid, None, dtype, data)
  * 
  * cdef public void shorePutCy(const char *doid, const char* column, const unsigned int rowid, const unsigned int *shape_c, const int dtype, const void *data_c):             # <<<<<<<<<<<<<<
  *     if shape_c:  #if array
@@ -4027,24 +4029,77 @@ void shorePutCy(char const *__pyx_v_doid, char const *__pyx_v_column, unsigned i
   __Pyx_RefNannyFinishContext();
 }
 
-/* "shoreClientCy.pyx":127
- *         shorePutScalar(doid, column, rowid, shape_c, dtype, data_c)
+/* "shoreClientCy.pyx":128
+ * 
  * 
  * cdef public void shoreGetCy(const char *doid, const char* column, const unsigned int rowid, unsigned int *shape_c, int *dtype, void *data_c):             # <<<<<<<<<<<<<<
- *     pass
+ *     shoreClient.shoreGet()
  * 
  */
 
 void shoreGetCy(CYTHON_UNUSED char const *__pyx_v_doid, CYTHON_UNUSED char const *__pyx_v_column, CYTHON_UNUSED unsigned int const __pyx_v_rowid, CYTHON_UNUSED unsigned int *__pyx_v_shape_c, CYTHON_UNUSED int *__pyx_v_dtype, CYTHON_UNUSED void *__pyx_v_data_c) {
   __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  PyObject *__pyx_t_2 = NULL;
+  PyObject *__pyx_t_3 = NULL;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("shoreGetCy", 0);
 
+  /* "shoreClientCy.pyx":129
+ * 
+ * cdef public void shoreGetCy(const char *doid, const char* column, const unsigned int rowid, unsigned int *shape_c, int *dtype, void *data_c):
+ *     shoreClient.shoreGet()             # <<<<<<<<<<<<<<
+ * 
+ * cdef public void shoreZmqInitCy():
+ */
+  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_shoreClient); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 129; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_shoreGet); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 129; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_t_2 = NULL;
+  if (CYTHON_COMPILING_IN_CPYTHON && unlikely(PyMethod_Check(__pyx_t_3))) {
+    __pyx_t_2 = PyMethod_GET_SELF(__pyx_t_3);
+    if (likely(__pyx_t_2)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
+      __Pyx_INCREF(__pyx_t_2);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_3, function);
+    }
+  }
+  if (__pyx_t_2) {
+    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_2); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 129; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  } else {
+    __pyx_t_1 = __Pyx_PyObject_CallNoArg(__pyx_t_3); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 129; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  }
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "shoreClientCy.pyx":128
+ * 
+ * 
+ * cdef public void shoreGetCy(const char *doid, const char* column, const unsigned int rowid, unsigned int *shape_c, int *dtype, void *data_c):             # <<<<<<<<<<<<<<
+ *     shoreClient.shoreGet()
+ * 
+ */
+
   /* function exit code */
+  goto __pyx_L0;
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_3);
+  __Pyx_WriteUnraisable("shoreClientCy.shoreGetCy", __pyx_clineno, __pyx_lineno, __pyx_filename, 0, 0);
+  __pyx_L0:;
   __Pyx_RefNannyFinishContext();
 }
 
-/* "shoreClientCy.pyx":130
- *     pass
+/* "shoreClientCy.pyx":131
+ *     shoreClient.shoreGet()
  * 
  * cdef public void shoreZmqInitCy():             # <<<<<<<<<<<<<<
  *     shoreClient.shoreZmqInit()
@@ -4061,16 +4116,16 @@ void shoreZmqInitCy(void) {
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("shoreZmqInitCy", 0);
 
-  /* "shoreClientCy.pyx":131
+  /* "shoreClientCy.pyx":132
  * 
  * cdef public void shoreZmqInitCy():
  *     shoreClient.shoreZmqInit()             # <<<<<<<<<<<<<<
  * 
  * 
  */
-  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_shoreClient); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 131; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_shoreClient); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 132; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_shoreZmqInit); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 131; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_shoreZmqInit); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 132; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_t_2 = NULL;
@@ -4084,17 +4139,17 @@ void shoreZmqInitCy(void) {
     }
   }
   if (__pyx_t_2) {
-    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_2); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 131; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_2); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 132; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   } else {
-    __pyx_t_1 = __Pyx_PyObject_CallNoArg(__pyx_t_3); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 131; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_1 = __Pyx_PyObject_CallNoArg(__pyx_t_3); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 132; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "shoreClientCy.pyx":130
- *     pass
+  /* "shoreClientCy.pyx":131
+ *     shoreClient.shoreGet()
  * 
  * cdef public void shoreZmqInitCy():             # <<<<<<<<<<<<<<
  *     shoreClient.shoreZmqInit()
@@ -16743,6 +16798,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_shape, __pyx_k_shape, sizeof(__pyx_k_shape), 0, 0, 1, 1},
   {&__pyx_n_s_shoreClient, __pyx_k_shoreClient, sizeof(__pyx_k_shoreClient), 0, 0, 1, 1},
   {&__pyx_n_s_shoreDataType, __pyx_k_shoreDataType, sizeof(__pyx_k_shoreDataType), 0, 0, 1, 1},
+  {&__pyx_n_s_shoreGet, __pyx_k_shoreGet, sizeof(__pyx_k_shoreGet), 0, 0, 1, 1},
   {&__pyx_n_s_shorePut, __pyx_k_shorePut, sizeof(__pyx_k_shorePut), 0, 0, 1, 1},
   {&__pyx_n_s_shoreZmqInit, __pyx_k_shoreZmqInit, sizeof(__pyx_k_shoreZmqInit), 0, 0, 1, 1},
   {&__pyx_n_s_short, __pyx_k_short, sizeof(__pyx_k_short), 0, 0, 1, 1},

@@ -25,7 +25,6 @@
 #    Any bugs, problems, and/or suggestions please email to
 #    jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
-import uuid
 import sys
 sys.path.append('shoreInfra/queuePlugins')
 from queue import queue
@@ -38,7 +37,7 @@ class queue_dict(queue):
         self.queue_dict[msg['event_id']] = msg
 
     def get(self,msg):
-        event_id = uuid.UUID(msg['event_id'])
+        event_id = msg['event_id']
         del self.queue_dict[event_id]['zmq_worker']
         del self.queue_dict[event_id]['status']
         del self.queue_dict[event_id]['workflow']

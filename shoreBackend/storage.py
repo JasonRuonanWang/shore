@@ -31,6 +31,8 @@ from plugin import plugin
 
 class storage(plugin):
 
+    backend_list = []
+
     dtype={0:'bool',
            1:'char',
            2:'unsigned char',
@@ -47,20 +49,25 @@ class storage(plugin):
     def __init__(self, event, config):
         plugin.__init__(self, event, config)
         self.module_name = 'storage'
+        self.backend_list.append(self.plugin_name())
 
     def event_handler_workflow(self, msg):
         if not self.msg_kv_match(msg, 'backend', self.plugin_name()):
             return False
 
-        operation = msg.get('operation', None)
+        operation = msg.get('operation')
+        if 'return' not in msg:
+            msg['return'] = {}
         if operation == 'put':
             if self.write(msg):
-                msg['return'] = 'OK'
+                msg['return']['put'] = 'OK'
             else:
-                if 'return' not in msg:
-                    msg['return'] = 'ERROR'
+                msg['return']['put'] = 'ERROR'
         elif operation == 'get':
-            self.read(msg)
+            if self.read(msg):
+                msg['return']['read'] = 'OK'
+            else:
+                msg['return']['read'] = 'ERROR'
         return True
 
 

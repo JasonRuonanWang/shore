@@ -69,21 +69,21 @@ class transport_zmqthreaded(transport):
         _socket_worker.connect(self._url_workers)
         msg = None
         while self._looping:
-            try:
+#            try:
                 msg_recv = _socket_worker.recv()
                 msg = pickle.loads(msg_recv)
                 if isinstance(msg, dict):
                     msg['workflow'] = 'transport'
-                    msg['operation'] = 'put'
                     msg['backend'] = 'hdf5'
+                    msg['operation'] ='put'
                     msg['zmq_worker'] = _socket_worker # send worker with msg so that it can be used for sending reply when pushed back to event module
                     self.push_event(msg, self.__class__.__name__)
-            except Exception as e:
-                exc_type, exc_obj, exc_tb = sys.exc_info()
-                fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+#            except Exception as e:
+#                self._looping = False
+#                self.log("Worker recv() is broken!", category='system')
+#                exc_type, exc_obj, exc_tb = sys.exc_info()
+#                fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
 #                print(e, exc_type, fname, exc_tb.tb_lineno)
-                self._looping = False
-                self.log("Worker recv() is broken!", category='system')
         _socket_worker.close()
         self.log("Worker thread is terminated!", category='system')
 

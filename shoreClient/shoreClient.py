@@ -58,14 +58,14 @@ def shoreQuery(doid, column, row):
 
 def shoreGet(doid, column, row):
     # message
-    msg = {
+    msg_send = {
         'operation' : 'get',
         'doid' : doid,
         'column' : column,
         'row' : row,
     }
-    message_socket.send_json(msg)
-    ret = message_socket.recv_json()
+    message_socket.send(pickle.dumps(msg_send))
+    ret = pickle.loads(message_socket.recv())
     print ret
     # transport
     if 'event_id' in ret:
@@ -82,7 +82,7 @@ def shoreGet(doid, column, row):
 
 def shorePut(doid, column, row, shape, dtype, data):
     # message
-    msg = {
+    msg_send = {
         'operation' : 'put',
         'doid' : doid,
         'column' : column,
@@ -90,8 +90,8 @@ def shorePut(doid, column, row, shape, dtype, data):
         'shape' : shape,
         'datatype' : dtype,
     }
-    message_socket.send_json(msg)
-    ret = message_socket.recv_json()
+    message_socket.send(pickle.dumps(msg_send))
+    ret = pickle.loads(message_socket.recv())
 
     # transport
     if 'event_id' in ret:

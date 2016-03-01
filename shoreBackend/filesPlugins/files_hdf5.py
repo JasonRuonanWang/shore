@@ -62,7 +62,6 @@ class files_hdf5(files):
             f[datasetName].resize([nr_rows] + msg['shape'])
 
         f[datasetName][msg['row'],:] = msg['data']
-
         return True
 
 def get_class():
