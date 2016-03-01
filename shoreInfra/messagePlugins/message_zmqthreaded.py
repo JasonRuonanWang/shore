@@ -28,6 +28,7 @@
 import zmq
 import time
 from message import message
+import cPickle as pickle
 
 class message_zmqthreaded(message):
 
@@ -38,16 +39,23 @@ class message_zmqthreaded(message):
     _looping = False
 
     def respond(self, msg):
-        if 'zmq_worker' in msg:
-            if 'event_id' in msg:
-                msg['zmq_worker'].send_json({"event_id": str(msg['event_id'])})
-            elif 'command' in msg:
-                msg['zmq_worker'].send_json({msg['command']: 'OK'})
+        try:
+            if 'zmq_worker' in msg:
+                msg_send={}
+                if 'event_id' in msg:
+                    msg_send['event_id'] = msg['event_id']
+                if 'return' in msg:
+                    msg_send['return'] = msg['return']
+                if 'command' in msg:
+                    msg_send[msg['command']] = 'OK'
+                msg['zmq_worker'].send(pickle.dumps(msg_send))
             else:
-                msg['zmq_worker'].send_json({'Unknown': 'OK'})
-        else:
-            self.log('No zmq_worker handler in msg',category='error')
-        pass
+                self.log('No zmq_worker handler in msg',category='error')
+            pass
+        except Exception as e:
+            import traceback, os.path
+            top = traceback.extract_stack()[-1]
+            print ', '.join([type(e).__name__, os.path.basename(top[0]), str(top[1])])
 
     def bind(self):
         while True:
@@ -68,14 +76,20 @@ class message_zmqthreaded(message):
         msg = None
         while self._looping:
             try:
-                msg = _socket_worker.recv_json()
+                msg_recv = _socket_worker.recv()
+                try:
+                    msg = pickle.loads(msg_recv)
+                except:
+                    _socket_worker.send(pickle.dumps({'error': 'msg not unpickleable'}))
+                    self.log('message_zmqthreaded received msg not unpickleable', category='error')
                 if isinstance(msg, dict):
                     msg['workflow'] = 'message'
                     msg['zmq_worker'] = _socket_worker # send worker with msg so that it can be used for sending reply when pushed back to event module
                     self.push_event(msg, self.__class__.__name__)
             except Exception as e:
-                import traceback, os.path
-                top = traceback.extract_stack()[-1]
+#                print e
+#                import traceback, os.path
+#                top = traceback.extract_stack()[-1]
 #                print ', '.join([type(e).__name__, os.path.basename(top[0]), str(top[1])])
                 self._looping = False
                 self.log("Worker recv_json() is broken!", category='system')

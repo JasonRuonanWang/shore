@@ -45,14 +45,14 @@ def shoreZmqInit():
     transport_socket.connect(transport_address)
 
 def shoreQuery(doid, column, row):
-    msg = {
+    msg_send = {
         'operation' : 'query',
         'doid' : doid,
         'column' : column,
         'row' : row,
     }
-    message_socket.send_json(msg)
-    ret = message_socket.recv_json()
+    message_socket.send(pickle.dumps(msg_send))
+    ret = pickle.loads(message_socket.recv())
     print ret
 
 

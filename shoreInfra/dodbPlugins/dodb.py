@@ -58,17 +58,17 @@ class dodb(plugin):
            10:numpy.complex128,
            11:None}
 
-    def query(self, msg):
-        self.query_do(msg)
-        self.query_column(msg)
+    def query(self,msg):
+        dic = {'doid':msg['doid']}
+        res_list = self.db_query('do', dic)
+        if len(res_list) == 0:
+            msg['return'] = 0
+        else:
+            msg['return'] = res_list[0]
+            if len(res_list) > 1:
+                self.log('doid {0} found multiple records'.format(msg['doid']), category='error', source=__name__)
 
-    def update(self, msg):
-        self.update_do(msg)
-        self.update_column(msg)
 
-    def get(self, msg):
-        self.query_do(msg)
-        self.query_column(msg)
 
     def event_handler_admin(self, msg):
         return
@@ -77,23 +77,17 @@ class dodb(plugin):
         if not 'doid' in msg:
             self.log('query dodb without having valid data object ID', category='error', source=__name__)
             return False
-        if not 'operation' in msg:
-            self.log('msg does not specify operation to do', category='error', source=__name__)
-            return False
 
-        if msg['operation'] == 'put':
-            if not 'shape' in msg:
-                msg['shape'] = None
-            if not 'column' in msg:
-                msg['column'] = None
-            if not 'row' in msg:
-                msg['row'] = None
-            self.update(msg)
-        elif msg['operation'] == 'get':
-            self.get(msg)
-        elif msg['operation'] == 'query':
+        operation = msg.get('operation')
+        if operation == 'put':
+            pass
+        elif operation == 'get':
             self.query(msg)
-
+        elif operation == 'query':
+            self.query(msg)
+        else:
+            self.log('dodb.event_handler_workflow received invalid msg[\'operation\']', category='warning', source=__name__)
+            return False
         return True
 
 

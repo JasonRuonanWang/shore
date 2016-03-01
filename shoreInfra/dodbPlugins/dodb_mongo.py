@@ -34,6 +34,16 @@ class dodb_mongo(dodb):
 
     __db = None
 
+    def __init__(self, event, config):
+        dodb.__init__(self, event, config)
+        client = MongoClient()
+        self.__db = client.shore
+
+    def db_query(self, collection, dic):
+        ret = []
+        for i in self.__db[collection].find(dic):
+            ret.append(i)
+        return ret
 
     def update_do(self, msg):
         self.__db.do.update(
@@ -44,7 +54,6 @@ class dodb_mongo(dodb):
                     },
                 upsert=True
                 )
-
 
     def update_column(self, msg):
         msg['datatype'] = self.dtype_shore_to_numpy[msg['datatype']]
@@ -74,10 +83,6 @@ class dodb_mongo(dodb):
     def query_row(self, msg):
         return
 
-    def __init__(self, event, config):
-        dodb.__init__(self, event, config)
-        client = MongoClient()
-        self.__db = client.shore
 
 def get_class():
     return dodb_mongo
