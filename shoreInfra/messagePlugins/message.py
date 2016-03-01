@@ -26,6 +26,7 @@
 #    jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
 import sys
+import time
 sys.path.append('shoreMeta')
 from plugin import plugin
 import threading
@@ -40,17 +41,16 @@ class message(plugin):
                 self._url_clients = msg['message_address']
                 self.bind()
                 self.start()
-                return False
+                return
             else:
                 if not 'config' in msg:
                     msg['config']='message_address'
                     self.push_event(msg, self.__class__.__name__)
-                return False
-        if self.msg_kv_match(msg, 'command', 'terminate'):
+                return
+        elif self.msg_kv_match(msg, 'command', 'terminate'):
             self.respond(msg)
+            time.sleep(1)
             self.stop()
-            return False
-        return False
 
     def event_handler_workflow(self, msg):
         self.respond(msg)

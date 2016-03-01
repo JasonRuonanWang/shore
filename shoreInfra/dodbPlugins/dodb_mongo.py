@@ -34,13 +34,8 @@ class dodb_mongo(dodb):
 
     __db = None
 
-    def init_db(self):
-        if not self.__db:
-            client = MongoClient()
-            self.__db = client.shore
 
     def update_do(self, msg):
-        self.init_db()
         self.__db.do.update(
                 {'doid':msg['doid']},
                 {
@@ -50,12 +45,11 @@ class dodb_mongo(dodb):
                 upsert=True
                 )
 
+
     def update_column(self, msg):
-        self.init_db()
         msg['datatype'] = self.dtype_shore_to_numpy[msg['datatype']]
         cursor = self.__db.column.find({'doid':msg['doid'], 'column':msg['column']})
         if cursor.count() == 0:
-            print msg['doid'], msg['column'], msg['shape'], msg['datatype']
             self.__db.column.insert_one({'doid':msg['doid'], 'column':msg['column'], 'shape':msg['shape'], 'datatype':msg['datatype'].__name__ })
         else:
             if cursor[0]['shape'] != msg['shape']:
@@ -64,23 +58,26 @@ class dodb_mongo(dodb):
             self.log('Warning: Data Object {0} Column {1} has multiple records in dodb.column'.format(msg['doid'],msg['column']), category='warning', source=__name__)
 
     def query_do(self, msg):
-        self.init_db()
         cursor = self.__db.do.find({'doid':msg['doid']})
         if cursor.count() == 0:
             return None
         else:
-            if cursor.count() > 1:
-                self.log('Warning: Data Object {0} has multiple records in dodb.do'.format(msg['doid']), category='warning', source=__name__)
-#            print cursor[0]
-#            print type(cursor[0])
+            return cursor
 
     def query_column(self, msg):
-        self.init_db()
-        return
+        cursor = self.__db.column.find({'doid':msg['doid'], 'column':msg['column']})
+        if cursor.count() == 0:
+            return False
+        else:
+            return True
 
     def query_row(self, msg):
-        self.init_db()
         return
+
+    def __init__(self, event, config):
+        dodb.__init__(self, event, config)
+        client = MongoClient()
+        self.__db = client.shore
 
 def get_class():
     return dodb_mongo

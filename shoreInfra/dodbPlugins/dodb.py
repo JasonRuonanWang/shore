@@ -58,7 +58,11 @@ class dodb(plugin):
            10:numpy.complex128,
            11:None}
 
-    def put(self, msg):
+    def query(self, msg):
+        self.query_do(msg)
+        self.query_column(msg)
+
+    def update(self, msg):
         self.update_do(msg)
         self.update_column(msg)
 
@@ -84,9 +88,11 @@ class dodb(plugin):
                 msg['column'] = None
             if not 'row' in msg:
                 msg['row'] = None
-            self.put(msg)
+            self.update(msg)
         elif msg['operation'] == 'get':
             self.get(msg)
+        elif msg['operation'] == 'query':
+            self.query(msg)
 
         return True
 

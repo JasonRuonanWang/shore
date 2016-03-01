@@ -38,7 +38,8 @@ class workflow_list(workflow):
     __flowlist['get'] = {}
     __flowlist['get']['message'] = ['authen', 'eventid', 'dodb', 'queue', 'message']
     __flowlist['get']['transport'] = ['queue', 'storage', 'transport']
-    __flowlist['query'] = ['authen', 'eventid', 'dodb']
+    __flowlist['query'] = {}
+    __flowlist['query']['message'] = ['authen', 'eventid', 'dodb', 'message']
 
     def get_next(self, operation, workflow, current):
         index = self.__flowlist[operation][workflow].index(current)

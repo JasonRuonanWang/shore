@@ -44,6 +44,18 @@ def shoreZmqInit():
     transport_socket = context.socket(zmq.REQ)
     transport_socket.connect(transport_address)
 
+def shoreQuery(doid, column, row):
+    msg = {
+        'operation' : 'query',
+        'doid' : doid,
+        'column' : column,
+        'row' : row,
+    }
+    message_socket.send_json(msg)
+    ret = message_socket.recv_json()
+    print ret
+
+
 def shoreGet(doid, column, row):
     # message
     msg = {

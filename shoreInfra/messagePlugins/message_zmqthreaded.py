@@ -76,9 +76,10 @@ class message_zmqthreaded(message):
             except Exception as e:
                 import traceback, os.path
                 top = traceback.extract_stack()[-1]
-                print ', '.join([type(e).__name__, os.path.basename(top[0]), str(top[1])])
+#                print ', '.join([type(e).__name__, os.path.basename(top[0]), str(top[1])])
                 self._looping = False
                 self.log("Worker recv_json() is broken!", category='system')
+        time.sleep(1)
         _socket_worker.close()
         self.log("Worker thread is terminated!", category='system')
 
@@ -91,7 +92,9 @@ class message_zmqthreaded(message):
     def stop_thread(self):
         time.sleep(1)
         self._socket_workers.close()
+        time.sleep(1)
         self._socket_clients.close()
+        time.sleep(1)
         self._context.term()
         self.log("ZMQ Context is terminated!", category='system')
 

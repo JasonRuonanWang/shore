@@ -85,7 +85,7 @@ cdef void shorePutArrayDComplex(const char *doid, const char* column, unsigned i
     shoreClient.shorePut(doid, column, rowid, shape, dtype, data)
 
 
-cdef void shorePutArray(const char *doid, const char* column, unsigned int rowid, unsigned int *shape_c, int dtype, const void *data_c):
+cdef void shorePutArray(const char *doid, const char* column, const unsigned int rowid, const unsigned int *shape_c, const int dtype, const void *data_c):
     cdef int nelements
     shape = []
     for i in range(0, shape_c[0]):
@@ -114,15 +114,19 @@ cdef void shorePutArray(const char *doid, const char* column, unsigned int rowid
     elif shoreDataType[dtype] == 'DComplex':
         shorePutArrayDComplex(doid, column, rowid, shape, dtype, data_c, nelements)
 
-cdef void shorePutScaler(const char *doid, const char* column, unsigned int rowid, unsigned int *shape_c, int dtype, const void *data_c):
+cdef void shorePutScalar(const char *doid, const char* column, const unsigned int rowid, const unsigned int *shape_c, const int dtype, const void *data_c):
     data = data_c[0]
     shoreClient.shorePut(doid, column, rowid, None, dtype, data)
 
-cdef public void shorePutCy(const char *doid, const char* column, unsigned int rowid, unsigned int *shape_c, int dtype, const void *data_c):
-    if shape_c:
+cdef public void shorePutCy(const char *doid, const char* column, const unsigned int rowid, const unsigned int *shape_c, const int dtype, const void *data_c):
+    if shape_c:  #if array
         shorePutArray(doid, column, rowid, shape_c, dtype, data_c)
-    else:
-        shorePutScaler(doid, column, rowid, shape_c, dtype, data_c)
+    else:        #if scalar
+        shorePutScalar(doid, column, rowid, shape_c, dtype, data_c)
+
+
+cdef public void shoreGetCy(const char *doid, const char* column, const unsigned int rowid, unsigned int *shape_c, int *dtype, void *data_c):
+    shoreClient.shoreGet()
 
 cdef public void shoreZmqInitCy():
     shoreClient.shoreZmqInit()

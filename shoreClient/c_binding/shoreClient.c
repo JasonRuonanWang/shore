@@ -38,9 +38,14 @@ void shoreClientCyInit(){
     isShoreClientCyInited = true;
 }
 
-void shorePut(const char *doid, const char *column, unsigned int rowid, unsigned int *shape, int dtype, const void *data){
+void shorePut(const char *doid, const char *column, const unsigned int rowid, const unsigned int *shape, const int dtype, const void *data){
     if(!isShoreClientCyInited) shoreClientCyInit();
     shorePutCy(doid, column, rowid, shape, dtype, data);
+}
+
+void shoreGet(const char *doid, const char *column, const unsigned int rowid, unsigned int *shape, int *dtype, void *data){
+    if(!isShoreClientCyInited) shoreClientCyInit();
+    shoreGetCy(doid, column, rowid, shape, dtype, data);
 }
 
 void shoreClientCyFinalise(){
