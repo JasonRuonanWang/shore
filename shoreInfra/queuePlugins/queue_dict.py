@@ -34,10 +34,10 @@ class queue_dict(queue):
     queue_dict = {}
 
     def put(self,msg):
-        self.queue_dict[msg['event_id']] = msg
+        self.queue_dict[str(msg['event_id'])] = msg
 
     def get(self,msg):
-        event_id = msg['event_id']
+        event_id = str(msg['event_id'])
         del self.queue_dict[event_id]['zmq_worker']
         del self.queue_dict[event_id]['status']
         del self.queue_dict[event_id]['workflow']

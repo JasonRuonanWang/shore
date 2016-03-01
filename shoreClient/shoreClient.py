@@ -52,12 +52,10 @@ def shoreQuery(doid, column, row):
         'row' : row,
     }
     message_socket.send(pickle.dumps(msg_send))
-    ret = pickle.loads(message_socket.recv())
-    print ret
+    return pickle.loads(message_socket.recv())
 
 
 def shoreGet(doid, column, row):
-    # message
     msg_send = {
         'operation' : 'get',
         'doid' : doid,
@@ -66,7 +64,6 @@ def shoreGet(doid, column, row):
     }
     message_socket.send(pickle.dumps(msg_send))
     ret = pickle.loads(message_socket.recv())
-    print ret
     # transport
     if 'event_id' in ret:
         pkg_dict = {'event_id':ret['event_id']}
@@ -74,7 +71,6 @@ def shoreGet(doid, column, row):
         transport_socket.send(pkg_pickled)
         ret = transport_socket.recv()
         ret = pickle.loads(ret)
-        print ret
         if 'data' in ret:
             return ret['data']
         else:
