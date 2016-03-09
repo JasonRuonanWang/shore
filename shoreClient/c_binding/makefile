@@ -5,7 +5,7 @@ ifdef LIBPATH
 	cp ../shoreClient.py $(LIBPATH)/shoreClient/python
 endif
 
-lib:
+lib: cl
 	cython *.pyx
 	cc *.c -lpython2.7 --shared -o libShoreClient.so
 
@@ -13,4 +13,5 @@ cl:
 	rm -rf *.so *.o
 
 clean:cl
-	rm -rf *.c *.h
+	rm -rf shoreClientCy.c shoreClientCy.h
+

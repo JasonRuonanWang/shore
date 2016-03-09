@@ -43,6 +43,7 @@ class dodb_mongo(dodb):
         ret = []
         for i in self.__db[collection].find(query_dict):
             ret.append(i)
+        print ret
         return ret
 
     def db_update(self, collection, query_dict, update_dict, operation):
