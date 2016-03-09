@@ -62,7 +62,8 @@ class files_hdf5(files):
         if not f:
             self.log('backend.file.hdf5.read(): invalid file name {0}'.format(filename), category='error')
         if datasetName in f:
-            if f[datasetName].dtype != msg['datatype']:
+            print msg
+            if f[datasetName].dtype != msg['datatype_numpy']:
                 msg['return']['write'] = 'hdf5: datatype does not match'
                 self.log('Data Object {0} Column {1} datatype does not match. Did not wirte anything.'.format(msg['doid'],msg['column']), category='warning', source=__name__)
                 return True
@@ -71,7 +72,8 @@ class files_hdf5(files):
                 self.log('Data Object {0} Column {1} shape does not match. Did not wirte anything.'.format(msg['doid'],msg['column']), category='warning', source=__name__)
                 return True
         else:
-            f.create_dataset(datasetName, shape, msg['datatype'], maxshape=maxshape)
+            print msg
+            f.create_dataset(datasetName, shape, msg['datatype_numpy'], maxshape=maxshape)
 
         if msg['row'] >= f[datasetName].shape[0]:
             nr_rows = (int(msg['row'] / self.min_rows) + 1) * self.min_rows

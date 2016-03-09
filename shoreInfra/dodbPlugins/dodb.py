@@ -87,15 +87,15 @@ class dodb(plugin):
         else:
             self.db_insert('do', {'doid':msg['doid'], 'rows':msg['row'], 'columns':[msg['column']]})
 
-        msg['datatype'] = self.dtype_shore_to_numpy[msg['datatype']]
         query_dict = {'doid':msg['doid'], 'column':msg['column']}
         column_list = self.db_query('column', query_dict)
+        msg['datatype_numpy'] = self.dtype_shore_to_numpy[msg['datatype']].__name__
         if len(column_list) > 0:
             if column_list[0]['shape'] !=msg['shape']:
                 msg['return']['dodb'] = 'Shape not match'
                 self.log('Data Object {0} Column {1} shape does not match'.format(msg['doid'],msg['column']), category='warning', source=__name__)
         else:
-            self.db_insert('column', {'doid':msg['doid'], 'column':msg['column'], 'shape':msg['shape'], 'datatype':msg['datatype'].__name__ })
+            self.db_insert('column', {'doid':msg['doid'], 'column':msg['column'], 'shape':msg['shape'], 'datatype':msg['datatype'], 'datatype_numpy':msg['datatype_numpy']})
 
 
     def event_handler_admin(self, msg):

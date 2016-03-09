@@ -124,15 +124,21 @@ cdef public void shorePutCy(const char *doid, const char* column, const unsigned
     else:        #if scalar
         shorePutScalar(doid, column, rowid, rows, shape_c, dtype, data_c)
 
-cdef public void shoreGetCy(const char *doid, const char* column, const unsigned int rowid, const unsigned int rows, unsigned int *shape, int *dtype, void *data_c):
+cdef public void shoreGetCy(const char *doid, const char* column, const unsigned int rowid, const unsigned int rows, unsigned int *shape_c, int *dtype_c, void *data_c):
     ret = shoreClient.shoreGet(doid, column, rowid)
-    if 'shape' in ret:
-        print ret['shape']
-    print ret
 
-cdef public int shoreQueryCy(const char *doid, const char* column, const unsigned int rowid, unsigned int *shape_c, int *dtype):
-    ret = shoreClient.shoreQuery()
-    print ret
+cdef public int shoreQueryCy(const char *doid, const char* column, const unsigned int rowid, unsigned int *shape_c, int *dtype_c):
+    ret = shoreClient.shoreQuery(doid, column, rowid)
+    shape = ret['return']['column']['shape']
+    dtype = ret['return']['column']['datatype']
+
+    shape_c[0]=len(shape)
+    s = 1
+    for i in shape:
+        shape_c[s] = i
+        s+=1
+
+    dtype_c[0] = dtype
 
 cdef public void shoreZmqInitCy():
     shoreClient.shoreZmqInit()
