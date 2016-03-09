@@ -1,6 +1,7 @@
 bool isShoreClientCyInited = false;
-void shorePut(char const *, char const *, const unsigned int, const unsigned int *, const int, const void *);
-void shoreGet(char const *, char const *, const unsigned int, unsigned int *, int *, void *);
+void shorePut(char const *, char const *, const unsigned int, const unsigned int, const unsigned int *, const int, const void *);
+void shoreQuery(char const *, char const *, const unsigned int, unsigned int *, int *);
+void shoreGet(char const *, char const *, const unsigned int, const unsigned int, unsigned int *, int *, void *);
 void shoreClientCyInit();
 
 enum shoreDataType {

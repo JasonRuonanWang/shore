@@ -75,7 +75,7 @@ class transport_zmqthreaded(transport):
                 if isinstance(msg, dict):
                     msg['workflow'] = 'transport'
                     msg['backend'] = 'hdf5'
-                    msg['operation'] ='put'
+                    msg['return'] = {}
                     msg['zmq_worker'] = _socket_worker # send worker with msg so that it can be used for sending reply when pushed back to event module
                     self.push_event(msg, self.__class__.__name__)
             except Exception as e:

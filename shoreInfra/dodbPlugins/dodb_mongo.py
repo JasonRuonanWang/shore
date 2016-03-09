@@ -39,13 +39,27 @@ class dodb_mongo(dodb):
         client = MongoClient()
         self.__db = client.shore
 
-    def db_query(self, collection, dic):
+    def db_query(self, collection, query_dict):
         ret = []
-        for i in self.__db[collection].find(dic):
+        for i in self.__db[collection].find(query_dict):
             ret.append(i)
         return ret
 
-    def update_do(self, msg):
+    def db_update(self, collection, query_dict, update_dict, operation):
+        if operation == 'set':
+            self.__db[collection].update(query_dict,{'$set':update_dict},upsert=True)
+        elif operation == 'max':
+            self.__db[collection].update(query_dict,{'$max':update_dict},upsert=True)
+        elif operation == 'add':
+            self.__db[collection].update(query_dict,{'$addToSet':update_dict},upsert=True)
+
+    def db_insert(self, collection, insert_dict):
+        self.__db[collection].insert_one(insert_dict)
+
+    def db_delete(self, collection, delete_dict):
+        self.__db[collection].delete_many(delete_dict)
+
+    def update(self, msg):
         self.__db.do.update(
                 {'doid':msg['doid']},
                 {
@@ -55,34 +69,16 @@ class dodb_mongo(dodb):
                 upsert=True
                 )
 
-    def update_column(self, msg):
         msg['datatype'] = self.dtype_shore_to_numpy[msg['datatype']]
         cursor = self.__db.column.find({'doid':msg['doid'], 'column':msg['column']})
         if cursor.count() == 0:
             self.__db.column.insert_one({'doid':msg['doid'], 'column':msg['column'], 'shape':msg['shape'], 'datatype':msg['datatype'].__name__ })
         else:
             if cursor[0]['shape'] != msg['shape']:
-                self.__db.column.update({'doid':msg['doid'], 'column':msg['column']}, {'$set':{'shape':None}})
+                self.log('Data Object {0} Column {1} shape does not match. Did not touch dodb.'.format(msg['doid'],msg['column']), category='warning', source=__name__)
+#                self.__db.column.update({'doid':msg['doid'], 'column':msg['column']}, {'$set':{'shape':None}})
         if cursor.count() > 1:
-            self.log('Warning: Data Object {0} Column {1} has multiple records in dodb.column'.format(msg['doid'],msg['column']), category='warning', source=__name__)
-
-    def query_do(self, msg):
-        cursor = self.__db.do.find({'doid':msg['doid']})
-        if cursor.count() == 0:
-            return None
-        else:
-            return cursor
-
-    def query_column(self, msg):
-        cursor = self.__db.column.find({'doid':msg['doid'], 'column':msg['column']})
-        if cursor.count() == 0:
-            return False
-        else:
-            return True
-
-    def query_row(self, msg):
-        return
-
+            self.log('Data Object {0} Column {1} has multiple records in dodb.column'.format(msg['doid'],msg['column']), category='warning', source=__name__)
 
 def get_class():
     return dodb_mongo

@@ -1,6 +1,6 @@
 import shoreClient
 
 shoreClient.shoreZmqInit()
-ret=shoreClient.shoreGet("aaa","data_Complex",0)
+ret=shoreClient.shoreGet("eeef","data_DComplex",0, 50)
 print ret
-print len(ret)
+print ret['data'].shape

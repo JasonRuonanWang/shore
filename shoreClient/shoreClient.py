@@ -44,7 +44,37 @@ def shoreZmqInit():
     transport_socket = context.socket(zmq.REQ)
     transport_socket.connect(transport_address)
 
-def shoreQuery(doid, column, row):
+
+def shoreQueryU(doid, column, row, operation):
+    msg_send = {
+        'operation' : operation,
+        'doid' : doid,
+        'column' : column,
+        'row' : row,
+    }
+    message_socket.send(pickle.dumps(msg_send))
+    ret = pickle.loads(message_socket.recv())
+    if type(ret) is not dict:
+        return None
+    if 'return' not in ret:
+        return None
+    if 'do' not in ret['return']:
+        print('shoreClient.shoreGet(): Could not find Data Object {0}'.format(doid))
+        return None
+    if 'columns' not in ret['return']['do']:
+        if column is None:
+            return ret
+        print('shoreClient.shoreGet(): Could not find Column {1} in Data Object {0}'.format(doid, column))
+        return None
+    if column not in ret['return']['do']['columns']:
+        if row is None:
+            return ret
+        print('shoreClient.shoreGet(): Could not find Column {1} in Data Object {0}'.format(doid, column))
+        return None
+    return ret
+
+
+def shoreQuery(doid, column=None, row=None):
     msg_send = {
         'operation' : 'query',
         'doid' : doid,
@@ -52,40 +82,74 @@ def shoreQuery(doid, column, row):
         'row' : row,
     }
     message_socket.send(pickle.dumps(msg_send))
-    return pickle.loads(message_socket.recv())
+    ret = pickle.loads(message_socket.recv())
+    if type(ret) is not dict:
+        return None
+    if 'return' not in ret:
+        return None
+    if 'do' not in ret['return']:
+        print('shoreClient.shoreGet(): Could not find Data Object {0}'.format(doid))
+        return None
+    if 'columns' not in ret['return']['do']:
+        if column is None:
+            return ret
+        print('shoreClient.shoreGet(): Could not find Column {1} in Data Object {0}'.format(doid, column))
+        return None
+    if column not in ret['return']['do']['columns']:
+        if row is None:
+            return ret
+        print('shoreClient.shoreGet(): Could not find Column {1} in Data Object {0}'.format(doid, column))
+        return None
+    return ret
 
 
-def shoreGet(doid, column, row):
+def shoreGet(doid, column, row, rows = 1, slicer = None):
     msg_send = {
         'operation' : 'get',
         'doid' : doid,
         'column' : column,
         'row' : row,
+        'rows' : rows
     }
     message_socket.send(pickle.dumps(msg_send))
     ret = pickle.loads(message_socket.recv())
+    if type(ret) is not dict:
+        return None
+    if 'return' not in ret:
+        return None
+    if 'do' not in ret['return']:
+        print('shoreClient.shoreGet(): Could not find Data Object {0}'.format(doid))
+        return None
+    if 'columns' not in ret['return']['do']:
+        print('shoreClient.shoreGet(): Could not find Column {1} in Data Object {0}'.format(doid, column))
+        return None
+    if column not in ret['return']['do']['columns']:
+        print('shoreClient.shoreGet(): Could not find Column {1} in Data Object {0}'.format(doid, column))
+        return None
+
     # transport
     if 'event_id' in ret:
-        pkg_dict = {'event_id':ret['event_id']}
+        pkg_dict = {'event_id':ret['event_id'],'operation':'get'}
         pkg_pickled = pickle.dumps(pkg_dict)
         transport_socket.send(pkg_pickled)
         ret = transport_socket.recv()
         ret = pickle.loads(ret)
-        if 'data' in ret:
-            return ret['data']
-        else:
-            print ('Error: no data found')
+        return ret
 
-def shorePut(doid, column, row, shape, dtype, data):
+def shorePut(doid, column, row, shape, dtype, data, rows = 1, slicer = None):
     # message
     msg_send = {
         'operation' : 'put',
         'doid' : doid,
         'column' : column,
         'row' : row,
+        'rows': rows,
         'shape' : shape,
         'datatype' : dtype,
     }
+    if slicer:
+        msg_send['slicer']=slicer
+
     message_socket.send(pickle.dumps(msg_send))
     ret = pickle.loads(message_socket.recv())
 
@@ -95,7 +159,7 @@ def shorePut(doid, column, row, shape, dtype, data):
             data_np = np.asarray(data)
             data_np_rs = data_np.reshape(shape)
             print data_np_rs
-            pkg_dict = {'event_id':ret['event_id'], 'data':data_np_rs}
+            pkg_dict = {'event_id':ret['event_id'], 'data':data_np_rs, 'operation':'put'}
             pkg_pickled = pickle.dumps(pkg_dict)
             transport_socket.send(pkg_pickled)
             ret = transport_socket.recv()
