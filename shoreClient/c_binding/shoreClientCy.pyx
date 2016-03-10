@@ -25,27 +25,32 @@
 #    Any bugs, problems, and/or suggestions please email to
 #    jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
+#define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
 
 import sys
 sys.path.append('../')
 import shoreClient
 import numpy as np
+cimport numpy as np
+np.get_include()
 import operator
 import functools
 from libcpp cimport bool
+from libc.string cimport memcpy
+import ctypes
 
 shoreDataType = {
     0:'bool',
     1:'char',
-    2:'uChar',
+    2:'uchar',
     3:'short',
-    4:'uShort',
+    4:'ushort',
     5:'int',
-    6:'uInt',
+    6:'uint',
     7:'float',
     8:'double',
-    9:'Complex',
-    10:'DComplex'}
+    9:'complex',
+    10:'dcomplex'}
 
 cdef extern from "stdbool.h":
     pass
@@ -86,7 +91,6 @@ cdef void shorePutArrayDComplex(const char *doid, const char* column, unsigned i
 
 
 cdef void shorePutArray(const char *doid, const char* column, const unsigned int rowid, const unsigned int rows, const unsigned int *shape_c, const int dtype, const void *data_c):
-    cdef int nelements
     shape = []
     for i in range(0, shape_c[0]):
         shape.append(shape_c[i+1])
@@ -95,23 +99,23 @@ cdef void shorePutArray(const char *doid, const char* column, const unsigned int
         shorePutArrayBool(doid, column, rowid, rows, shape, dtype, data_c, nelements)
     elif shoreDataType[dtype] == 'char':
         shorePutArrayChar(doid, column, rowid, rows, shape, dtype, data_c, nelements)
-    elif shoreDataType[dtype] == 'uChar':
+    elif shoreDataType[dtype] == 'uchar':
         shorePutArrayUChar(doid, column, rowid, rows, shape, dtype, data_c, nelements)
     elif shoreDataType[dtype] == 'short':
         shorePutArrayShort(doid, column, rowid, rows, shape, dtype, data_c, nelements)
-    elif shoreDataType[dtype] == 'uShort':
+    elif shoreDataType[dtype] == 'ushort':
         shorePutArrayUShort(doid, column, rowid, rows, shape, dtype, data_c, nelements)
     elif shoreDataType[dtype] == 'int':
         shorePutArrayInt(doid, column, rowid, rows, shape, dtype, data_c, nelements)
-    elif shoreDataType[dtype] == 'uInt':
+    elif shoreDataType[dtype] == 'uint':
         shorePutArrayUInt(doid, column, rowid, rows, shape, dtype, data_c, nelements)
     elif shoreDataType[dtype] == 'float':
         shorePutArrayFloat(doid, column, rowid, rows, shape, dtype, data_c, nelements)
     elif shoreDataType[dtype] == 'double':
         shorePutArrayDouble(doid, column, rowid, rows, shape, dtype, data_c, nelements)
-    elif shoreDataType[dtype] == 'Complex':
+    elif shoreDataType[dtype] == 'complex':
         shorePutArrayComplex(doid, column, rowid, rows, shape, dtype, data_c, nelements)
-    elif shoreDataType[dtype] == 'DComplex':
+    elif shoreDataType[dtype] == 'dcomplex':
         shorePutArrayDComplex(doid, column, rowid, rows, shape, dtype, data_c, nelements)
 
 cdef void shorePutScalar(const char *doid, const char* column, const unsigned int rowid, const unsigned int rows, const unsigned int *shape_c, const int dtype, const void *data_c):
@@ -124,21 +128,86 @@ cdef public void shorePutCy(const char *doid, const char* column, const unsigned
     else:        #if scalar
         shorePutScalar(doid, column, rowid, rows, shape_c, dtype, data_c)
 
+cdef void shoreGetBool(dict ret, int nelements, void *data_c):
+    data_python = ret['data']
+    data_python_reshaped = np.reshape(ret['data'],[nelements])
+    data_python_retyped = data_python_reshaped.astype(np.uint8)
+    cdef np.ndarray[unsigned char, ndim=1, mode="c"] data = np.ascontiguousarray(data_python_retyped)
+    memcpy(data_c, <const void*> data.data, sizeof(unsigned char) * nelements)
+cdef void shoreGetChar(dict ret, int nelements, void *data_c):
+    cdef np.ndarray[char, ndim=1, mode="c"] data = np.ascontiguousarray( np.reshape(ret['data'],[nelements]) )
+    memcpy(data_c, <const void*> data.data, sizeof(char) * nelements)
+cdef void shoreGetUchar(dict ret, int nelements, void *data_c):
+    cdef np.ndarray[unsigned char, ndim=1, mode="c"] data = np.ascontiguousarray( np.reshape(ret['data'],[nelements]) )
+    memcpy(data_c, <const void*> data.data, sizeof(unsigned char) * nelements)
+cdef void shoreGetShort(dict ret, int nelements, void *data_c):
+    cdef np.ndarray[short, ndim=1, mode="c"] data = np.ascontiguousarray( np.reshape(ret['data'],[nelements]) )
+    memcpy(data_c, <const void*> data.data, sizeof(short) * nelements)
+cdef void shoreGetUshort(dict ret, int nelements, void *data_c):
+    cdef np.ndarray[unsigned short, ndim=1, mode="c"] data = np.ascontiguousarray( np.reshape(ret['data'],[nelements]) )
+    memcpy(data_c, <const void*> data.data, sizeof(unsigned short) * nelements)
+cdef void shoreGetInt(dict ret, int nelements, void *data_c):
+    cdef np.ndarray[int, ndim=1, mode="c"] data = np.ascontiguousarray( np.reshape(ret['data'],[nelements]) )
+    memcpy(data_c, <const void*> data.data, sizeof(int) * nelements)
+cdef void shoreGetUint(dict ret, int nelements, void *data_c):
+    cdef np.ndarray[unsigned int, ndim=1, mode="c"] data = np.ascontiguousarray( np.reshape(ret['data'],[nelements]) )
+    memcpy(data_c, <const void*> data.data, sizeof(unsigned int) * nelements)
+cdef void shoreGetFloat(dict ret, int nelements, void *data_c):
+    cdef np.ndarray[float, ndim=1, mode="c"] data = np.ascontiguousarray( np.reshape(ret['data'],[nelements]) )
+    memcpy(data_c, <const void*> data.data, sizeof(float) * nelements)
+cdef void shoreGetDouble(dict ret, int nelements, void *data_c):
+    cdef np.ndarray[double, ndim=1, mode="c"] data = np.ascontiguousarray( np.reshape(ret['data'],[nelements]) )
+    memcpy(data_c, <const void*> data.data, sizeof(double) * nelements)
+cdef void shoreGetComplex(dict ret, int nelements, void *data_c):
+    cdef np.ndarray[float complex, ndim=1, mode="c"] data = np.ascontiguousarray( np.reshape(ret['data'],[nelements]) )
+    memcpy(data_c, <const void*> data.data, sizeof(float complex) * nelements)
+cdef void shoreGetDcomplex(dict ret, int nelements, void *data_c):
+    cdef np.ndarray[double complex, ndim=1, mode="c"] data = np.ascontiguousarray( np.reshape(ret['data'],[nelements]) )
+    memcpy(data_c, <const void*> data.data, sizeof(double complex) * nelements)
+
 cdef public void shoreGetCy(const char *doid, const char* column, const unsigned int rowid, const unsigned int rows, unsigned int *shape_c, int *dtype_c, void *data_c):
     ret = shoreClient.shoreGet(doid, column, rowid)
+    dtype = ret['return']['column']['datatype']
+    shape = [rows] + ret['return']['column']['shape']
+    nelements = functools.reduce(operator.mul, shape, 1)
+    if shoreDataType[dtype] == 'bool':
+        shoreGetBool(ret, nelements, data_c)
+    elif shoreDataType[dtype] == 'char':
+        shoreGetChar(ret, nelements, data_c)
+    elif shoreDataType[dtype] == 'uchar':
+        shoreGetUchar(ret, nelements, data_c)
+    elif shoreDataType[dtype] == 'short':
+        shoreGetShort(ret, nelements, data_c)
+    elif shoreDataType[dtype] == 'ushort':
+        shoreGetUshort(ret, nelements, data_c)
+    elif shoreDataType[dtype] == 'int':
+        shoreGetInt(ret, nelements, data_c)
+    elif shoreDataType[dtype] == 'uint':
+        shoreGetUint(ret, nelements, data_c)
+    elif shoreDataType[dtype] == 'float':
+        shoreGetFloat(ret, nelements, data_c)
+    elif shoreDataType[dtype] == 'double':
+        shoreGetDouble(ret, nelements, data_c)
+    elif shoreDataType[dtype] == 'complex':
+        shoreGetComplex(ret, nelements, data_c)
+    elif shoreDataType[dtype] == 'dcomplex':
+        shoreGetDcomplex(ret, nelements, data_c)
+
 
 cdef public int shoreQueryCy(const char *doid, const char* column, const unsigned int rowid, unsigned int *shape_c, int *dtype_c):
+    ##### call python shoreClient
     ret = shoreClient.shoreQuery(doid, column, rowid)
+    ##### shape
     shape = ret['return']['column']['shape']
-    dtype = ret['return']['column']['datatype']
-
     shape_c[0]=len(shape)
     s = 1
     for i in shape:
         shape_c[s] = i
         s+=1
-
+    ##### dtype
+    dtype = ret['return']['column']['datatype']
     dtype_c[0] = dtype
+    return 0
 
 cdef public void shoreZmqInitCy():
     shoreClient.shoreZmqInit()

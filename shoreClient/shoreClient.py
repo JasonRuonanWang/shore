@@ -45,35 +45,6 @@ def shoreZmqInit():
     transport_socket.connect(transport_address)
 
 
-def shoreQueryU(doid, column, row, operation):
-    msg_send = {
-        'operation' : operation,
-        'doid' : doid,
-        'column' : column,
-        'row' : row,
-    }
-    message_socket.send(pickle.dumps(msg_send))
-    ret = pickle.loads(message_socket.recv())
-    if type(ret) is not dict:
-        return None
-    if 'return' not in ret:
-        return None
-    if 'do' not in ret['return']:
-        print('shoreClient.shoreGet(): Could not find Data Object {0}'.format(doid))
-        return None
-    if 'columns' not in ret['return']['do']:
-        if column is None:
-            return ret
-        print('shoreClient.shoreGet(): Could not find Column {1} in Data Object {0}'.format(doid, column))
-        return None
-    if column not in ret['return']['do']['columns']:
-        if row is None:
-            return ret
-        print('shoreClient.shoreGet(): Could not find Column {1} in Data Object {0}'.format(doid, column))
-        return None
-    return ret
-
-
 def shoreQuery(doid, column=None, row=None):
     msg_send = {
         'operation' : 'query',
