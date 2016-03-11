@@ -82,10 +82,10 @@ class dodb(plugin):
         query_dict = {'doid':msg['doid']}
         do_list = self.db_query('do', query_dict)
         if len(do_list) > 0:
-            self.db_update('do', query_dict, {'rows':msg['row']}, 'max')
+            self.db_update('do', query_dict, {'total_rows':(msg['row']+1)}, 'max')
             self.db_update('do', query_dict, {'columns':msg['column']}, 'add')
         else:
-            self.db_insert('do', {'doid':msg['doid'], 'rows':msg['row'], 'columns':[msg['column']]})
+            self.db_insert('do', {'doid':msg['doid'], 'total_rows':(msg['row']+1), 'columns':[msg['column']]})
 
         query_dict = {'doid':msg['doid'], 'column':msg['column']}
         column_list = self.db_query('column', query_dict)

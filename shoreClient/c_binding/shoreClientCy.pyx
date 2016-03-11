@@ -56,38 +56,49 @@ cdef extern from "stdbool.h":
     pass
 
 cdef void shorePutArrayBool(const char *doid, const char* column, unsigned int rowid, unsigned int rows, list shape, int dtype, const void *data_c, int nelements):
-    cdef bool[:] data = <bool[:nelements]>data_c
-    shoreClient.shorePut(doid, column, rowid, shape, dtype, data, rows)
+    cdef bool[:] data_mv = <bool[:nelements]>data_c
+    data = np.ascontiguousarray(data_mv).reshape(shape)
+    shoreClient.shorePut(doid, column, rowid, data, rows)
 cdef void shorePutArrayChar(const char *doid, const char* column, unsigned int rowid, unsigned int rows, list shape, int dtype, const void *data_c, int nelements):
-    cdef char[:] data = <char[:nelements]>data_c
-    shoreClient.shorePut(doid, column, rowid, shape, dtype, data, rows)
+    cdef char[:] data_mv = <char[:nelements]>data_c
+    data = np.ascontiguousarray(data_mv).reshape(shape)
+    shoreClient.shorePut(doid, column, rowid, data, rows)
 cdef void shorePutArrayUChar(const char *doid, const char* column, unsigned int rowid, unsigned int rows, list shape, int dtype, const void *data_c, int nelements):
-    cdef unsigned char[:] data = <unsigned char[:nelements]>data_c
-    shoreClient.shorePut(doid, column, rowid, shape, dtype, data, rows)
+    cdef unsigned char[:] data_mv = <unsigned char[:nelements]>data_c
+    data = np.ascontiguousarray(data_mv).reshape(shape)
+    shoreClient.shorePut(doid, column, rowid, data, rows)
 cdef void shorePutArrayShort(const char *doid, const char* column, unsigned int rowid, unsigned int rows, list shape, int dtype, const void *data_c, int nelements):
-    cdef short[:] data = <short[:nelements]>data_c
-    shoreClient.shorePut(doid, column, rowid, shape, dtype, data, rows)
+    cdef short[:] data_mv = <short[:nelements]>data_c
+    data = np.ascontiguousarray(data_mv).reshape(shape)
+    shoreClient.shorePut(doid, column, rowid, data, rows)
 cdef void shorePutArrayUShort(const char *doid, const char* column, unsigned int rowid, unsigned int rows, list shape, int dtype, const void *data_c, int nelements):
-    cdef unsigned short[:] data = <unsigned short[:nelements]>data_c
-    shoreClient.shorePut(doid, column, rowid, shape, dtype, data, rows)
+    cdef unsigned short[:] data_mv = <unsigned short[:nelements]>data_c
+    data = np.ascontiguousarray(data_mv).reshape(shape)
+    shoreClient.shorePut(doid, column, rowid, data, rows)
 cdef void shorePutArrayInt(const char *doid, const char* column, unsigned int rowid, unsigned int rows, list shape, int dtype, const void *data_c, int nelements):
-    cdef int[:] data = <int[:nelements]>data_c
-    shoreClient.shorePut(doid, column, rowid, shape, dtype, data, rows)
+    cdef int[:] data_mv = <int[:nelements]>data_c
+    data = np.ascontiguousarray(data_mv).reshape(shape)
+    shoreClient.shorePut(doid, column, rowid, data, rows)
 cdef void shorePutArrayUInt(const char *doid, const char* column, unsigned int rowid, unsigned int rows, list shape, int dtype, const void *data_c, int nelements):
-    cdef unsigned int[:] data = <unsigned int[:nelements]>data_c
-    shoreClient.shorePut(doid, column, rowid, shape, dtype, data, rows)
+    cdef unsigned int[:] data_mv = <unsigned int[:nelements]>data_c
+    data = np.ascontiguousarray(data_mv).reshape(shape)
+    shoreClient.shorePut(doid, column, rowid, data, rows)
 cdef void shorePutArrayFloat(const char *doid, const char* column, unsigned int rowid, unsigned int rows, list shape, int dtype, const void *data_c, int nelements):
-    cdef float[:] data = <float[:nelements]>data_c
-    shoreClient.shorePut(doid, column, rowid, shape, dtype, data, rows)
+    cdef float[:] data_mv = <float[:nelements]>data_c
+    data = np.ascontiguousarray(data_mv).reshape(shape)
+    shoreClient.shorePut(doid, column, rowid, data, rows)
 cdef void shorePutArrayDouble(const char *doid, const char* column, unsigned int rowid, unsigned int rows, list shape, int dtype, const void *data_c, int nelements):
-    cdef double[:] data = <double[:nelements]>data_c
-    shoreClient.shorePut(doid, column, rowid, shape, dtype, data, rows)
+    cdef double[:] data_mv = <double[:nelements]>data_c
+    data = np.ascontiguousarray(data_mv).reshape(shape)
+    shoreClient.shorePut(doid, column, rowid, data, rows)
 cdef void shorePutArrayComplex(const char *doid, const char* column, unsigned int rowid, unsigned int rows, list shape, int dtype, const void *data_c, int nelements):
-    cdef float complex[:] data = <float complex[:nelements]>data_c
-    shoreClient.shorePut(doid, column, rowid, shape, dtype, data, rows)
+    cdef float complex[:] data_mv = <float complex[:nelements]>data_c
+    data = np.ascontiguousarray(data_mv).reshape(shape)
+    shoreClient.shorePut(doid, column, rowid, data, rows)
 cdef void shorePutArrayDComplex(const char *doid, const char* column, unsigned int rowid, unsigned int rows, list shape, int dtype, const void *data_c, int nelements):
-    cdef double complex[:] data = <double complex[:nelements]>data_c
-    shoreClient.shorePut(doid, column, rowid, shape, dtype, data, rows)
+    cdef double complex[:] data_mv = <double complex[:nelements]>data_c
+    data = np.ascontiguousarray(data_mv).reshape(shape)
+    shoreClient.shorePut(doid, column, rowid, data, rows)
 
 
 cdef void shorePutArray(const char *doid, const char* column, const unsigned int rowid, const unsigned int rows, const unsigned int *shape_c, const int dtype, const void *data_c):
@@ -196,7 +207,7 @@ cdef public void shoreGetCy(const char *doid, const char* column, const unsigned
 
 cdef public int shoreQueryCy(const char *doid, const char* column, const unsigned int rowid, unsigned int *shape_c, int *dtype_c):
     ##### call python shoreClient
-    ret = shoreClient.shoreQuery(doid, column, rowid)
+    ret = shoreClient.shoreQuery(doid, column)
     ##### shape
     shape = ret['return']['column']['shape']
     shape_c[0]=len(shape)

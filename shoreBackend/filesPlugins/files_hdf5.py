@@ -39,6 +39,9 @@ class files_hdf5(files):
         datasetName = msg['column']
         rowid = msg['row']
         rows = msg['rows']
+        if rows == 0:
+            rows = msg['return']['do']['total_rows'] - rowid
+        print rows
         f = h5py.File(filename)
         if not f:
             self.log('backend.file.hdf5.read(): invalid file name {0}'.format(filename), category='error')
@@ -55,15 +58,13 @@ class files_hdf5(files):
         maxshape = [None] + msg['shape']
         rowid = msg['row']
         rows = msg.get('rows')
-        if not rows:
-            rows = 1
 
         f = h5py.File(filename)
         if not f:
             self.log('backend.file.hdf5.read(): invalid file name {0}'.format(filename), category='error')
         if datasetName in f:
-            print msg
-            if f[datasetName].dtype != msg['datatype_numpy']:
+            print type(f[datasetName].dtype), type(msg['datatype'])
+            if f[datasetName].dtype != msg['datatype']:
                 msg['return']['write'] = 'hdf5: datatype does not match'
                 self.log('Data Object {0} Column {1} datatype does not match. Did not wirte anything.'.format(msg['doid'],msg['column']), category='warning', source=__name__)
                 return True
@@ -72,8 +73,7 @@ class files_hdf5(files):
                 self.log('Data Object {0} Column {1} shape does not match. Did not wirte anything.'.format(msg['doid'],msg['column']), category='warning', source=__name__)
                 return True
         else:
-            print msg
-            f.create_dataset(datasetName, shape, msg['datatype_numpy'], maxshape=maxshape)
+            f.create_dataset(datasetName, shape, msg['datatype'], maxshape=maxshape)
 
         if msg['row'] >= f[datasetName].shape[0]:
             nr_rows = (int(msg['row'] / self.min_rows) + 1) * self.min_rows

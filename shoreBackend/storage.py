@@ -60,7 +60,6 @@ class storage(plugin):
             if self.write(msg):
                 msg['return']['put'] = 'OK'
             else:
-                print msg
                 msg['return']['put'] = 'ERROR'
         elif operation == 'get':
             if self.read(msg):
