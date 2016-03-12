@@ -111,7 +111,6 @@ def shorePut(doid, column, row, data, rows = 1, slicer = None):
         shape = list(data.shape)[1:]
 
     dtype = data.dtype
-    print 'after', dtype
 
     # message
     msg_send = {

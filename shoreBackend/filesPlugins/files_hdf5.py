@@ -63,7 +63,6 @@ class files_hdf5(files):
         if not f:
             self.log('backend.file.hdf5.read(): invalid file name {0}'.format(filename), category='error')
         if datasetName in f:
-            print type(f[datasetName].dtype), type(msg['datatype'])
             if f[datasetName].dtype != msg['datatype']:
                 msg['return']['write'] = 'hdf5: datatype does not match'
                 self.log('Data Object {0} Column {1} datatype does not match. Did not wirte anything.'.format(msg['doid'],msg['column']), category='warning', source=__name__)
