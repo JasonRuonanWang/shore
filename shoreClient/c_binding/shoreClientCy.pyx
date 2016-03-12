@@ -25,32 +25,13 @@
 #    Any bugs, problems, and/or suggestions please email to
 #    jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
-#define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
-
 import sys
 sys.path.append('../')
 import shoreClient
 import numpy as np
 cimport numpy as np
-np.get_include()
-import operator
-import functools
 from libcpp cimport bool
 from libc.string cimport memcpy
-import ctypes
-
-shoreDataType = {
-    0:'bool',
-    1:'char',
-    2:'uchar',
-    3:'short',
-    4:'ushort',
-    5:'int',
-    6:'uint',
-    7:'float',
-    8:'double',
-    9:'complex',
-    10:'dcomplex'}
 
 cdef extern from "stdbool.h":
     pass
@@ -105,28 +86,30 @@ cdef public void shorePutCy(const char *doid, const char* column, const unsigned
     shape = []
     for i in range(0, shape_c[0]):
         shape.append(shape_c[i+1])
-    nelements = functools.reduce(operator.mul, shape, 1)
-    if shoreDataType[dtype] == 'bool':
+    nelements = 1
+    for x in shape:
+        nelements *= x
+    if dtype == 0:
         shorePutCyBool(doid, column, rowid, rows, shape, data_c, nelements)
-    elif shoreDataType[dtype] == 'char':
+    elif dtype == 1:
         shorePutCyChar(doid, column, rowid, rows, shape, data_c, nelements)
-    elif shoreDataType[dtype] == 'uchar':
+    elif dtype == 2:
         shorePutCyUChar(doid, column, rowid, rows, shape, data_c, nelements)
-    elif shoreDataType[dtype] == 'short':
+    elif dtype == 3:
         shorePutCyShort(doid, column, rowid, rows, shape, data_c, nelements)
-    elif shoreDataType[dtype] == 'ushort':
+    elif dtype == 4:
         shorePutCyUShort(doid, column, rowid, rows, shape, data_c, nelements)
-    elif shoreDataType[dtype] == 'int':
+    elif dtype == 5:
         shorePutCyInt(doid, column, rowid, rows, shape, data_c, nelements)
-    elif shoreDataType[dtype] == 'uint':
+    elif dtype == 6:
         shorePutCyUInt(doid, column, rowid, rows, shape, data_c, nelements)
-    elif shoreDataType[dtype] == 'float':
+    elif dtype == 7:
         shorePutCyFloat(doid, column, rowid, rows, shape, data_c, nelements)
-    elif shoreDataType[dtype] == 'double':
+    elif dtype == 8:
         shorePutCyDouble(doid, column, rowid, rows, shape, data_c, nelements)
-    elif shoreDataType[dtype] == 'complex':
+    elif dtype == 9:
         shorePutCyComplex(doid, column, rowid, rows, shape, data_c, nelements)
-    elif shoreDataType[dtype] == 'dcomplex':
+    elif dtype == 10:
         shorePutCyDComplex(doid, column, rowid, rows, shape, data_c, nelements)
 
 
@@ -171,28 +154,30 @@ cdef public void shoreGetCy(const char *doid, const char* column, const unsigned
     ret = shoreClient.shoreGet(doid, column, rowid)
     dtype = ret['return']['column']['datatype']
     shape = [rows] + ret['return']['column']['shape']
-    nelements = functools.reduce(operator.mul, shape, 1)
-    if shoreDataType[dtype] == 'bool':
+    nelements = 1
+    for x in shape:
+        nelements *= x
+    if dtype == 0:
         shoreGetBool(ret, nelements, data_c)
-    elif shoreDataType[dtype] == 'char':
+    elif dtype == 1:
         shoreGetChar(ret, nelements, data_c)
-    elif shoreDataType[dtype] == 'uchar':
+    elif dtype == 2:
         shoreGetUchar(ret, nelements, data_c)
-    elif shoreDataType[dtype] == 'short':
+    elif dtype == 3:
         shoreGetShort(ret, nelements, data_c)
-    elif shoreDataType[dtype] == 'ushort':
+    elif dtype == 4:
         shoreGetUshort(ret, nelements, data_c)
-    elif shoreDataType[dtype] == 'int':
+    elif dtype == 5:
         shoreGetInt(ret, nelements, data_c)
-    elif shoreDataType[dtype] == 'uint':
+    elif dtype == 6:
         shoreGetUint(ret, nelements, data_c)
-    elif shoreDataType[dtype] == 'float':
+    elif dtype == 7:
         shoreGetFloat(ret, nelements, data_c)
-    elif shoreDataType[dtype] == 'double':
+    elif dtype == 8:
         shoreGetDouble(ret, nelements, data_c)
-    elif shoreDataType[dtype] == 'complex':
+    elif dtype == 9:
         shoreGetComplex(ret, nelements, data_c)
-    elif shoreDataType[dtype] == 'dcomplex':
+    elif dtype == 10:
         shoreGetDcomplex(ret, nelements, data_c)
 
 
