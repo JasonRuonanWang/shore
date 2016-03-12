@@ -1,4 +1,5 @@
 install:lib
+
 ifdef LIBPATH
 	cp libShoreClient.so $(LIBPATH)/shoreClient/lib 
 	cp shoreClient.h $(LIBPATH)/shoreClient/include
@@ -14,4 +15,3 @@ cl:
 
 clean:cl
 	rm -rf shoreClientCy.c shoreClientCy.h
-

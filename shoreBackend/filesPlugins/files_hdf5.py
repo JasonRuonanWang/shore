@@ -41,8 +41,12 @@ class files_hdf5(files):
         rows = msg['rows']
         if rows == 0:
             rows = msg['return']['do']['total_rows'] - rowid
-        print rows
-        f = h5py.File(filename)
+        f = None
+        try:
+            f = h5py.File(filename)
+        except Exception as e:
+            print e
+            return True
         if not f:
             self.log('backend.file.hdf5.read(): invalid file name {0}'.format(filename), category='error')
         if datasetName in f:
@@ -59,7 +63,13 @@ class files_hdf5(files):
         rowid = msg['row']
         rows = msg.get('rows')
 
-        f = h5py.File(filename)
+        f = None
+        try:
+            f = h5py.File(filename)
+        except Exception as e:
+            print e
+            return True
+
         if not f:
             self.log('backend.file.hdf5.read(): invalid file name {0}'.format(filename), category='error')
         if datasetName in f:

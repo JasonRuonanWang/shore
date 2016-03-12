@@ -103,6 +103,7 @@ def shoreGet(doid, column, row, rows = 1, slicer = None):
         ret = pickle.loads(ret)
         return ret
 
+
 def shorePut(doid, column, row, data, rows = 1, slicer = None):
     shape = []
     if rows == 1:

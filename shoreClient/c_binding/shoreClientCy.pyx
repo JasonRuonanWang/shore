@@ -42,7 +42,7 @@ cdef void shorePutCyBool(const char *doid, const char* column, unsigned int rowi
     shoreClient.shorePut(doid, column, rowid, data, rows)
 cdef void shorePutCyChar(const char *doid, const char* column, unsigned int rowid, unsigned int rows, list shape, const void *data_c, int nelements):
     cdef char[:] data_mv = <char[:nelements]>data_c
-    data = np.ascontiguousarray(data_mv).reshape(shape)
+    data = np.ascontiguousarray(data_mv).reshape(shape).astype('int8')
     shoreClient.shorePut(doid, column, rowid, data, rows)
 cdef void shorePutCyUChar(const char *doid, const char* column, unsigned int rowid, unsigned int rows, list shape, const void *data_c, int nelements):
     cdef unsigned char[:] data_mv = <unsigned char[:nelements]>data_c
@@ -157,27 +157,26 @@ cdef public void shoreGetCy(const char *doid, const char* column, const unsigned
     nelements = 1
     for x in shape:
         nelements *= x
-    if dtype == 0:
-        shoreGetBool(ret, nelements, data_c)
-    elif dtype == 1:
+    print nelements
+    if dtype == 'int8':
         shoreGetChar(ret, nelements, data_c)
-    elif dtype == 2:
+    elif dtype == 'uint8':
         shoreGetUchar(ret, nelements, data_c)
-    elif dtype == 3:
+    elif dtype == 'int16':
         shoreGetShort(ret, nelements, data_c)
-    elif dtype == 4:
+    elif dtype == 'uint16':
         shoreGetUshort(ret, nelements, data_c)
-    elif dtype == 5:
+    elif dtype == 'int32':
         shoreGetInt(ret, nelements, data_c)
-    elif dtype == 6:
+    elif dtype == 'uint32':
         shoreGetUint(ret, nelements, data_c)
-    elif dtype == 7:
+    elif dtype == 'float32':
         shoreGetFloat(ret, nelements, data_c)
-    elif dtype == 8:
+    elif dtype == 'float64':
         shoreGetDouble(ret, nelements, data_c)
-    elif dtype == 9:
+    elif dtype == 'complex64':
         shoreGetComplex(ret, nelements, data_c)
-    elif dtype == 10:
+    elif dtype == 'complex128':
         shoreGetDcomplex(ret, nelements, data_c)
 
 
@@ -193,7 +192,6 @@ cdef public int shoreQueryCy(const char *doid, const char* column, const unsigne
         s+=1
     ##### dtype
     dtype = ret['return']['column']['datatype']
-    dtype_c[0] = dtype
     return 0
 
 cdef public void shoreZmqInitCy():

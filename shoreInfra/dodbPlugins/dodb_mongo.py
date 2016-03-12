@@ -71,8 +71,7 @@ class dodb_mongo(dodb):
                 )
         cursor = self.__db.column.find({'doid':msg['doid'], 'column':msg['column']})
         if cursor.count() == 0:
-            print type(np.uint8)
-            self.__db.column.insert_one({'doid':msg['doid'], 'column':msg['column'], 'shape':msg['shape'], 'datatype':msg['datatype'].str  })
+            self.__db.column.insert_one({'doid':msg['doid'], 'column':msg['column'], 'shape':msg['shape'], 'datatype':str(msg['datatype'])})
         else:
             if cursor[0]['shape'] != msg['shape']:
                 self.log('Data Object {0} Column {1} shape does not match. Did not touch dodb.'.format(msg['doid'],msg['column']), category='warning', source=__name__)
