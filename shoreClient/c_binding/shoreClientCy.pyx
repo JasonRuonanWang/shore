@@ -113,12 +113,6 @@ cdef public void shorePutCy(const char *doid, const char* column, const unsigned
         shorePutCyDComplex(doid, column, rowid, rows, shape, data_c, nelements)
 
 
-cdef void shoreGetBool(dict ret, int nelements, void *data_c):
-    data_python = ret['data']
-    data_python_reshaped = np.reshape(ret['data'],[nelements])
-    data_python_retyped = data_python_reshaped.astype(np.uint8)
-    cdef np.ndarray[unsigned char, ndim=1, mode="c"] data = np.ascontiguousarray(data_python_retyped)
-    memcpy(data_c, <const void*> data.data, sizeof(unsigned char) * nelements)
 cdef void shoreGetChar(dict ret, int nelements, void *data_c):
     cdef np.ndarray[char, ndim=1, mode="c"] data = np.ascontiguousarray( np.reshape(ret['data'],[nelements]) )
     memcpy(data_c, <const void*> data.data, sizeof(char) * nelements)
@@ -151,13 +145,20 @@ cdef void shoreGetDcomplex(dict ret, int nelements, void *data_c):
     memcpy(data_c, <const void*> data.data, sizeof(double complex) * nelements)
 
 cdef public void shoreGetCy(const char *doid, const char* column, const unsigned int rowid, const unsigned int rows, unsigned int *shape_c, int *dtype_c, void *data_c):
-    ret = shoreClient.shoreGet(doid, column, rowid)
+    ret = shoreClient.shoreGet(doid, column, rowid, rows = rows)
     dtype = ret['return']['column']['datatype']
-    shape = [rows] + ret['return']['column']['shape']
-    nelements = 1
+
+    shape = []
+    rows_new = rows
+    if rows_new == 0:
+        rows_new = ret['return']['do']['total_rows']
+    shape = ret['return']['column']['shape']
+
+    nelements = rows_new
+
     for x in shape:
         nelements *= x
-    print nelements
+
     if dtype == 'int8':
         shoreGetChar(ret, nelements, data_c)
     elif dtype == 'uint8':
@@ -180,7 +181,7 @@ cdef public void shoreGetCy(const char *doid, const char* column, const unsigned
         shoreGetDcomplex(ret, nelements, data_c)
 
 
-cdef public int shoreQueryCy(const char *doid, const char* column, const unsigned int rowid, unsigned int *shape_c, int *dtype_c):
+cdef public int shoreQueryCy(const char *doid, const char* column, unsigned int *rows, unsigned int *shape_c, int *dtype_c):
     ##### call python shoreClient
     ret = shoreClient.shoreQuery(doid, column)
     ##### shape
@@ -192,6 +193,8 @@ cdef public int shoreQueryCy(const char *doid, const char* column, const unsigne
         s+=1
     ##### dtype
     dtype = ret['return']['column']['datatype']
+    rows[0] = ret['return']['do']['total_rows']
+
     return 0
 
 cdef public void shoreZmqInitCy():

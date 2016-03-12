@@ -1,6 +1,6 @@
 bool isShoreClientCyInited = false;
 void shorePut(char const *, char const *, const unsigned int, const unsigned int, const unsigned int *, const int, const void *);
-int shoreQuery(char const *, char const *, const unsigned int, unsigned int *, int *);
+int shoreQuery(char const *, char const *, unsigned int*, unsigned int *, int *);
 void shoreGet(char const *, char const *, const unsigned int, const unsigned int, unsigned int *, int *, void *);
 void shoreClientCyInit();
 
