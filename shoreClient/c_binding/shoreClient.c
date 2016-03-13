@@ -49,9 +49,9 @@ int shoreQuery(const char *doid, const char *column, unsigned int *rows, unsigne
     return 0;
 }
 
-void shoreGet(const char *doid, const char *column, const unsigned int rowid, const unsigned int rows, unsigned int *shape, int *dtype, void *data){
+void shoreGet(const char *doid, const char *column, const unsigned int rowid, const unsigned int rows, void *data){
     if(!isShoreClientCyInited) shoreClientCyInit();
-    shoreGetCy(doid, column, rowid, rows, shape, dtype, data);
+    shoreGetCy(doid, column, rowid, rows, data);
 }
 
 void shoreClientCyFinalise(){

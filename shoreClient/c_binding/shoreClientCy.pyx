@@ -144,7 +144,7 @@ cdef void shoreGetDcomplex(dict ret, int nelements, void *data_c):
     cdef np.ndarray[double complex, ndim=1, mode="c"] data = np.ascontiguousarray( np.reshape(ret['data'],[nelements]) )
     memcpy(data_c, <const void*> data.data, sizeof(double complex) * nelements)
 
-cdef public void shoreGetCy(const char *doid, const char* column, const unsigned int rowid, const unsigned int rows, unsigned int *shape_c, int *dtype_c, void *data_c):
+cdef public void shoreGetCy(const char *doid, const char* column, const unsigned int rowid, const unsigned int rows, void *data_c):
     ret = shoreClient.shoreGet(doid, column, rowid, rows = rows)
     dtype = ret['return']['column']['datatype']
 

@@ -1620,7 +1620,7 @@ static void __pyx_f_13shoreClientCy_shoreGetFloat(PyObject *, int, void *); /*pr
 static void __pyx_f_13shoreClientCy_shoreGetDouble(PyObject *, int, void *); /*proto*/
 static void __pyx_f_13shoreClientCy_shoreGetComplex(PyObject *, int, void *); /*proto*/
 static void __pyx_f_13shoreClientCy_shoreGetDcomplex(PyObject *, int, void *); /*proto*/
-__PYX_EXTERN_C DL_EXPORT(void) shoreGetCy(char const *, char const *, unsigned int const , unsigned int const , unsigned int *, int *, void *); /*proto*/
+__PYX_EXTERN_C DL_EXPORT(void) shoreGetCy(char const *, char const *, unsigned int const , unsigned int const , void *); /*proto*/
 __PYX_EXTERN_C DL_EXPORT(int) shoreQueryCy(char const *, char const *, unsigned int *, unsigned int *, int *); /*proto*/
 __PYX_EXTERN_C DL_EXPORT(void) shoreZmqInitCy(void); /*proto*/
 static struct __pyx_array_obj *__pyx_array_new(PyObject *, Py_ssize_t, char *, char *, char *); /*proto*/
@@ -6507,7 +6507,7 @@ static void __pyx_f_13shoreClientCy_shoreGetDcomplex(PyObject *__pyx_v_ret, int 
  *     cdef np.ndarray[double complex, ndim=1, mode="c"] data = np.ascontiguousarray( np.reshape(ret['data'],[nelements]) )
  *     memcpy(data_c, <const void*> data.data, sizeof(double complex) * nelements)             # <<<<<<<<<<<<<<
  * 
- * cdef public void shoreGetCy(const char *doid, const char* column, const unsigned int rowid, const unsigned int rows, unsigned int *shape_c, int *dtype_c, void *data_c):
+ * cdef public void shoreGetCy(const char *doid, const char* column, const unsigned int rowid, const unsigned int rows, void *data_c):
  */
   memcpy(__pyx_v_data_c, ((void const *)__pyx_v_data->data), ((sizeof(__pyx_t_double_complex)) * __pyx_v_nelements));
 
@@ -6546,12 +6546,12 @@ static void __pyx_f_13shoreClientCy_shoreGetDcomplex(PyObject *__pyx_v_ret, int 
 /* "shoreClientCy.pyx":147
  *     memcpy(data_c, <const void*> data.data, sizeof(double complex) * nelements)
  * 
- * cdef public void shoreGetCy(const char *doid, const char* column, const unsigned int rowid, const unsigned int rows, unsigned int *shape_c, int *dtype_c, void *data_c):             # <<<<<<<<<<<<<<
+ * cdef public void shoreGetCy(const char *doid, const char* column, const unsigned int rowid, const unsigned int rows, void *data_c):             # <<<<<<<<<<<<<<
  *     ret = shoreClient.shoreGet(doid, column, rowid, rows = rows)
  *     dtype = ret['return']['column']['datatype']
  */
 
-void shoreGetCy(char const *__pyx_v_doid, char const *__pyx_v_column, unsigned int const __pyx_v_rowid, unsigned int const __pyx_v_rows, CYTHON_UNUSED unsigned int *__pyx_v_shape_c, CYTHON_UNUSED int *__pyx_v_dtype_c, void *__pyx_v_data_c) {
+void shoreGetCy(char const *__pyx_v_doid, char const *__pyx_v_column, unsigned int const __pyx_v_rowid, unsigned int const __pyx_v_rows, void *__pyx_v_data_c) {
   PyObject *__pyx_v_ret = NULL;
   PyObject *__pyx_v_dtype = NULL;
   PyObject *__pyx_v_shape = NULL;
@@ -6575,7 +6575,7 @@ void shoreGetCy(char const *__pyx_v_doid, char const *__pyx_v_column, unsigned i
 
   /* "shoreClientCy.pyx":148
  * 
- * cdef public void shoreGetCy(const char *doid, const char* column, const unsigned int rowid, const unsigned int rows, unsigned int *shape_c, int *dtype_c, void *data_c):
+ * cdef public void shoreGetCy(const char *doid, const char* column, const unsigned int rowid, const unsigned int rows, void *data_c):
  *     ret = shoreClient.shoreGet(doid, column, rowid, rows = rows)             # <<<<<<<<<<<<<<
  *     dtype = ret['return']['column']['datatype']
  * 
@@ -6617,7 +6617,7 @@ void shoreGetCy(char const *__pyx_v_doid, char const *__pyx_v_column, unsigned i
   __pyx_t_3 = 0;
 
   /* "shoreClientCy.pyx":149
- * cdef public void shoreGetCy(const char *doid, const char* column, const unsigned int rowid, const unsigned int rows, unsigned int *shape_c, int *dtype_c, void *data_c):
+ * cdef public void shoreGetCy(const char *doid, const char* column, const unsigned int rowid, const unsigned int rows, void *data_c):
  *     ret = shoreClient.shoreGet(doid, column, rowid, rows = rows)
  *     dtype = ret['return']['column']['datatype']             # <<<<<<<<<<<<<<
  * 
@@ -7110,7 +7110,7 @@ void shoreGetCy(char const *__pyx_v_doid, char const *__pyx_v_column, unsigned i
   /* "shoreClientCy.pyx":147
  *     memcpy(data_c, <const void*> data.data, sizeof(double complex) * nelements)
  * 
- * cdef public void shoreGetCy(const char *doid, const char* column, const unsigned int rowid, const unsigned int rows, unsigned int *shape_c, int *dtype_c, void *data_c):             # <<<<<<<<<<<<<<
+ * cdef public void shoreGetCy(const char *doid, const char* column, const unsigned int rowid, const unsigned int rows, void *data_c):             # <<<<<<<<<<<<<<
  *     ret = shoreClient.shoreGet(doid, column, rowid, rows = rows)
  *     dtype = ret['return']['column']['datatype']
  */
