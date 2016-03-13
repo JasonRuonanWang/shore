@@ -82,7 +82,7 @@ cdef void shorePutCyDComplex(const char *doid, const char* column, unsigned int 
     shoreClient.shorePut(doid, column, rowid, data, rows)
 
 
-cdef public void shorePutCy(const char *doid, const char* column, const unsigned int rowid, const unsigned int rows, const unsigned int *shape_c, const int dtype, const void *data_c):
+cdef public int shorePutCy(const char *doid, const char* column, const unsigned int rowid, const unsigned int rows, const unsigned int *shape_c, const int dtype, const void *data_c):
     shape = []
     for i in range(0, shape_c[0]):
         shape.append(shape_c[i+1])
@@ -112,6 +112,7 @@ cdef public void shorePutCy(const char *doid, const char* column, const unsigned
     elif dtype == 10:
         shorePutCyDComplex(doid, column, rowid, rows, shape, data_c, nelements)
 
+    return 0
 
 cdef void shoreGetChar(dict ret, int nelements, void *data_c):
     cdef np.ndarray[char, ndim=1, mode="c"] data = np.ascontiguousarray( np.reshape(ret['data'],[nelements]) )
@@ -144,8 +145,10 @@ cdef void shoreGetDcomplex(dict ret, int nelements, void *data_c):
     cdef np.ndarray[double complex, ndim=1, mode="c"] data = np.ascontiguousarray( np.reshape(ret['data'],[nelements]) )
     memcpy(data_c, <const void*> data.data, sizeof(double complex) * nelements)
 
-cdef public void shoreGetCy(const char *doid, const char* column, const unsigned int rowid, const unsigned int rows, void *data_c):
+cdef public int shoreGetCy(const char *doid, const char* column, const unsigned int rowid, const unsigned int rows, void *data_c):
     ret = shoreClient.shoreGet(doid, column, rowid, rows = rows)
+    if ret is None:
+        return -1
     dtype = ret['return']['column']['datatype']
 
     shape = []
@@ -180,11 +183,17 @@ cdef public void shoreGetCy(const char *doid, const char* column, const unsigned
     elif dtype == 'complex128':
         shoreGetDcomplex(ret, nelements, data_c)
 
+    return 0
+
 
 cdef public int shoreQueryCy(const char *doid, const char* column, unsigned int *rows, unsigned int *shape_c, int *dtype_c):
     ##### call python shoreClient
     ret = shoreClient.shoreQuery(doid, column)
     ##### shape
+
+    if ret is None:
+        return -1
+
     shape = ret['return']['column']['shape']
     shape_c[0]=len(shape)
     s = 1

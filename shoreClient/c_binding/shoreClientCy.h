@@ -18,8 +18,8 @@
   #define DL_IMPORT(_T) _T
 #endif
 
-__PYX_EXTERN_C DL_IMPORT(void) shorePutCy(char const *, char const *, unsigned int const , unsigned int const , unsigned int const *, int const , void const *);
-__PYX_EXTERN_C DL_IMPORT(void) shoreGetCy(char const *, char const *, unsigned int const , unsigned int const , void *);
+__PYX_EXTERN_C DL_IMPORT(int) shorePutCy(char const *, char const *, unsigned int const , unsigned int const , unsigned int const *, int const , void const *);
+__PYX_EXTERN_C DL_IMPORT(int) shoreGetCy(char const *, char const *, unsigned int const , unsigned int const , void *);
 __PYX_EXTERN_C DL_IMPORT(int) shoreQueryCy(char const *, char const *, unsigned int *, unsigned int *, int *);
 __PYX_EXTERN_C DL_IMPORT(void) shoreZmqInitCy(void);
 

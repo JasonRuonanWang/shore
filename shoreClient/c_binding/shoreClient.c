@@ -38,20 +38,19 @@ void shoreClientCyInit(){
     isShoreClientCyInited = true;
 }
 
-void shorePut(const char *doid, const char *column, const unsigned int rowid, const unsigned int rows, const unsigned int *shape, const int dtype, const void *data){
+int shorePut(const char *doid, const char *column, const unsigned int rowid, const unsigned int rows, const unsigned int *shape, const int dtype, const void *data){
     if(!isShoreClientCyInited) shoreClientCyInit();
-    shorePutCy(doid, column, rowid, rows, shape, dtype, data);
+    return shorePutCy(doid, column, rowid, rows, shape, dtype, data);
 }
 
 int shoreQuery(const char *doid, const char *column, unsigned int *rows, unsigned int *shape, int *dtype){
     if(!isShoreClientCyInited) shoreClientCyInit();
-    shoreQueryCy(doid, column, rows, shape, dtype);
-    return 0;
+    return shoreQueryCy(doid, column, rows, shape, dtype);
 }
 
-void shoreGet(const char *doid, const char *column, const unsigned int rowid, const unsigned int rows, void *data){
+int shoreGet(const char *doid, const char *column, const unsigned int rowid, const unsigned int rows, void *data){
     if(!isShoreClientCyInited) shoreClientCyInit();
-    shoreGetCy(doid, column, rowid, rows, data);
+    return shoreGetCy(doid, column, rowid, rows, data);
 }
 
 void shoreClientCyFinalise(){
