@@ -105,11 +105,7 @@ def shoreGet(doid, column, row, rows = 1, slicer = None):
 
 
 def shorePut(doid, column, row, data, rows = 1, slicer = None):
-    shape = []
-    if rows == 1:
-        shape = list(data.shape)
-    else:
-        shape = list(data.shape)[1:]
+    shape = list(data.shape)[1:]
 
     dtype = data.dtype
 
