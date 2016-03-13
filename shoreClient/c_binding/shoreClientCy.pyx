@@ -83,12 +83,13 @@ cdef void shorePutCyDComplex(const char *doid, const char* column, unsigned int 
 
 
 cdef public int shorePutCy(const char *doid, const char* column, const unsigned int rowid, const unsigned int rows, const unsigned int *shape_c, const int dtype, const void *data_c):
-    shape = []
+    shape = [rows]
     for i in range(0, shape_c[0]):
         shape.append(shape_c[i+1])
     nelements = 1
     for x in shape:
         nelements *= x
+
     if dtype == 0:
         shorePutCyBool(doid, column, rowid, rows, shape, data_c, nelements)
     elif dtype == 1:

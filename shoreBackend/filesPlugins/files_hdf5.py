@@ -61,7 +61,13 @@ class files_hdf5(files):
         shape = [self.min_rows] + msg['shape']
         maxshape = [None] + msg['shape']
         rowid = msg['row']
-        rows = msg.get('rows')
+        rows = msg['rows']
+        if rows <= 0:
+            self.log('User trying to write a non-positive number of rows to hdf5.', category='warning', source=__name__)
+            return True
+        if rowid < 0:
+            self.log('User trying to write data to a negative row number of an hdf5 file.', category='warning', source=__name__)
+            return True
 
         f = None
         try:

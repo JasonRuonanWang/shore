@@ -64,7 +64,7 @@ class dodb_mongo(dodb):
         self.__db.do.update(
                 {'doid':msg['doid']},
                 {
-                    '$max':{'total_rows':(msg['row']+1)},
+                    '$max':{'total_rows':(msg['row']+msg['rows'])},
                     '$addToSet':{'columns':msg['column']}
                     },
                 upsert=True
