@@ -29,18 +29,66 @@
 import sys
 sys.path.append('shoreBackend/filesPlugins')
 from files import files
+import adios as ad
+import numpy as np
+import copy
 
 
 class files_adios(files):
 
+    def __init__(self, event, config):
+        files.__init__(self, event, config)
+        self.buffersize = 100
+        self.maxrows = 10000000
+        self.dtype_numpy2adios = {
+            np.dtype(np.int8)   : ad.DATATYPE.byte,
+            np.dtype(np.uint8)  : ad.DATATYPE.unsigned_byte,
+            np.dtype(np.int16)  : ad.DATATYPE.short,
+            np.dtype(np.uint16) : ad.DATATYPE.unsigned_short,
+            np.dtype(np.int32)  : ad.DATATYPE.integer,
+            np.dtype(np.uint32) : ad.DATATYPE.unsigned_integer,
+            np.dtype(np.int64)  : ad.DATATYPE.long,
+            np.dtype(np.uint64) : ad.DATATYPE.unsigned_long,
+            np.dtype(np.float32): ad.DATATYPE.real,
+            np.dtype(np.float64): ad.DATATYPE.double,
+            np.dtype(np.float128): ad.DATATYPE.long_double,
+            np.dtype(np.complex64): ad.DATATYPE.complex,
+            np.dtype(np.complex128): ad.DATATYPE.double_complex,
+        }
+
+    def write_init(self):
+        pass
 
     def read(self):
         pass
 
     def write(self, msg):
-        print 'adios.write'
-        pass
 
+        doid = msg['doid']
+        column = msg['column']
+        rows = msg['rows']
+        shape = msg['shape']
+        rowid = msg['row']
+        datatype = msg['datatype']
+        data = msg['data']
+        filename = self.filepath + '/' + doid
+
+        dimension = [rows] + copy.copy(shape)
+        global_dimension = copy.copy(dimension)
+        global_dimension[0] = self.maxrows
+        offset = [0] * len(dimension)
+        offset[0] = rowid
+
+        ad.init_noxml()
+        ad.allocate_buffer (ad.BUFFER_ALLOC_WHEN.NOW, self.buffersize);
+        g = ad.declare_group("shore", "", ad.FLAG.YES)
+        ad.define_var(g, column, "", self.dtype_numpy2adios[datatype], str(dimension)[1:-1], str(global_dimension)[1:-1], str(offset)[1:-1])
+        ad.select_method(g, "POSIX", "", "")
+        fd = ad.open("shore", filename, 'u')
+        ad.set_group_size(fd, data.nbytes)
+        ad.write(fd, column, data, datatype)
+        ad.close(fd)
+        ad.finalize()
 
 def get_class():
     return files_adios

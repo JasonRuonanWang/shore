@@ -74,7 +74,7 @@ class transport_zmqthreaded(transport):
                 msg = pickle.loads(msg_recv)
                 if isinstance(msg, dict):
                     msg['workflow'] = 'transport'
-                    msg['backend'] = 'hdf5'
+                    msg['backend'] = 'adios'
                     msg['return'] = {}
                     msg['zmq_worker'] = _socket_worker # send worker with msg so that it can be used for sending reply when pushed back to event module
                     self.push_event(msg, self.__class__.__name__)
