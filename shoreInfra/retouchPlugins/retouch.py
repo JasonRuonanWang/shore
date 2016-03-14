@@ -26,32 +26,24 @@
 #    jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
 import sys
-sys.path.append('shoreSystem/workflowPlugins')
-from workflow import workflow
+sys.path.append('shoreMeta')
+from plugin import plugin
 
-class workflow_list(workflow):
+class retouch(plugin):
 
-    __flowlist={}
-    __flowlist['put'] = {}
-    __flowlist['put']['message'] = ['authen', 'eventid', 'dodb', 'queue', 'message']
-    __flowlist['put']['transport'] = ['queue', 'retouch', 'storage', 'transport']
-    __flowlist['get'] = {}
-    __flowlist['get']['message'] = ['authen', 'eventid', 'dodb', 'queue', 'message']
-    __flowlist['get']['transport'] = ['queue', 'retouch', 'storage', 'transport']
-    __flowlist['query'] = {}
-    __flowlist['query']['message'] = ['authen', 'eventid', 'dodb', 'message']
+    def event_handler_admin(self, msg):
+        return
 
-    def get_next(self, operation, workflow, current):
-        index = self.__flowlist[operation][workflow].index(current)
-        if index + 1 == len(self.__flowlist[operation][workflow]):
-            return None
-        else:
-            return self.__flowlist[operation][workflow][index + 1]
+    def event_handler_workflow(self, msg):
+        if 'rows' in msg:
+            if msg['rows'] == 0:
+                if 'return' in msg:
+                    if 'do' in msg['return']:
+                        if 'total_rows' in msg['return']['do']:
+                            if 'row' in msg:
+                                msg['rows'] = msg['return']['do']['total_rows'] - msg['row']
+        return True
 
-    def get_first(self, operation, workflow):
-        return self.__flowlist[operation][workflow][0]
 
-def get_class():
-    return workflow_list
 
 

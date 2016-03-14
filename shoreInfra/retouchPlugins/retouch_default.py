@@ -26,32 +26,15 @@
 #    jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
 import sys
-sys.path.append('shoreSystem/workflowPlugins')
-from workflow import workflow
+sys.path.append('shoreInfra/retouchPlugins')
+from retouch import retouch
 
-class workflow_list(workflow):
-
-    __flowlist={}
-    __flowlist['put'] = {}
-    __flowlist['put']['message'] = ['authen', 'eventid', 'dodb', 'queue', 'message']
-    __flowlist['put']['transport'] = ['queue', 'retouch', 'storage', 'transport']
-    __flowlist['get'] = {}
-    __flowlist['get']['message'] = ['authen', 'eventid', 'dodb', 'queue', 'message']
-    __flowlist['get']['transport'] = ['queue', 'retouch', 'storage', 'transport']
-    __flowlist['query'] = {}
-    __flowlist['query']['message'] = ['authen', 'eventid', 'dodb', 'message']
-
-    def get_next(self, operation, workflow, current):
-        index = self.__flowlist[operation][workflow].index(current)
-        if index + 1 == len(self.__flowlist[operation][workflow]):
-            return None
-        else:
-            return self.__flowlist[operation][workflow][index + 1]
-
-    def get_first(self, operation, workflow):
-        return self.__flowlist[operation][workflow][0]
+class retouch_default(retouch):
+    pass
 
 def get_class():
-    return workflow_list
+    return retouch_default
+
+
 
 

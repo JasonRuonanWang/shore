@@ -52,6 +52,7 @@ class config(plugin):
             'transport':'zmqthreaded',
             'transport_address':transport_address,
             'queue':'dict',
+            'retouch':'default',
             # backend
             'fsroot':'/scratch/shoreroot'
         }
