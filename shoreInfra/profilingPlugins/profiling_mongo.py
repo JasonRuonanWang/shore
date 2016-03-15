@@ -22,22 +22,26 @@
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
 #    MA 02111-1307  USA
 #
-#	 Any bugs, problems, and/or suggestions please email to
-#	 jason.wang@icrar.org or jason.ruonan.wang@gmail.com
+#    Any bugs, problems, and/or suggestions please email to
+#    jason.wang@icrar.org or jason.ruonan.wang@gmail.com
+
+import sys
+sys.path.append('shoreInfra/profilingPlugins')
+from profiling import profiling
+from pymongo import MongoClient
+
+class profiling_mongo(profiling):
+
+    def __init__(self, event, config):
+        profiling.__init__(self, event, config)
+        client = MongoClient()
+        self.__db = client.shore
+
+    def db_insert(self, insert_dict):
+        self.__db['profiling'].insert_one(insert_dict)
 
 
-from files import files
-
-
-class files_fits(files):
-
-    def read(self):
-        pass
-
-    def write(self, msg):
-        print 'fits.write'
-        pass
 
 def get_class():
-    return files_fits
+    return profiling_mongo
 

@@ -44,7 +44,7 @@ class retouch(plugin):
                                 msg['rows'] = msg['return']['do']['total_rows'] - msg['row']
 
         if 'backend' not in msg:
-            msg['backend'] = self.config('backend')
+            msg['backend'] = self.config('backend_default')
 
 
         return True

@@ -58,7 +58,7 @@ class plugin(object):
         return
 
     def event_handler_workflow(self, msg):
-        self.log(category='warning', text='plugin.event_handler_workflow is called, which should have been overload')
+        self.log(category='warning', text='plugin.event_handler_workflow is called, which should never happen')
         return
 
     def msg_kv_match(self, msg, k, v):

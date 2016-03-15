@@ -28,6 +28,7 @@
 import sys
 sys.path.append('shoreMeta')
 from plugin import plugin
+from datetime import datetime
 
 class storage(plugin):
 
@@ -56,16 +57,22 @@ class storage(plugin):
             return False
 
         operation = msg.get('operation')
+        before = datetime.now()
         if operation == 'put':
             if self.write(msg):
-                msg['return']['put'] = 'OK'
+                msg['return']['storage'] = 'OK'
             else:
-                msg['return']['put'] = 'ERROR'
+                msg['return']['storage'] = 'ERROR'
         elif operation == 'get':
             if self.read(msg):
-                msg['return']['read'] = 'OK'
+                msg['return']['storage'] = 'OK'
             else:
-                msg['return']['read'] = 'ERROR'
+                msg['return']['storage'] = 'ERROR'
+        after = datetime.now()
+        if msg['return']['storage'] == 'OK':
+            msg['total_seconds'] = (after - before).total_seconds()
+        if self.filesystem:
+            msg['filesystem'] = self.filesystem
         return True
 
 

@@ -34,7 +34,8 @@ class files(storage):
 
     def __init__(self, event, config):
         storage.__init__(self, event, config)
-        self.fsroot = self.config('fsroot')
+        storage.filesystem = self.config('filesystems')[self.config('backend_' + self.plugin_name())]
+        self.fsroot = storage.filesystem['root']
         self.filepath = self.fsroot + '/' + self.plugin_name()
         if not os.path.exists(self.filepath):
             os.makedirs(self.filepath)

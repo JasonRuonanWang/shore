@@ -52,12 +52,18 @@ class config(plugin):
             'transport':'zmqthreaded',
             'transport_address':transport_address,
             'transport_workflow':'transport_nonblocking',
+ #           'transport_workflow':'transport',
             'queue':'dict',
             'retouch':'default',
-            'profiling':'default',
+            'profiling':'mongo',
             # backend
-            'backend':'numpy',
-            'fsroot':'/scratch/shoreroot'
+            'backend_default':'hdf5',
+            'filesystems':[
+                {'root':'/scratch/shoreroot', 'type':'HFS+', 'device':'HDD'},
+                {'root':'/scratch/ssd', 'type':'EXT3', 'device':'SSD'}
+            ],
+            'backend_adios':0,
+            'backend_hdf5':0,
         }
 
     def value(self, key):

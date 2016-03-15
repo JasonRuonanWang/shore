@@ -39,7 +39,7 @@ class queue(plugin):
             return False
         if msg['workflow'] == 'message':
             self.put(msg)
-        elif msg['workflow'] == 'transport':
+        elif msg['workflow'][0:9] == 'transport':
             self.get(msg)
         return True
 
