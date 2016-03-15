@@ -29,26 +29,13 @@ import sys
 sys.path.append('shoreMeta')
 from plugin import plugin
 
-class retouch(plugin):
+class profiling(plugin):
 
     def event_handler_admin(self, msg):
         return
 
     def event_handler_workflow(self, msg):
-        if 'rows' in msg:
-            if msg['rows'] == 0:
-                if 'return' in msg:
-                    if 'do' in msg['return']:
-                        if 'total_rows' in msg['return']['do']:
-                            if 'row' in msg:
-                                msg['rows'] = msg['return']['do']['total_rows'] - msg['row']
-
-        if 'backend' not in msg:
-            msg['backend'] = self.config('backend')
-
-
         return True
-
 
 
 

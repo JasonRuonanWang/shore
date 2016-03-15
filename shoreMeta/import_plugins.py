@@ -41,6 +41,8 @@ category_name =  __file__.split('/')[-2].lower()[0:-7]
 
 # obtain the list of plugin files
 __files__ = glob('{0}/{1}_*.py'.format(os.path.abspath(__path__[0]), category_name))
+
+
 for _pc in __files__:
     # obtain the plugin file name
     plugin_filename = os.path.splitext(os.path.basename(_pc))[0]

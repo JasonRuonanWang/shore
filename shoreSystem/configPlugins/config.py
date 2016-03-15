@@ -51,9 +51,12 @@ class config(plugin):
             'message_address':message_address,
             'transport':'zmqthreaded',
             'transport_address':transport_address,
+            'transport_workflow':'transport_nonblocking',
             'queue':'dict',
             'retouch':'default',
+            'profiling':'default',
             # backend
+            'backend':'numpy',
             'fsroot':'/scratch/shoreroot'
         }
 

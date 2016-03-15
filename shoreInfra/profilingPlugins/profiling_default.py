@@ -26,29 +26,13 @@
 #    jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
 import sys
-sys.path.append('shoreMeta')
-from plugin import plugin
+sys.path.append('shoreInfra/profilingPlugins')
+from profiling import profiling
 
-class retouch(plugin):
-
-    def event_handler_admin(self, msg):
-        return
-
-    def event_handler_workflow(self, msg):
-        if 'rows' in msg:
-            if msg['rows'] == 0:
-                if 'return' in msg:
-                    if 'do' in msg['return']:
-                        if 'total_rows' in msg['return']['do']:
-                            if 'row' in msg:
-                                msg['rows'] = msg['return']['do']['total_rows'] - msg['row']
-
-        if 'backend' not in msg:
-            msg['backend'] = self.config('backend')
+class profiling_default(profiling):
+    pass
 
 
-        return True
-
-
-
+def get_class():
+    return profiling_default
 

@@ -95,7 +95,7 @@ class dodb(plugin):
                 msg['return']['dodb'] = 'Shape not match'
                 self.log('Data Object {0} Column {1} shape does not match'.format(msg['doid'],msg['column']), category='warning', source=__name__)
         else:
-            self.db_insert('column', {'doid':msg['doid'], 'column':msg['column'], 'shape':msg['shape'], 'datatype':msg['datatype'], 'datatype_numpy':msg['datatype_numpy']})
+            self.db_insert('column', {'doid':msg['doid'], 'column':msg['column'], 'shape':msg['shape'], 'datatype':str(msg['datatype']), 'backend':msg['backend']})
 
 
     def event_handler_admin(self, msg):

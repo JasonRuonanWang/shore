@@ -73,8 +73,9 @@ class transport_zmqthreaded(transport):
                 msg_recv = _socket_worker.recv()
                 msg = pickle.loads(msg_recv)
                 if isinstance(msg, dict):
+#                    if 'workflow' not in msg:
+#                        msg['workflow'] = self.config('transport_workflow')
                     msg['workflow'] = 'transport'
-                    msg['backend'] = 'numpy'
                     msg['return'] = {}
                     msg['zmq_worker'] = _socket_worker # send worker with msg so that it can be used for sending reply when pushed back to event module
                     self.push_event(msg, self.__class__.__name__)

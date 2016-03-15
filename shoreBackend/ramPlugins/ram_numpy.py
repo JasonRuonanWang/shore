@@ -44,7 +44,9 @@ class ram_numpy(ram):
         rowid = msg['row']
         rows = msg['rows']
 
-        msg['data'] = self.__inmem[doid][column]['data'][rowid:rowid+rows,:]
+        if doid in self.__inmem:
+            if column in self.__inmem[doid]:
+                msg['data'] = self.__inmem[doid][column]['data'][rowid:rowid+rows,:]
 
 
     def write(self, msg):
@@ -70,6 +72,7 @@ class ram_numpy(ram):
 
         self.__inmem[doid][column]['data'][rowid:rowid+rows,:] = data
 
+        return True
 
 
 def get_class():

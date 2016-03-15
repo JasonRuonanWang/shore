@@ -22,14 +22,13 @@
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
 #    MA 02111-1307  USA
 #
-#	 Any bugs, problems, and/or suggestions please email to
-#	 jason.wang@icrar.org or jason.ruonan.wang@gmail.com
+#    Any bugs, problems, and/or suggestions please email to
+#    jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
 import sys
 sys.path.append('shoreInfra/dodbPlugins')
 from dodb import dodb
 from pymongo import MongoClient
-import numpy as np
 
 class dodb_mongo(dodb):
 
@@ -71,7 +70,7 @@ class dodb_mongo(dodb):
                 )
         cursor = self.__db.column.find({'doid':msg['doid'], 'column':msg['column']})
         if cursor.count() == 0:
-            self.__db.column.insert_one({'doid':msg['doid'], 'column':msg['column'], 'shape':msg['shape'], 'datatype':str(msg['datatype'])})
+            self.__db.column.insert_one({'doid':msg['doid'], 'column':msg['column'], 'shape':msg['shape'], 'datatype':str(msg['datatype']), 'backend':msg['backend']})
         else:
             if cursor[0]['shape'] != msg['shape']:
                 self.log('Data Object {0} Column {1} shape does not match. Did not touch dodb.'.format(msg['doid'],msg['column']), category='warning', source=__name__)
