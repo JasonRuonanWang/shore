@@ -22,8 +22,8 @@
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
 #    MA 02111-1307  USA
 #
-#	 Any bugs, problems, and/or suggestions please email to
-#	 jason.wang@icrar.org or jason.ruonan.wang@gmail.com
+#    Any bugs, problems, and/or suggestions please email to
+#    jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
 
 import sys
