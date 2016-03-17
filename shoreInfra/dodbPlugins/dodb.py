@@ -67,6 +67,7 @@ class dodb(plugin):
         do_list = self.db_query('do', dic)
         if len(do_list) > 0:
             msg['return']['do'] = do_list[0]
+            msg['total_rows'] = do_list[0]['total_rows']
             if len(do_list) > 1:
                 self.log('doid {0} found multiple records'.format(msg['doid']), category='error', source=__name__)
 
@@ -75,6 +76,8 @@ class dodb(plugin):
             column_list = self.db_query('column', dic)
             if len(column_list) > 0:
                 msg['return']['column'] = column_list[0]
+                msg['datatype'] = column_list[0]['datatype']
+                msg['shape'] = column_list[0]['shape']
                 if len(column_list) > 1:
                     self.log('doid {0}, column {1} found multiple records'.format(msg['doid'],msg['column']), category='error', source=__name__)
 

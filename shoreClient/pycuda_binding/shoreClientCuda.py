@@ -25,32 +25,21 @@
 #    Any bugs, problems, and/or suggestions please email to
 #    jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
-import sys
-sys.path.append('shoreMeta')
-from plugin import plugin
+import shoreClient
 
-class retouch(plugin):
+def shoreDelete(doid, column=None):
+    return shoreClient.shoreDelete(doid, column)
 
-    def event_handler_admin(self, msg):
-        return
+def shoreQuery(doid, column=None):
+    return shoreClient.shoreQuery(doid, column)
 
-    def event_handler_workflow(self, msg):
-        # fix rows number if rows == 0
-        if 'rows' in msg:
-            if msg['rows'] == 0:
-                if 'return' in msg:
-                    if 'do' in msg['return']:
-                        if 'total_rows' in msg['return']['do']:
-                            if 'row' in msg:
-                                msg['rows'] = msg['return']['do']['total_rows'] - msg['row']
+def shoreGet(doid, column, row, rows = 1, slicer = None):
+    ret = shoreClient.shoreGet(doid, column, row, rows = 1, slicer = None)
+    print ret
 
-
-        if 'backend' not in msg:
-            msg['backend'] = self.config('backend_default')
-
-
-        return True
-
+def shorePut(doid, column, row, data, rows = 1, slicer = None):
+    ret = shoreClient.shorePut(doid, column, row, data, rows = 1, slicer = None)
+    print ret
 
 
 

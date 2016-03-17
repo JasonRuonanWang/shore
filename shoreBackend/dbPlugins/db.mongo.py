@@ -25,32 +25,25 @@
 #    Any bugs, problems, and/or suggestions please email to
 #    jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
+
 import sys
-sys.path.append('shoreMeta')
-from plugin import plugin
-
-class retouch(plugin):
-
-    def event_handler_admin(self, msg):
-        return
-
-    def event_handler_workflow(self, msg):
-        # fix rows number if rows == 0
-        if 'rows' in msg:
-            if msg['rows'] == 0:
-                if 'return' in msg:
-                    if 'do' in msg['return']:
-                        if 'total_rows' in msg['return']['do']:
-                            if 'row' in msg:
-                                msg['rows'] = msg['return']['do']['total_rows'] - msg['row']
+sys.path.append('shoreBackend/filesPlugins')
+from db import db
 
 
-        if 'backend' not in msg:
-            msg['backend'] = self.config('backend_default')
+class db_mongo(db):
+
+    def __init__(self, event, config):
+        db.__init__(self, event, config)
 
 
-        return True
+    def read(self, msg):
+        pass
 
 
+    def write(self, msg):
+        pass
 
+def get_class():
+    return db_mongo
 

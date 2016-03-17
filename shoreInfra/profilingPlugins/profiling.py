@@ -37,6 +37,7 @@ class profiling(plugin):
     def event_handler_workflow(self, msg):
 
         if 'total_seconds' in msg:
+            print msg
             dtype = msg['datatype']
             nBytes = msg['rows']
             for i in msg['shape']:

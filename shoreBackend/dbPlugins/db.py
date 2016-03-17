@@ -26,30 +26,13 @@
 #    jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
 import sys
-sys.path.append('shoreMeta')
-from plugin import plugin
+sys.path.append('shoreBackend')
+from storage import storage
 
-class retouch(plugin):
+class db(storage):
 
-    def event_handler_admin(self, msg):
-        return
-
-    def event_handler_workflow(self, msg):
-        # fix rows number if rows == 0
-        if 'rows' in msg:
-            if msg['rows'] == 0:
-                if 'return' in msg:
-                    if 'do' in msg['return']:
-                        if 'total_rows' in msg['return']['do']:
-                            if 'row' in msg:
-                                msg['rows'] = msg['return']['do']['total_rows'] - msg['row']
-
-
-        if 'backend' not in msg:
-            msg['backend'] = self.config('backend_default')
-
-
-        return True
+    def __init__(self, event, config):
+        storage.__init__(self, event, config)
 
 
 

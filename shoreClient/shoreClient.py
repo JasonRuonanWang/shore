@@ -31,10 +31,12 @@ import cPickle as pickle
 
 message_socket = None
 transport_socket = None
+isInited = False
 
 def shoreZmqInit():
     global message_socket
     global transport_socket
+    global isInited
     message_address = os.environ['SHORE_DAEMON_ADDRESS']
     transport_address = message_address.split(':')[0] + ':' + message_address.split(':')[1] + ':' + str(int(message_address.split(':')[2]) + 1)
     context = zmq.Context()
@@ -42,9 +44,23 @@ def shoreZmqInit():
     message_socket.connect(message_address)
     transport_socket = context.socket(zmq.REQ)
     transport_socket.connect(transport_address)
+    isInited = True
 
+def shoreDelete(doid, column=None):
+    if not isInited:
+        shoreZmqInit()
+    msg_send = {
+        'operation' : 'delete',
+        'doid' : doid,
+        'column' : column,
+    }
+    message_socket.send(pickle.dumps(msg_send))
+    ret = pickle.loads(message_socket.recv())
+    return ret
 
 def shoreQuery(doid, column=None):
+    if not isInited:
+        shoreZmqInit()
     msg_send = {
         'operation' : 'query',
         'doid' : doid,
@@ -71,6 +87,8 @@ def shoreQuery(doid, column=None):
 
 
 def shoreGet(doid, column, row, rows = 1, slicer = None):
+    if not isInited:
+        shoreZmqInit()
     msg_send = {
         'operation' : 'get',
         'doid' : doid,
@@ -105,10 +123,11 @@ def shoreGet(doid, column, row, rows = 1, slicer = None):
 
 
 def shorePut(doid, column, row, data, rows = 1, slicer = None):
+    if not isInited:
+        shoreZmqInit()
+
     shape = list(data.shape)[1:]
-
     dtype = data.dtype
-
     # message
     msg_send = {
         'operation' : 'put',
