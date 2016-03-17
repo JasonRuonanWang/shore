@@ -68,6 +68,12 @@ class storage(plugin):
                 msg['return']['storage'] = 'OK'
             else:
                 msg['return']['storage'] = 'ERROR'
+        elif operation == 'delete':
+            if self.delete(msg):
+                msg['return']['storage'] = 'OK'
+            else:
+                msg['return']['storage'] = 'ERROR'
+
         after = datetime.now()
         if msg['return']['storage'] == 'OK':
             msg['total_seconds'] = (after - before).total_seconds()

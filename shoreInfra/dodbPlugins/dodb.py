@@ -78,6 +78,7 @@ class dodb(plugin):
                 msg['return']['column'] = column_list[0]
                 msg['datatype'] = column_list[0]['datatype']
                 msg['shape'] = column_list[0]['shape']
+                msg['backend'] = column_list[0]['backend']
                 if len(column_list) > 1:
                     self.log('doid {0}, column {1} found multiple records'.format(msg['doid'],msg['column']), category='error', source=__name__)
 
@@ -100,6 +101,15 @@ class dodb(plugin):
         else:
             self.db_insert('column', {'doid':msg['doid'], 'column':msg['column'], 'shape':msg['shape'], 'datatype':str(msg['datatype']), 'backend':msg['backend']})
 
+    def delete(self,msg):
+        print 'deleting 1'
+        delete_dict = {'doid':msg['doid']}
+        if 'column' in msg:
+            delete_dict['column'] = msg['column']
+            self.db_delete('column', delete_dict)
+        else:
+            self.db_delete('do', delete_dict)
+
 
     def event_handler_admin(self, msg):
         return
@@ -110,10 +120,17 @@ class dodb(plugin):
             return False
 
         operation = msg.get('operation')
+        print operation
         if operation == 'put':
             self.update(msg)
-        elif operation == 'get' or 'query':
+        elif operation == 'get':
             self.query(msg)
+        elif operation == 'query':
+            self.query(msg)
+        elif operation == 'delete':
+            self.query(msg)
+            self.delete(msg)
+
         else:
             self.log('dodb.event_handler_workflow received invalid msg[\'operation\']', category='warning', source=__name__)
             return False

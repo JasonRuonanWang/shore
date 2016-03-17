@@ -37,7 +37,6 @@ class profiling(plugin):
     def event_handler_workflow(self, msg):
 
         if 'total_seconds' in msg:
-            print msg
             dtype = msg['datatype']
             nBytes = msg['rows']
             for i in msg['shape']:
@@ -71,6 +70,7 @@ class profiling(plugin):
                    'MBytes':nMBytes,
                    'MBps':MBps,
                    'datatype':str(dtype),
+                   'operation':msg['operation']
                    }
             if 'filesystem' in msg:
                 dic['filesystem'] = msg['filesystem']

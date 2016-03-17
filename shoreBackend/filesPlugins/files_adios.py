@@ -95,6 +95,9 @@ class files_adios(files):
         ad.close(fd)
         ad.finalize()
 
+
+
+
 def get_class():
     return files_adios
 

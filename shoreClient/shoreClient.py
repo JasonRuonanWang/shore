@@ -33,6 +33,16 @@ message_socket = None
 transport_socket = None
 isInited = False
 
+def securityCheck(doid, column, row, rows):
+    if type(row) is not int:
+        print('ShoreClient Error: Please give a valid start row number')
+        return False
+    if type(rows) is not int:
+        print('ShoreClient Error: Please give a valid total row number')
+        return False
+    return True
+
+
 def shoreZmqInit():
     global message_socket
     global transport_socket
@@ -87,6 +97,9 @@ def shoreQuery(doid, column=None):
 
 
 def shoreGet(doid, column, row, rows = 1, slicer = None):
+    if not securityCheck(doid,column,row,rows):
+        return None
+
     if not isInited:
         shoreZmqInit()
     msg_send = {
@@ -123,6 +136,11 @@ def shoreGet(doid, column, row, rows = 1, slicer = None):
 
 
 def shorePut(doid, column, row, data, rows = 1, slicer = None):
+
+    if not securityCheck(doid,column,row,rows):
+        return None
+
+
     if not isInited:
         shoreZmqInit()
 

@@ -15,7 +15,7 @@ if len(sys.argv) > 1:
             if len(sys.argv) > 4:
                 rows = sys.argv[4]
 
-ret=shoreClient.shoreGet(doid,column,row,rows)
+ret=shoreClient.shoreGet(doid,column,int(row),int(rows))
 print ret
 if ret:
     print ret['data'].shape

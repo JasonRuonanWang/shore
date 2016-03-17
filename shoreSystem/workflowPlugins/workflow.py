@@ -33,6 +33,8 @@ import copy
 
 class workflow(plugin):
 
+    legal_operations = ['put', 'get', 'query', 'delete', 'copy', 'move']
+
     # overwrite plugin.event_handler
     def event_handler(self, msg_recv):
         msg = copy.copy(msg_recv)
@@ -42,7 +44,7 @@ class workflow(plugin):
         if not 'workflow' in msg:
             return False
         work = msg['workflow']
-        if oper == 'put' or oper == 'get' or oper == 'query':
+        if oper in self.legal_operations:
             # in case there isn't 'module' key, add it and start from the beginning of the workflow
             if not 'module' in msg:
                 msg['module'] = self.get_first(oper,work)

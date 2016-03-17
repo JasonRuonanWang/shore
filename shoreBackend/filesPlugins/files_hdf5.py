@@ -26,6 +26,7 @@
 #    jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
 import h5py
+import os
 from files import files
 
 class files_hdf5(files):
@@ -33,6 +34,16 @@ class files_hdf5(files):
     def __init__(self, event, config):
         files.__init__(self, event, config)
         self.min_rows = 100
+
+
+    def delete(self, msg):
+        filename = self.filepath + '/' + msg['doid']
+        try:
+            os.remove(filename)
+        except:
+            return False
+        return True
+
 
     def read(self, msg):
         filename = self.filepath + '/' + msg['doid']
