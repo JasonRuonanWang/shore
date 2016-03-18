@@ -29,20 +29,40 @@
 import sys
 sys.path.append('shoreBackend/filesPlugins')
 from db import db
+from pymongo import MongoClient
+import numpy as np
+import cPickle as pickle
 
 
 class db_mongo(db):
 
     def __init__(self, event, config):
         db.__init__(self, event, config)
-
+        client = MongoClient()
+        self.__db = client.shore
 
     def read(self, msg):
-        pass
-
+        query_dict = {
+            'doid':msg['doid'],
+            'column':msg['column'],
+        }
+        msg['data'] = np.ndarray([msg['rows']] + msg['shape'], msg['datatype'])
+        for i in range(0, msg['rows']):
+            query_dict['row'] = i + msg['row']
+            for record in self.__db['data'].find(query_dict):
+                msg['data'][i,:] = pickle.loads(str(record['data']))
 
     def write(self, msg):
-        pass
+        query_dict = {
+            'doid':msg['doid'],
+            'column':msg['column'],
+        }
+        for i in range(0, msg['rows']):
+            query_dict['row'] = i + msg['row']
+            update_dict = {
+                'data':pickle.dumps(msg['data'][i,:])
+            }
+            self.__db['data'].update(query_dict,{'$set':update_dict},upsert=True)
 
 def get_class():
     return db_mongo

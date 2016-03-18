@@ -102,7 +102,6 @@ class dodb(plugin):
             self.db_insert('column', {'doid':msg['doid'], 'column':msg['column'], 'shape':msg['shape'], 'datatype':str(msg['datatype']), 'backend':msg['backend']})
 
     def delete(self,msg):
-        print 'deleting 1'
         delete_dict = {'doid':msg['doid']}
         if 'column' in msg:
             delete_dict['column'] = msg['column']
@@ -120,7 +119,6 @@ class dodb(plugin):
             return False
 
         operation = msg.get('operation')
-        print operation
         if operation == 'put':
             self.update(msg)
         elif operation == 'get':

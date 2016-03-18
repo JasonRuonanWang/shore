@@ -56,7 +56,6 @@ class files_adios(files):
             np.dtype(np.complex128): ad.DATATYPE.double_complex,
         }
 
-
     def read(self, msg):
         doid = msg['doid']
         column = msg['column']
@@ -65,7 +64,6 @@ class files_adios(files):
         filename = self.filepath + '/' + doid
         f = ad.file(filename)
         msg['data'] = f.var[column][rowid:rowid+rows,:]
-
 
     def write(self, msg):
 

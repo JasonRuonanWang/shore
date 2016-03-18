@@ -57,7 +57,7 @@ class config(plugin):
             'retouch':'default',
             'profiling':'mongo',
             # backend
-            'backend_default':'hdf5',
+            'backend_default':'mongo',
             'filesystems':[
                 {'root':'/scratch/shoreroot', 'type':'HFS+', 'device':'HDD'},
                 {'root':'/scratch/ssd', 'type':'EXT3', 'device':'SSD'}
