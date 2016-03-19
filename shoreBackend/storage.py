@@ -33,6 +33,7 @@ from datetime import datetime
 class storage(plugin):
 
     backend_list = []
+    filesystem = None
 
     dtype={0:'bool',
            1:'char',
@@ -56,6 +57,7 @@ class storage(plugin):
         if not self.msg_kv_match(msg, 'backend', self.plugin_name()):
             return False
 
+
         operation = msg.get('operation')
         before = datetime.now()
         if operation == 'put':
@@ -64,6 +66,9 @@ class storage(plugin):
             else:
                 msg['return']['storage'] = 'ERROR'
         elif operation == 'get':
+            if msg['row'] + msg['rows'] > msg['return']['do']['total_rows']:
+                self.log('backend.storage.event_handler_workflow(): user trying to read more rows than existing', category='warning')
+                return True
             if self.read(msg):
                 msg['return']['storage'] = 'OK'
             else:

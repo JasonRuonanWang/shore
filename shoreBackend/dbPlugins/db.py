@@ -27,7 +27,7 @@
 
 import sys
 sys.path.append('shoreBackend')
-from storage import storage
+from shoreBackend.storage import storage
 
 class db(storage):
 

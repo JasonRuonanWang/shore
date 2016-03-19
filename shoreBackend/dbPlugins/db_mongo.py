@@ -26,8 +26,6 @@
 #    jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
 
-import sys
-sys.path.append('shoreBackend/filesPlugins')
 from db import db
 from pymongo import MongoClient
 import numpy as np

@@ -26,7 +26,6 @@
 #    jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
 import os
-import zmq
 import cPickle as pickle
 
 message_socket = None
@@ -42,12 +41,15 @@ def securityCheck(doid, column, row, rows):
         return False
     return True
 
-
-def shoreZmqInit():
+def shoreZmqInit(address = None):
+    import zmq
     global message_socket
     global transport_socket
     global isInited
-    message_address = os.environ['SHORE_DAEMON_ADDRESS']
+    if address:
+        message_address = address
+    else:
+        message_address = os.environ['SHORE_DAEMON_ADDRESS']
     transport_address = message_address.split(':')[0] + ':' + message_address.split(':')[1] + ':' + str(int(message_address.split(':')[2]) + 1)
     context = zmq.Context()
     message_socket = context.socket(zmq.REQ)
@@ -95,7 +97,6 @@ def shoreQuery(doid, column=None):
         return None
     return ret
 
-
 def shoreGet(doid, column, row, rows = 1, slicer = None):
     if not securityCheck(doid,column,row,rows):
         return None
@@ -133,7 +134,6 @@ def shoreGet(doid, column, row, rows = 1, slicer = None):
         ret = transport_socket.recv()
         ret = pickle.loads(ret)
         return ret
-
 
 def shorePut(doid, column, row, data, rows = 1, slicer = None):
 
