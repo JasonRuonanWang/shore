@@ -25,10 +25,8 @@
 #    Any bugs, problems, and/or suggestions please email to
 #    jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
-import sys
 import time
-sys.path.append('shoreMeta')
-from plugin import plugin
+from shoreMeta.plugin import plugin
 import threading
 
 class message(plugin):

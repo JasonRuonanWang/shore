@@ -55,7 +55,7 @@ class message_zmqthreaded(message):
         except Exception as e:
             import traceback, os.path
             top = traceback.extract_stack()[-1]
-            print ', '.join([type(e).__name__, os.path.basename(top[0]), str(top[1])])
+            print (', '.join([type(e).__name__, os.path.basename(top[0]), str(top[1])]))
 
     def bind(self):
         while True:

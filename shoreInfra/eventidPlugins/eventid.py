@@ -26,9 +26,7 @@
 #	 jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
 
-import sys
-sys.path.append('domashMeta')
-from plugin import plugin
+from shoreMeta.plugin import plugin
 
 class eventid(plugin):
 

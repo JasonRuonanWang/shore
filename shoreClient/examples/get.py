@@ -1,4 +1,4 @@
-import shoreClient
+from ....shoreClient import shoreClient
 import sys
 
 doid = 'aaa'

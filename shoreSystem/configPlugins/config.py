@@ -27,10 +27,8 @@
 
 
 import os
-import sys
 import copy
-sys.path.append('shoreMeta')
-from plugin import plugin
+from shoreMeta.plugin import plugin
 
 class config(plugin):
 

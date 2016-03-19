@@ -26,9 +26,7 @@
 #	 jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
 
-import sys
-sys.path.append('shoreMeta')
-from plugin import plugin
+from shoreMeta.plugin import plugin
 import copy
 
 class workflow(plugin):

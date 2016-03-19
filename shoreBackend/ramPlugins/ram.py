@@ -25,9 +25,7 @@
 #    Any bugs, problems, and/or suggestions please email to
 #    jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
-import sys
-sys.path.append('shoreBackend')
-from storage import storage
+from shoreBackend.storage import storage
 
 class ram(storage):
     def __init__(self, event, config):

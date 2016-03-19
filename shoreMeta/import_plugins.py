@@ -35,10 +35,6 @@ DEBUG = True
 category_name =  __file__.split('/')[-2].lower()[0:-7]
 # define the plugin dictionary
 __plugin_dict__ = {}
-
-# obtain the plugin category name in a string
-category_name =  __file__.split('/')[-2].lower()[0:-7]
-
 # obtain the list of plugin files
 __files__ = glob('{0}/{1}_*.py'.format(os.path.abspath(__path__[0]), category_name))
 

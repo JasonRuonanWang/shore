@@ -25,10 +25,8 @@
 #    Any bugs, problems, and/or suggestions please email to
 #    jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
-import sys
 import os
-sys.path.append('shoreBackend')
-from storage import storage
+from shoreBackend.storage import storage
 
 class files(storage):
 

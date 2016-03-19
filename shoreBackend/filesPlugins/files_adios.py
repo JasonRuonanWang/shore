@@ -26,8 +26,6 @@
 #    jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
 
-import sys
-sys.path.append('shoreBackend/filesPlugins')
 from files import files
 import adios as ad
 import numpy as np

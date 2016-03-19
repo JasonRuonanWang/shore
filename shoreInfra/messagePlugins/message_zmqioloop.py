@@ -30,8 +30,6 @@ from zmq.eventloop.zmqstream import ZMQStream
 from zmq.eventloop.ioloop import IOLoop
 import time
 import threading
-import sys
-sys.path.append('shoreInfra/messagePlugins')
 from message import message
 
 

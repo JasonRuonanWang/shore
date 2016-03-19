@@ -26,8 +26,7 @@
 #    jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
 import zmq
-import sys, os
-sys.path.append('shoreInfra/transportPlugins')
+import os
 from transport import transport
 import cPickle as pickle
 

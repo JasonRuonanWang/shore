@@ -26,8 +26,6 @@
 #    jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
 
-import sys
-sys.path.append('shoreBackend/ramPlugins')
 from ram import ram
 import numpy as np
 
