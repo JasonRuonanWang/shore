@@ -1,4 +1,4 @@
-from shoreClient import shoreClientCuda as shore
+from shoreClient.pycuda_binding import shoreClientCuda as shore
 import sys
 
 doid = 'aaa'
@@ -17,6 +17,4 @@ if len(sys.argv) > 1:
 
 ret=shore.shoreGet(doid,column,int(row),int(rows))
 print ret
-if ret:
-    print ret['data'].shape
 

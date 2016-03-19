@@ -25,7 +25,7 @@
 #    Any bugs, problems, and/or suggestions please email to
 #    jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
-import shoreClient as shore
+from shoreClient import shoreClient as shore
 
 def shoreDelete(doid, column=None):
     return shore.shoreDelete(doid, column)

@@ -1,4 +1,4 @@
-from shoreClient import shoreClientCuda as shore
+from shoreClient.pycuda_binding import shoreClientCuda as shore
 import numpy as np
 import sys
 import pycuda.autoinit

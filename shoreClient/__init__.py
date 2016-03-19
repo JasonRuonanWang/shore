@@ -1,1 +1,1 @@
-import shoreClient, shoreClientCuda
+import shoreClient, pycuda_binding
