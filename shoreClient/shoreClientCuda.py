@@ -25,21 +25,24 @@
 #    Any bugs, problems, and/or suggestions please email to
 #    jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
-import shoreClient
+import shoreClient as shore
 
 def shoreDelete(doid, column=None):
-    return shoreClient.shoreDelete(doid, column)
+    return shore.shoreDelete(doid, column)
 
 def shoreQuery(doid, column=None):
-    return shoreClient.shoreQuery(doid, column)
+    return shore.shoreQuery(doid, column)
 
 def shoreGet(doid, column, row, rows = 1, slicer = None):
-    ret = shoreClient.shoreGet(doid, column, row, rows = 1, slicer = None)
-    print ret
+    import pycuda.autoinit
+    import pycuda.gpuarray as gpuarray
+    data = shore.shoreGet(doid, column, row, rows = 1, slicer = None)
+    data_gpu = gpuarray.to_gpu(data)
+    return data_gpu
+
 
 def shorePut(doid, column, row, data, rows = 1, slicer = None):
-    ret = shoreClient.shorePut(doid, column, row, data, rows = 1, slicer = None)
-    print ret
+    return shore.shorePut(doid, column, row, data.get(), rows = 1, slicer = None)
 
 
 

@@ -133,7 +133,10 @@ def shoreGet(doid, column, row, rows = 1, slicer = None):
         transport_socket.send(pkg_pickled)
         ret = transport_socket.recv()
         ret = pickle.loads(ret)
-        return ret
+        if 'data' in ret:
+            return ret['data']
+        else:
+            return None
 
 def shorePut(doid, column, row, data, rows = 1, slicer = None):
 

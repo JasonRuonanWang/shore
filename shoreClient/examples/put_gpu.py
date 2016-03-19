@@ -1,6 +1,8 @@
-from shoreClient import shoreClient as shore
+from shoreClient import shoreClientCuda as shore
 import numpy as np
 import sys
+import pycuda.autoinit
+import pycuda.gpuarray as gpuarray
 
 doid = 'aaa'
 column = 'data_Float'
@@ -24,7 +26,8 @@ for r in range(rows):
         for y in range(ydim):
             data[r][x][y] = x * 100 + y
 
+data_gpu = gpuarray.to_gpu(data)
 
 
-ret = shore.shorePut(doid, column, row, data, rows)
+ret = shore.shorePut(doid, column, row, data_gpu, rows)
 

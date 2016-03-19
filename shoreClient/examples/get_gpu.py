@@ -1,10 +1,10 @@
-from shoreClient import shoreClient as shore
+from shoreClient import shoreClientCuda as shore
 import sys
 
 doid = 'aaa'
 column = 'data_Float'
 row = 0
-rows = 10
+rows = 1
 
 if len(sys.argv) > 1:
     doid = sys.argv[1]

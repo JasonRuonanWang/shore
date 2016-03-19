@@ -1,9 +1,10 @@
 install:lib
 
 ifdef LIBPATH
+	mkdir -p $(LIBPATH)/shoreClient/include
+	mkdir -p $(LIBPATH)/shoreClient/lib
 	cp libShoreClient.so $(LIBPATH)/shoreClient/lib 
 	cp shoreClient.h $(LIBPATH)/shoreClient/include
-	cp ../shoreClient.py $(LIBPATH)/shoreClient/python
 endif
 
 lib: cl
