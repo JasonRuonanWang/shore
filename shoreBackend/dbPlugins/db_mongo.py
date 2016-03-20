@@ -49,6 +49,7 @@ class db_mongo(db):
             query_dict['row'] = i + msg['row']
             for record in self.__db['data'].find(query_dict):
                 msg['data'][i,:] = pickle.loads(str(record['data']))
+        return True
 
     def write(self, msg):
         query_dict = {
@@ -61,6 +62,7 @@ class db_mongo(db):
                 'data':pickle.dumps(msg['data'][i,:])
             }
             self.__db['data'].update(query_dict,{'$set':update_dict},upsert=True)
+        return True
 
 def get_class():
     return db_mongo
