@@ -7,14 +7,13 @@ def write_bench():
 
     doid = 'write_bench'
     column = 'data_Float'
-    row = 0
     rows = 1000
 
-    for i in range(rows):
+    for row in range(rows):
 
-        xdim = 4096
+        xdim = 1024
         ydim = 256
-        data = np.ndarray([1,xdim,ydim])
+        data = np.ndarray([1,xdim,ydim]).astype(np.float32)
         for x in range(xdim):
             for y in range(ydim):
                 data[0][x][y] = x * 100 + y
