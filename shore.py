@@ -26,11 +26,12 @@
 #    Any bugs, problems, and/or suggestions please email to
 #    jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
-import shoreSystem as system
-import shoreInfra as infra
-import shoreBackend as backend
 
 def start_daemon():
+
+    import shoreSystem as system
+    import shoreInfra as infra
+    import shoreBackend as backend
 
     event = system.event.observer()
     config = system.config.default(event)
@@ -48,8 +49,36 @@ def start_daemon():
 
     event.push_event({'operation':'admin', 'command':'start'}, __name__)
 
+def stop_daemon(address = None):
+
+    import zmq
+    import os
+    import uuid
+    import cPickle as pickle
+
+    if not address:
+        address = os.environ.get('SHORE_DAEMON_ADDRESS', 'tcp://127.0.0.1:12306')
+
+    context = zmq.Context()
+    socket = context.socket(zmq.REQ)
+    socket.connect(address)
+
+    socket.send(pickle.dumps({'command':'terminate','operation':'admin'}))
+    msg = pickle.loads(socket.recv())
+    print msg
+
 if __name__ == "__main__":
-    start_daemon()
+
+    import sys
+
+    if len(sys.argv) == 1:
+        start_daemon()
+    elif len(sys.argv) == 2:
+        if sys.argv[1] == 'start':
+            start_daemon()
+        elif sys.argv[1] == 'stop':
+            stop_daemon()
+
 
 
 
