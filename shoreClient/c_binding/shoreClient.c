@@ -31,6 +31,8 @@
 #include "shoreClient.h"
 #include "shoreClientCy.h"
 
+bool isShoreClientCyInited = false;
+
 void shoreClientCyInit(){
     Py_Initialize();
     initshoreClientCy();

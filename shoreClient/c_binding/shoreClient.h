@@ -1,4 +1,3 @@
-bool isShoreClientCyInited = false;
 int shorePut(char const *, char const *, const unsigned int, const unsigned int, const unsigned int *, const int, const void *);
 int shoreQuery(char const *, char const *, unsigned int*, unsigned int *, int *);
 int shoreGet(char const *, char const *, const unsigned int, const unsigned int, void *);
