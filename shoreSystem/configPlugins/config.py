@@ -34,7 +34,7 @@ class config(plugin):
 
     def __init__(self, event):
         plugin.__init__(self,event,self)
-        message_address = os.environ['SHORE_DAEMON_ADDRESS']
+        message_address = os.environ.get('SHORE_DAEMON_ADDRESS', 'tcp://127.0.0.1:12306')
         transport_address = message_address.split(':')[0] + ':' + message_address.split(':')[1] + ':' + str(int(message_address.split(':')[2]) + 1)
         self.__config_dict__ = {
             # system
