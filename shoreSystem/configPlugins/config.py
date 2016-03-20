@@ -35,6 +35,8 @@ class config(plugin):
     def __init__(self, event):
         plugin.__init__(self,event,self)
         message_address = os.environ.get('SHORE_DAEMON_ADDRESS', 'tcp://127.0.0.1:12306')
+        shore_root = os.environ.get('SHORE_ROOT', '/scratch/shore')
+        print shore_root
         transport_address = message_address.split(':')[0] + ':' + message_address.split(':')[1] + ':' + str(int(message_address.split(':')[2]) + 1)
         self.__config_dict__ = {
             # system
@@ -57,8 +59,8 @@ class config(plugin):
             # backend
             'backend_default':'mongo',
             'filesystems':[
-                {'root':'/scratch/shoreroot', 'type':'HFS+', 'device':'HDD'},
-                {'root':'/scratch/ssd', 'type':'EXT3', 'device':'SSD'}
+                {'root':shore_root, 'type':'HFS+', 'device':'HDD'},
+                {'root':'/scratch/ssd', 'type':'EXT3', 'device':'SSD'},
             ],
             'backend_adios':0,
             'backend_hdf5':0,

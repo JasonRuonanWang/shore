@@ -5,7 +5,7 @@ import os
 import uuid
 import cPickle as pickle
 
-address = os.environ['SHORE_DAEMON_ADDRESS']
+address = os.environ.get('SHORE_DAEMON_ADDRESS', 'tcp://127.0.0.1:12306')
 
 context = zmq.Context()
 socket = context.socket(zmq.REQ)
