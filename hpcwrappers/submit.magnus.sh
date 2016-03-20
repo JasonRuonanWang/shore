@@ -1,6 +1,6 @@
 #!/bin/sh
 
-sbatch --account=$IVEC_PROJECT --time=12:00:00 --nodes=1 --ntasks-per-node=1 run.sh
+sbatch --account=$IVEC_PROJECT --time=00:05:00 --nodes=1 --ntasks-per-node=1 -p debugq run.sh
 
 
 #for i in $(seq 9 -1 1)
