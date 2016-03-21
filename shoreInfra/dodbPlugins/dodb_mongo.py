@@ -45,11 +45,11 @@ class dodb_mongo(dodb):
 
     def db_update(self, collection, query_dict, update_dict, operation):
         if operation == 'set':
-            self.__db[collection].update(query_dict,{'$set':update_dict},upsert=True)
+            self.__db[collection].update_many(query_dict,{'$set':update_dict},upsert=True)
         elif operation == 'max':
-            self.__db[collection].update(query_dict,{'$max':update_dict},upsert=True)
+            self.__db[collection].update_many(query_dict,{'$max':update_dict},upsert=True)
         elif operation == 'add':
-            self.__db[collection].update(query_dict,{'$addToSet':update_dict},upsert=True)
+            self.__db[collection].update_many(query_dict,{'$addToSet':update_dict},upsert=True)
 
     def db_insert(self, collection, insert_dict):
         self.__db[collection].insert_one(insert_dict)

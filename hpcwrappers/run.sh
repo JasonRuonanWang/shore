@@ -1,6 +1,8 @@
 #!/bin/bash --login
 
-PYTHON="/home/jwang/pyenv/bin/python"
+PYTHON="/home/jwang/pyenv27/bin/python"
+
+. /home/jwang/pyenv27/bin/activate
 
 if [ "$JOBSCHEDULER" == "slurm" ]; then
     JOBID=$SLURM_JOBID

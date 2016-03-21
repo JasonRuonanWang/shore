@@ -56,7 +56,7 @@ class config(plugin):
             'retouch':'default',
             'profiling':'mongo',
             # backend
-            'backend_default':'adios',
+            'backend_default':'hdf5',
             'filesystems':[
                 {'root':shore_root, 'type':'HFS+', 'device':'HDD'},
                 {'root':'/scratch/ssd', 'type':'EXT3', 'device':'SSD'},
