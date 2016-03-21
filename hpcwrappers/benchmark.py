@@ -1,15 +1,12 @@
 from shoreClient import shoreClient as shore
 import numpy as np
 import sys
-from mpi4py import MPI as mpi
 import uuid
 
 
 
 def write_bench():
 
-    comm = mpi.COMM_WORLD
-    rank = comm.Get_rank()
 #    doid = 'write_bench_rank{0}'.format(rank)
     doid = str(uuid.uuid1())
     column = 'data_Float'
@@ -23,6 +20,7 @@ def write_bench():
         for x in range(xdim):
             for y in range(ydim):
                 data[0][x][y] = x * 100 + y
+        print data.nbytes
         shore.shorePut(doid, column, row, data, 1)
 
 
