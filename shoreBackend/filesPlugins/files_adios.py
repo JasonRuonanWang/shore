@@ -86,7 +86,7 @@ class files_adios(files):
         ad.define_var(g, column, "", self.dtype_numpy2adios[datatype], str(dimension)[1:-1], str(global_dimension)[1:-1], str(offset)[1:-1])
         ad.select_method(g, "POSIX", "", "")
         fd = ad.open("shore", filename, 'u')
-        ad.set_group_size(fd, data.nbytes)
+        ad.set_group_size(fd, data.nbytes * 2)
         ad.write(fd, column, data, datatype)
         ad.close(fd)
         ad.finalize()

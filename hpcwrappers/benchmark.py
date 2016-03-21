@@ -10,12 +10,12 @@ def write_bench():
     rank = comm.Get_rank()
     doid = 'write_bench_rank{0}'.format(rank)
     column = 'data_Float'
-    rows = 10
+    rows = 100
 
     for row in range(rows):
 
-        xdim = 1024
-        ydim = 256
+        xdim = 10
+        ydim = 25
         data = np.ndarray([1,xdim,ydim]).astype(np.float32)
         for x in range(xdim):
             for y in range(ydim):
