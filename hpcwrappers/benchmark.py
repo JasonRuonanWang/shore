@@ -1,13 +1,16 @@
 from shoreClient import shoreClient as shore
 import numpy as np
 import sys
+from mpi4py import MPI as mpi
 
 
 def write_bench():
 
-    doid = 'write_bench'
+    comm = mpi.COMM_WORLD
+    rank = comm.Get_rank()
+    doid = 'write_bench_rank{0}'.format(rank)
     column = 'data_Float'
-    rows = 1000
+    rows = 10
 
     for row in range(rows):
 

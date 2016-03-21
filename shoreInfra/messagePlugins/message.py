@@ -62,6 +62,7 @@ class message(plugin):
             thread.start()
 
         thread = threading.Thread(target=self.start_plugin)
+        thread.daemon = True
         thread.start()
 
     def stop(self):

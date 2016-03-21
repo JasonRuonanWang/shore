@@ -1,5 +1,7 @@
 #!/bin/bash --login
 
+PYTHON="/home/jwang/pyenv/bin/python"
+
 if [ "$JOBSCHEDULER" == "slurm" ]; then
     JOBID=$SLURM_JOBID
     JOBDIR=$SLURM_SUBMIT_DIR
@@ -11,6 +13,6 @@ if [ "$JOBSCHEDULER" == "pbs" ]; then
     RUN="mpirun"
 fi
 
-$RUN python $JOBDIR/shorePyMpi.py $JOBDIR
+$RUN $PYTHON $JOBDIR/shorePyMpi.py $JOBDIR
 
 
