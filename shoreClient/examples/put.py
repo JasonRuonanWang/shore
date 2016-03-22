@@ -6,6 +6,7 @@ doid = 'aaa'
 column = 'data_Float'
 row = 0
 rows = 1
+backend = 'gridfs'
 
 if len(sys.argv) > 1:
     doid = sys.argv[1]
@@ -15,6 +16,8 @@ if len(sys.argv) > 1:
             row = int(sys.argv[3])
             if len(sys.argv) > 4:
                 rows = int(sys.argv[4])
+                if len(sys.argv) > 5:
+                    backend = sys.argv[5]
 
 xdim = 2560
 ydim = 200
@@ -24,8 +27,6 @@ for r in range(rows):
         for y in range(ydim):
             data[r][x][y] = x * 100 + y
 
-
-
-ret = shore.shorePut(data, doid, column, row, rows)
+ret = shore.shorePut(data, doid, column, row, rows, backend=backend)
 
 print ret
