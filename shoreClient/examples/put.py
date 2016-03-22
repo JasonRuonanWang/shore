@@ -18,7 +18,7 @@ if len(sys.argv) > 1:
 
 xdim = 2560
 ydim = 200
-data = np.ndarray([rows,xdim,ydim])
+data = np.ndarray([rows,xdim,ydim]).astype(np.float32)
 for r in range(rows):
     for x in range(xdim):
         for y in range(ydim):
