@@ -53,7 +53,6 @@ class db_mongo(db):
         return True
 
     def write(self, msg):
-        print msg['data'].nbytes / msg['rows']
         if msg['data'].nbytes / msg['rows'] > 4096000:
             self.log('backend.db.mongo.write(): user trying to write more than 16MB', category='warning')
             msg['return']['backend_mongo'] = 'backend.db.mongo only supports arrays smaller than 16MB'

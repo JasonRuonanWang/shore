@@ -21,7 +21,6 @@ def write_bench():
             for x in range(xdim):
                 for y in range(ydim):
                     data[0][x][y] = x * 100 + y
-            print backend, '*********************************************'
             shore.shorePut(data, doid, column, row, 1, backend=backend)
 
 
