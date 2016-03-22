@@ -2,26 +2,41 @@ from shoreClient import shoreClient as shore
 import numpy as np
 import sys
 import uuid
+import random
 
 
+def write_bench_one(backend, rows, shape, datatype):
+
+    doid = str(uuid.uuid1())
+    column = 'data_Float'
+    for row in range(rows):
+        data = np.ndarray([1]+shape).astype(datatype)
+        data.fill(3)
+        shore.shorePut(data, doid, column, row, 1, backend=backend)
 
 def write_bench():
 
+    backends = ['hdf5', 'gridfs', 'mongo']
+    max_rows = 10000
+    max_array_dimensions = 5
+    min_array_dimensions = 1
+    max_array_dimension = 1000
+    min_array_dimension = 1
+    datatypes = [np.int8, np.uint8, np.int16, np.uint16, np.int32, np.uint32, np.float32, np.float64, np.complex64, np.complex128]
 
-    for backend in ['hdf5', 'gridfs', 'mongo']:
+    iterations = 10
 
-        doid = str(uuid.uuid1())
-        column = 'data_Float'
-        rows = 10
-        for row in range(rows):
+    for i in range(iterations):
+        backend = random.choice(backends)
+        datatype = random.choice(datatypes)
+        rows = random.randrange(0, max_rows)
+        dimensions = random.randrange(min_array_dimensions, max_array_dimensions)
+        shape = []
+        for j in range(dimensions):
+            dimension = random.randrange(min_array_dimension, max_array_dimension)
+            shape.append(dimension)
+        write_bench_one(backend, rows, shape, datatype)
 
-            xdim = 1024
-            ydim = 256
-            data = np.ndarray([1,xdim,ydim]).astype(np.float32)
-            for x in range(xdim):
-                for y in range(ydim):
-                    data[0][x][y] = x * 100 + y
-            shore.shorePut(data, doid, column, row, 1, backend=backend)
 
 
 if __name__ == "__main__":
