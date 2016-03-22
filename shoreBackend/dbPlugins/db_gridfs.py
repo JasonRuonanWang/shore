@@ -28,48 +28,33 @@
 
 from db import db
 from pymongo import MongoClient
-from bson.binary import Binary
+from bson.objectid import ObjectId
+import gridfs
 import numpy as np
 import cPickle as pickle
+import bson
 
 
-class db_mongo(db):
+class db_gridfs(db):
 
     def __init__(self, event, config):
         db.__init__(self, event, config)
         client = MongoClient()
-        self.__db = client.shore
+        self.__db = client.shoreGridFS
+        self.__fs = gridfs.GridFS(self.__db)
 
     def read(self, msg):
-        query_dict = {
-            'doid':msg['doid'],
-            'column':msg['column'],
-        }
         msg['data'] = np.ndarray([msg['rows']] + msg['shape'], msg['datatype'])
         for i in range(0, msg['rows']):
-            query_dict['row'] = i + msg['row']
-            for record in self.__db['data'].find(query_dict):
-                msg['data'][i,:] = pickle.loads(str(record['data']))
+            cursor = self.__db.fs.files.find({'doid':msg['doid'], 'column':msg['column'], 'row':msg['row']})
+            msg['data'][i,:]= pickle.loads(self.__fs.get(ObjectId(cursor[0]['_id'])).read())
         return True
 
     def write(self, msg):
-        print msg['data'].nbytes / msg['rows']
-        if msg['data'].nbytes / msg['rows'] > 4096000:
-            self.log('backend.db.mongo.write(): user trying to write more than 16MB', category='warning')
-            msg['return']['backend_mongo'] = 'backend.db.mongo only supports arrays smaller than 16MB'
-            return False
-        query_dict = {
-            'doid':msg['doid'],
-            'column':msg['column'],
-        }
         for i in range(0, msg['rows']):
-            query_dict['row'] = i + msg['row']
-            update_dict = {
-                'data':Binary(pickle.dumps(msg['data'][i,:]))
-            }
-            self.__db['data'].update(query_dict,{'$set':update_dict},upsert=True)
+            self.__fs.put(pickle.dumps(msg['data'][i,:]), doid=msg['doid'], column=msg['column'], row = msg['row']+i)
         return True
 
 def get_class():
-    return db_mongo
+    return db_gridfs
 

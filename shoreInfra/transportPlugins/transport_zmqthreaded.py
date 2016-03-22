@@ -42,7 +42,8 @@ class transport_zmqthreaded(transport):
         if 'zmq_worker' in msg:
             msg_send = {}
             if 'data' in msg:
-                msg_send['data'] = msg['data']
+                if msg['operation'] == 'get':
+                    msg_send['data'] = msg['data']
             elif 'command' in msg:
                 msg_send['command'] = msg['command']
             if 'return' in msg:

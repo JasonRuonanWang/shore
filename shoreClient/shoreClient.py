@@ -171,4 +171,6 @@ def shorePut(doid, column, row, data, rows = 1, slicer = None):
         ret = transport_socket.recv()
         ret = pickle.loads(ret)
 
+    return ret
+
 

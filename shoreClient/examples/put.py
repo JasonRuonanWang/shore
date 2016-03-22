@@ -5,7 +5,7 @@ import sys
 doid = 'aaa'
 column = 'data_Float'
 row = 0
-rows = 10
+rows = 1
 
 if len(sys.argv) > 1:
     doid = sys.argv[1]
@@ -16,8 +16,8 @@ if len(sys.argv) > 1:
             if len(sys.argv) > 4:
                 rows = int(sys.argv[4])
 
-xdim = 5
-ydim = 10
+xdim = 2560
+ydim = 200
 data = np.ndarray([rows,xdim,ydim])
 for r in range(rows):
     for x in range(xdim):
@@ -28,3 +28,4 @@ for r in range(rows):
 
 ret = shore.shorePut(doid, column, row, data, rows)
 
+print ret

@@ -86,17 +86,11 @@ class files_adios(files):
         local_dimension = str(dimension)[1:-1]
         global_dimension = str(global_dimension)[1:-1]
         offset = str(offset)[1:-1]
-        print local_dimension
-        print global_dimension
-        print offset
 
         ad.select_method(adios_group, "POSIX", "", "")
         ad.define_var(adios_group, column, "", self.dtype_numpy2adios[datatype], local_dimension, global_dimension, offset)
         adios_file = ad.open("shore", filename, 'u')
-        print 'data.nbytes=',data.nbytes
-        print 'data.size=',data.size
         group_size = data.nbytes * 10
-        print group_size
         ad.set_group_size(adios_file, group_size)
         ad.write(adios_file, column, data, datatype)
         ad.close(adios_file)

@@ -4,7 +4,7 @@ import sys
 doid = 'aaa'
 column = 'data_Float'
 row = 0
-rows = 10
+rows = 1
 
 if len(sys.argv) > 1:
     doid = sys.argv[1]
@@ -17,6 +17,4 @@ if len(sys.argv) > 1:
 
 ret=shore.shoreGet(doid,column,int(row),int(rows))
 print ret
-if ret:
-    print ret['data'].shape
 
