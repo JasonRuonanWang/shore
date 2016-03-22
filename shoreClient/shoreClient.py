@@ -97,7 +97,7 @@ def shoreQuery(doid, column=None):
         return None
     return ret
 
-def shoreGet(doid, column, row, rows = 1, slicer = None):
+def shoreGet(doid, column = 'data', row = 0, rows = 1, slicer = None):
     if not securityCheck(doid,column,row,rows):
         return None
 
@@ -138,7 +138,7 @@ def shoreGet(doid, column, row, rows = 1, slicer = None):
         else:
             return None
 
-def shorePut(doid, column, row, data, rows = 1, slicer = None):
+def shorePut(data, doid, column = 'data', row = 0, rows = 1, slicer = None, backend = None):
 
     if not securityCheck(doid,column,row,rows):
         return None
@@ -161,6 +161,8 @@ def shorePut(doid, column, row, data, rows = 1, slicer = None):
     }
     if slicer:
         msg_send['slicer']=slicer
+    if backend:
+        msg_send['backend']=backend
     message_socket.send(pickle.dumps(msg_send))
     ret = pickle.loads(message_socket.recv())
 

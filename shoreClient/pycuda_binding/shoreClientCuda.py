@@ -33,16 +33,16 @@ def shoreDelete(doid, column=None):
 def shoreQuery(doid, column=None):
     return shore.shoreQuery(doid, column)
 
-def shoreGet(doid, column, row, rows = 1, slicer = None):
+def shoreGet(doid, column = 'data', row = 0, rows = 1, slicer = None):
     import pycuda.autoinit
     import pycuda.gpuarray as gpuarray
-    data = shore.shoreGet(doid, column, row, rows = 1, slicer = None)
+    data = shore.shoreGet(doid, column, row, rows, slicer)
     data_gpu = gpuarray.to_gpu(data)
     return data_gpu
 
 
-def shorePut(doid, column, row, data, rows = 1, slicer = None):
-    return shore.shorePut(doid, column, row, data.get(), rows = 1, slicer = None)
+def shorePut(data, doid, column = 'data', row = 0, rows = 1, slicer = None, backend = None):
+    return shore.shorePut(data.get(), doid, column, row, rows, slicer, backend)
 
 
 

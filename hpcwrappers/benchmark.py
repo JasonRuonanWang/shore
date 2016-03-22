@@ -21,7 +21,7 @@ def write_bench():
             for y in range(ydim):
                 data[0][x][y] = x * 100 + y
         print data.nbytes
-        shore.shorePut(doid, column, row, data, 1)
+        shore.shorePut(data, doid, column, row, 1)
 
 
 if __name__ == "__main__":

@@ -26,6 +26,6 @@ for r in range(rows):
 
 
 
-ret = shore.shorePut(doid, column, row, data, rows)
+ret = shore.shorePut(data, doid, column, row, rows)
 
 print ret

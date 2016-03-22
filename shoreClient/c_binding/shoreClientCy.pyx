@@ -27,7 +27,7 @@
 
 import sys
 sys.path.append('../')
-import shoreClient
+from shoreClient import shoreClient
 import numpy as np
 cimport numpy as np
 from libcpp cimport bool
@@ -39,47 +39,47 @@ cdef extern from "stdbool.h":
 cdef void shorePutCyBool(const char *doid, const char* column, unsigned int rowid, unsigned int rows, list shape, const void *data_c, int nelements):
     cdef bool[:] data_mv = <bool[:nelements]>data_c
     data = np.ascontiguousarray(data_mv).reshape([rows]+shape)
-    shoreClient.shorePut(doid, column, rowid, data, rows)
+    shoreClient.shorePut(data, doid, column, rowid, rows)
 cdef void shorePutCyChar(const char *doid, const char* column, unsigned int rowid, unsigned int rows, list shape, const void *data_c, int nelements):
     cdef char[:] data_mv = <char[:nelements]>data_c
     data = np.ascontiguousarray(data_mv).reshape([rows]+shape).astype('int8')
-    shoreClient.shorePut(doid, column, rowid, data, rows)
+    shoreClient.shorePut(data, doid, column, rowid, rows)
 cdef void shorePutCyUChar(const char *doid, const char* column, unsigned int rowid, unsigned int rows, list shape, const void *data_c, int nelements):
     cdef unsigned char[:] data_mv = <unsigned char[:nelements]>data_c
     data = np.ascontiguousarray(data_mv).reshape([rows]+shape)
-    shoreClient.shorePut(doid, column, rowid, data, rows)
+    shoreClient.shorePut(data, doid, column, rowid, rows)
 cdef void shorePutCyShort(const char *doid, const char* column, unsigned int rowid, unsigned int rows, list shape, const void *data_c, int nelements):
     cdef short[:] data_mv = <short[:nelements]>data_c
     data = np.ascontiguousarray(data_mv).reshape([rows]+shape)
-    shoreClient.shorePut(doid, column, rowid, data, rows)
+    shoreClient.shorePut(data, doid, column, rowid, rows)
 cdef void shorePutCyUShort(const char *doid, const char* column, unsigned int rowid, unsigned int rows, list shape, const void *data_c, int nelements):
     cdef unsigned short[:] data_mv = <unsigned short[:nelements]>data_c
     data = np.ascontiguousarray(data_mv).reshape([rows]+shape)
-    shoreClient.shorePut(doid, column, rowid, data, rows)
+    shoreClient.shorePut(data, doid, column, rowid, rows)
 cdef void shorePutCyInt(const char *doid, const char* column, unsigned int rowid, unsigned int rows, list shape, const void *data_c, int nelements):
     cdef int[:] data_mv = <int[:nelements]>data_c
     data = np.ascontiguousarray(data_mv).reshape([rows]+shape)
-    shoreClient.shorePut(doid, column, rowid, data, rows)
+    shoreClient.shorePut(data, doid, column, rowid, rows)
 cdef void shorePutCyUInt(const char *doid, const char* column, unsigned int rowid, unsigned int rows, list shape, const void *data_c, int nelements):
     cdef unsigned int[:] data_mv = <unsigned int[:nelements]>data_c
     data = np.ascontiguousarray(data_mv).reshape([rows]+shape)
-    shoreClient.shorePut(doid, column, rowid, data, rows)
+    shoreClient.shorePut(data, doid, column, rowid, rows)
 cdef void shorePutCyFloat(const char *doid, const char* column, unsigned int rowid, unsigned int rows, list shape, const void *data_c, int nelements):
     cdef float[:] data_mv = <float[:nelements]>data_c
     data = np.ascontiguousarray(data_mv).reshape([rows]+shape)
-    shoreClient.shorePut(doid, column, rowid, data, rows)
+    shoreClient.shorePut(data, doid, column, rowid, rows)
 cdef void shorePutCyDouble(const char *doid, const char* column, unsigned int rowid, unsigned int rows, list shape, const void *data_c, int nelements):
     cdef double[:] data_mv = <double[:nelements]>data_c
     data = np.ascontiguousarray(data_mv).reshape([rows]+shape)
-    shoreClient.shorePut(doid, column, rowid, data, rows)
+    shoreClient.shorePut(data, doid, column, rowid, rows)
 cdef void shorePutCyComplex(const char *doid, const char* column, unsigned int rowid, unsigned int rows, list shape, const void *data_c, int nelements):
     cdef float complex[:] data_mv = <float complex[:nelements]>data_c
     data = np.ascontiguousarray(data_mv).reshape([rows]+shape)
-    shoreClient.shorePut(doid, column, rowid, data, rows)
+    shoreClient.shorePut(data, doid, column, rowid, rows)
 cdef void shorePutCyDComplex(const char *doid, const char* column, unsigned int rowid, unsigned int rows, list shape, const void *data_c, int nelements):
     cdef double complex[:] data_mv = <double complex[:nelements]>data_c
     data = np.ascontiguousarray(data_mv).reshape([rows]+shape)
-    shoreClient.shorePut(doid, column, rowid, data, rows)
+    shoreClient.shorePut(data, doid, column, rowid, rows)
 
 
 cdef public int shorePutCy(const char *doid, const char* column, const unsigned int rowid, const unsigned int rows, const unsigned int *shape_c, const int dtype, const void *data_c):
@@ -115,51 +115,46 @@ cdef public int shorePutCy(const char *doid, const char* column, const unsigned 
 
     return 0
 
-cdef void shoreGetChar(dict ret, int nelements, void *data_c):
-    cdef np.ndarray[char, ndim=1, mode="c"] data = np.ascontiguousarray( np.reshape(ret['data'],[nelements]) )
+cdef void shoreGetChar(np.ndarray data_ret, int nelements, void *data_c):
+    cdef np.ndarray[char, ndim=1, mode="c"] data = np.ascontiguousarray( np.reshape(data_ret,[nelements]) )
     memcpy(data_c, <const void*> data.data, sizeof(char) * nelements)
-cdef void shoreGetUchar(dict ret, int nelements, void *data_c):
-    cdef np.ndarray[unsigned char, ndim=1, mode="c"] data = np.ascontiguousarray( np.reshape(ret['data'],[nelements]) )
+cdef void shoreGetUchar(np.ndarray data_ret, int nelements, void *data_c):
+    cdef np.ndarray[unsigned char, ndim=1, mode="c"] data = np.ascontiguousarray( np.reshape(data_ret,[nelements]) )
     memcpy(data_c, <const void*> data.data, sizeof(unsigned char) * nelements)
-cdef void shoreGetShort(dict ret, int nelements, void *data_c):
-    cdef np.ndarray[short, ndim=1, mode="c"] data = np.ascontiguousarray( np.reshape(ret['data'],[nelements]) )
+cdef void shoreGetShort(np.ndarray data_ret, int nelements, void *data_c):
+    cdef np.ndarray[short, ndim=1, mode="c"] data = np.ascontiguousarray( np.reshape(data_ret,[nelements]) )
     memcpy(data_c, <const void*> data.data, sizeof(short) * nelements)
-cdef void shoreGetUshort(dict ret, int nelements, void *data_c):
-    cdef np.ndarray[unsigned short, ndim=1, mode="c"] data = np.ascontiguousarray( np.reshape(ret['data'],[nelements]) )
+cdef void shoreGetUshort(np.ndarray data_ret, int nelements, void *data_c):
+    cdef np.ndarray[unsigned short, ndim=1, mode="c"] data = np.ascontiguousarray( np.reshape(data_ret,[nelements]) )
     memcpy(data_c, <const void*> data.data, sizeof(unsigned short) * nelements)
-cdef void shoreGetInt(dict ret, int nelements, void *data_c):
-    cdef np.ndarray[int, ndim=1, mode="c"] data = np.ascontiguousarray( np.reshape(ret['data'],[nelements]) )
+cdef void shoreGetInt(np.ndarray data_ret, int nelements, void *data_c):
+    cdef np.ndarray[int, ndim=1, mode="c"] data = np.ascontiguousarray( np.reshape(data_ret,[nelements]) )
     memcpy(data_c, <const void*> data.data, sizeof(int) * nelements)
-cdef void shoreGetUint(dict ret, int nelements, void *data_c):
-    cdef np.ndarray[unsigned int, ndim=1, mode="c"] data = np.ascontiguousarray( np.reshape(ret['data'],[nelements]) )
+cdef void shoreGetUint(np.ndarray data_ret, int nelements, void *data_c):
+    cdef np.ndarray[unsigned int, ndim=1, mode="c"] data = np.ascontiguousarray( np.reshape(data_ret,[nelements]) )
     memcpy(data_c, <const void*> data.data, sizeof(unsigned int) * nelements)
-cdef void shoreGetFloat(dict ret, int nelements, void *data_c):
-    cdef np.ndarray[float, ndim=1, mode="c"] data = np.ascontiguousarray( np.reshape(ret['data'],[nelements]) )
+cdef void shoreGetFloat(np.ndarray data_ret, int nelements, void *data_c):
+    cdef np.ndarray[float, ndim=1, mode="c"] data = np.ascontiguousarray( np.reshape(data_ret,[nelements]) )
     memcpy(data_c, <const void*> data.data, sizeof(float) * nelements)
-cdef void shoreGetDouble(dict ret, int nelements, void *data_c):
-    cdef np.ndarray[double, ndim=1, mode="c"] data = np.ascontiguousarray( np.reshape(ret['data'],[nelements]) )
+cdef void shoreGetDouble(np.ndarray data_ret, int nelements, void *data_c):
+    cdef np.ndarray[double, ndim=1, mode="c"] data = np.ascontiguousarray( np.reshape(data_ret,[nelements]) )
     memcpy(data_c, <const void*> data.data, sizeof(double) * nelements)
-cdef void shoreGetComplex(dict ret, int nelements, void *data_c):
-    cdef np.ndarray[float complex, ndim=1, mode="c"] data = np.ascontiguousarray( np.reshape(ret['data'],[nelements]) )
+cdef void shoreGetComplex(np.ndarray data_ret, int nelements, void *data_c):
+    cdef np.ndarray[float complex, ndim=1, mode="c"] data = np.ascontiguousarray( np.reshape(data_ret,[nelements]) )
     memcpy(data_c, <const void*> data.data, sizeof(float complex) * nelements)
-cdef void shoreGetDcomplex(dict ret, int nelements, void *data_c):
-    cdef np.ndarray[double complex, ndim=1, mode="c"] data = np.ascontiguousarray( np.reshape(ret['data'],[nelements]) )
+cdef void shoreGetDcomplex(np.ndarray data_ret, int nelements, void *data_c):
+    cdef np.ndarray[double complex, ndim=1, mode="c"] data = np.ascontiguousarray( np.reshape(data_ret,[nelements]) )
     memcpy(data_c, <const void*> data.data, sizeof(double complex) * nelements)
 
 cdef public int shoreGetCy(const char *doid, const char* column, const unsigned int rowid, const unsigned int rows, void *data_c):
-    ret = shoreClient.shoreGet(doid, column, rowid, rows = rows)
+    ret = shoreClient.shoreGet(doid, column, rowid, rows)
     if ret is None:
         return -1
-    dtype = ret['return']['column']['datatype']
 
-    shape = []
-    rows_new = rows
-    if rows_new == 0:
-        rows_new = ret['return']['do']['total_rows']
-    shape = ret['return']['column']['shape']
+    dtype = ret.dtype
+    shape = ret.shape
 
-    nelements = rows_new
-
+    nelements = rows
     for x in shape:
         nelements *= x
 
