@@ -75,7 +75,7 @@ class message_zmqthreaded(message):
         _socket_worker.connect(self._url_workers)
         msg = None
         while self._looping:
-#            try:
+            try:
                 msg_recv = _socket_worker.recv()
                 try:
                     msg = pickle.loads(msg_recv)
@@ -87,9 +87,9 @@ class message_zmqthreaded(message):
                     msg['return'] = {}
                     msg['zmq_worker'] = _socket_worker # send worker with msg so that it can be used for sending reply when pushed back to event module
                     self.push_event(msg, self.__class__.__name__)
-#            except Exception as e:
-#                self._looping = False
-#                self.log("Worker recv_json() is broken!", category='system')
+            except Exception as e:
+                self._looping = False
+                self.log("Worker recv_json() is broken!", category='system')
 #                print e
 #                import traceback, os.path
 #                top = traceback.extract_stack()[-1]
