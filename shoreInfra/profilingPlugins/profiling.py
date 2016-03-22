@@ -56,6 +56,7 @@ class profiling(plugin):
             elif dtype == 'complex128':
                 nBytes *= 16
 
+
             nMBytes = float(nBytes) / 1000000
             MBps = "%.2f" % (nMBytes / msg['total_seconds'])
             dic = {'doid':msg['doid'],
@@ -72,6 +73,11 @@ class profiling(plugin):
                    }
             if 'filesystem' in msg:
                 dic['filesystem'] = msg['filesystem']
+            try:
+                from mpi4py import MPI
+                dic['mpisize'] = MPI.COMM_WORLD.Get_size()
+            except:
+                self.log("infra.profiling.event_handler_workflow(): mpi4py not installed, skipping MPI info", category='warning')
             self.db_insert(dic)
 
         return True
