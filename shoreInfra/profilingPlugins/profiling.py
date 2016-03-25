@@ -59,6 +59,7 @@ class profiling(plugin):
 
             nMBytes = float(nBytes) / 1000000
             MBps = "%.2f" % (nMBytes / msg['total_seconds'])
+            MBps = float(MBps)
             dic = {'doid':msg['doid'],
                    'column':msg['column'],
                    'row':msg['row'],
