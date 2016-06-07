@@ -16,15 +16,15 @@ def write_bench_one(backend, rows, shape, datatype):
 
 def write_bench():
 
-    backends = ['hdf5', 'gridfs', 'mongo']
-    max_rows = 10000
-    max_array_dimensions = 5
+    backends = ['hdf5', 'gridfs', 'mongo', 'adios']
+    max_rows = 100
+    max_array_dimensions = 3
     min_array_dimensions = 1
-    max_array_dimension = 1000
-    min_array_dimension = 1
+    max_array_dimension = 500
+    min_array_dimension = 20
     datatypes = [np.int8, np.uint8, np.int16, np.uint16, np.int32, np.uint32, np.float32, np.float64, np.complex64, np.complex128]
 
-    iterations = 10
+    iterations = 10000
 
     for i in range(iterations):
         backend = random.choice(backends)
