@@ -15,6 +15,8 @@ if [ "$JOBSCHEDULER" == "pbs" ]; then
     RUN="mpirun"
 fi
 
-$RUN $PYTHON $JOBDIR/shorePyMpi.py $JOBDIR
+#while true; do
+    $RUN $PYTHON $JOBDIR/shorePyMpi.py $JOBDIR
+#done
 
 

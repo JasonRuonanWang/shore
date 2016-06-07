@@ -6,7 +6,7 @@ doid = 'aaa'
 column = 'data_Float'
 row = 0
 rows = 1
-backend = 'gridfs'
+backend = 'adios'
 
 if len(sys.argv) > 1:
     doid = sys.argv[1]

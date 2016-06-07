@@ -36,8 +36,8 @@ class files_adios(files):
 
     def __init__(self, event, config):
         files.__init__(self, event, config)
-        self.buffersize = 100
-        self.maxrows = 10000000
+        self.buffersize = 4096
+        self.maxrows = 100000
         self.dtype_numpy2adios = {
             np.dtype(np.int8)   : ad.DATATYPE.byte,
             np.dtype(np.uint8)  : ad.DATATYPE.unsigned_byte,
@@ -95,6 +95,8 @@ class files_adios(files):
         ad.write(adios_file, column, data, datatype)
         ad.close(adios_file)
         ad.finalize()
+
+        return True
 
 
 

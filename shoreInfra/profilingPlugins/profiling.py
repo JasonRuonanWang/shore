@@ -56,7 +56,6 @@ class profiling(plugin):
             elif dtype == 'complex128':
                 nBytes *= 16
 
-
             nMBytes = float(nBytes) / 1000000
             MBps = "%.2f" % (nMBytes / msg['total_seconds'])
             MBps = float(MBps)
