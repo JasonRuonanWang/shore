@@ -6,7 +6,7 @@ from mpi4py import MPI as mpi
 comm = mpi.COMM_WORLD
 rank = comm.Get_rank()
 shore_root = os.environ.get('SHORE_ROOT')
-local_shore_root = shore_root + '_node' + str(rank)
+local_shore_root = shore_root + '/mongo_node' + str(rank)
 if not os.path.exists(local_shore_root):
     os.makedirs(local_shore_root)
 

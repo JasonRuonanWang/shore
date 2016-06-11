@@ -36,8 +36,8 @@ class files_adios(files):
 
     def __init__(self, event, config):
         files.__init__(self, event, config)
-        self.buffersize = 4096
-        self.maxrows = 100000
+        self.buffersize = 512
+        self.maxrows = 10000
         self.dtype_numpy2adios = {
             np.dtype(np.int8)   : ad.DATATYPE.byte,
             np.dtype(np.uint8)  : ad.DATATYPE.unsigned_byte,
@@ -90,7 +90,9 @@ class files_adios(files):
         ad.select_method(adios_group, "POSIX", "", "")
         ad.define_var(adios_group, column, "", self.dtype_numpy2adios[datatype], local_dimension, global_dimension, offset)
         adios_file = ad.open("shore", filename, 'u')
-        group_size = data.nbytes * 10
+        group_size = 1000000
+        if data.nbytes > group_size:
+            group_size = data.nbytes
         ad.set_group_size(adios_file, group_size)
         ad.write(adios_file, column, data, datatype)
         ad.close(adios_file)
