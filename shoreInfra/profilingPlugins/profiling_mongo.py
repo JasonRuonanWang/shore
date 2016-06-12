@@ -32,7 +32,7 @@ class profiling_mongo(profiling):
 
     def __init__(self, event, config):
         profiling.__init__(self, event, config)
-        client = MongoClient()
+        client = MongoClient(self.config('db_address'))
         self.__db = client.shore
 
     def db_insert(self, insert_dict):

@@ -39,7 +39,7 @@ class db_gridfs(db):
 
     def __init__(self, event, config):
         db.__init__(self, event, config)
-        client = MongoClient()
+        client = MongoClient(self.config('db_address'))
         self.__db = client.shoreGridFS
         self.__fs = gridfs.GridFS(self.__db)
 

@@ -34,7 +34,7 @@ class dodb_mongo(dodb):
 
     def __init__(self, event, config):
         dodb.__init__(self, event, config)
-        client = MongoClient()
+        client = MongoClient(self.config('db_address'))
         self.__db = client.shore
 
     def db_query(self, collection, query_dict):
