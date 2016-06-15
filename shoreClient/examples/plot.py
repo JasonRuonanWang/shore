@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 from pymongo import MongoClient
+import math
 
 client = MongoClient()
 db = client.shore
@@ -50,10 +51,13 @@ def plot(para, xmin, xmax, ymin, ymax, filename):
             s = s+1
     print s
 
-    del MBytes_dict['adios']
-    del MBytes_ave['adios']
+    if filename is 'without_adios':
+        if 'adios' in MBytes_dict:
+            del MBytes_dict['adios']
+        if 'adios' in MBytes_ave:
+            del MBytes_ave['adios']
 
-    color = {'hdf5':'ro',
+    color = {'hdf5':'r+',
             'adios':'gx',
             'mongo':'bv',
             'gridfs':'y*'}
@@ -69,7 +73,7 @@ def plot(para, xmin, xmax, ymin, ymax, filename):
     for i in MBytes_dict:
         for j in MBytes_dict[i]:
             for k in MBytes_dict[i][j]:
-                handler, = plt.semilogx(k, sum(MBytes_dict[i][j][k])/len(MBytes_dict[i][j][k]), color[i], markersize=(j+3)*1.5)
+                handler, = plt.semilogx(k, sum(MBytes_dict[i][j][k])/len(MBytes_dict[i][j][k]), color[i], markersize=math.log(j, 2)+5)
                 if j == 1:
                     legend_handler[i] = handler
 
@@ -88,6 +92,7 @@ def plot(para, xmin, xmax, ymin, ymax, filename):
     plt.savefig(filename+'.pdf', format='pdf', dpi=100)
 
 
-plot('mpisize', 0.001, 100, 0, 1000, 'without_adios')
+plot('mpisize', 0.001, 100, 0, 1150, 'without_adios')
+plot('mpisize', 0.001, 100, 0, 1150, 'with_adios')
 
 
