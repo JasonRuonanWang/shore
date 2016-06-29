@@ -1,7 +1,7 @@
 SHORE is a middleware framework designed to facilitate the implementation of
 plugins to support a range of storage and I/O interfaces on the backend side
 and a range of data format plugins on the frontend side. This allows a
-separation of I/O optimisation from application optimisation. SHORE is has been
+separation of I/O optimisation from application optimisation. SHORE has been
 desinged and implemented as part of a PhD thesis and is thus not production
 ready software, but more a proof of concept which in fact has been used and
 deployed for real-world science data reduction on very large scales.
@@ -9,8 +9,8 @@ deployed for real-world science data reduction on very large scales.
 SHORE is not an acronym, but can be loosely interpreted as Storage Hierarchy 
 Optimization and Retrieval Environment. The idea of SHORE comes from the scene 
 where waves hit a seashore and disappear in the sand grains. This is similar to 
-a piece of data 'disappearing' in some storage. The concept of the shoreline, 
-which is the interface between the ocean (data) and land (storage). A shoreline 
+a piece of data 'disappearing' in some storage. The concept of the shoreline 
+is the interface between the ocean (data) and land (storage). A shoreline 
 extending to distance represents a horizontally scalable data I/O interface.
 
 When a wave hits the shore, water fills from top down. Similarly, in a data 
