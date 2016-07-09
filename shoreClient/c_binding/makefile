@@ -1,20 +1,26 @@
-default:static install
+CC=gcc-4.9
+
+default:dynamic install
 
 install:
 ifdef LIBPATH
 	mkdir -p $(LIBPATH)/shoreClient/include
 	mkdir -p $(LIBPATH)/shoreClient/lib
-	cp libShoreClient.so libShoreClient.a $(LIBPATH)/shoreClient/lib
+	cp libShoreClient.* $(LIBPATH)/shoreClient/lib
 	cp shoreClient.h $(LIBPATH)/shoreClient/include
 endif
 
-lib: cl
-	cython *.pyx
-	cc -fPIC *.c -lpython2.7 --shared -o libShoreClient.so
+object:
+	$(CC) -fPIC -c *.c -lpython2.7
 
-static:
+cython:
 	cython *.pyx
-	cc -c -fPIC *.c -lpython2.7
+
+dynamic: cl cython
+	$(CC) -fPIC *.c -lpython2.7 --shared -o libShoreClient.so
+
+static: cl cython
+	$(CC) -c -fPIC *.c -lpython2.7
 	ar rcs libShoreClient.a *.o
 
 cl:
