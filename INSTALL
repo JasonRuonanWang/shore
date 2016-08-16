@@ -1,0 +1,20 @@
+
+Mac:
+
+brew install mongodb
+brew install openmpi
+brew install zeromq
+brew install hdf5
+
+
+Universal:
+
+pip install pymongo
+pip install mpi4py
+pip install zmq
+pip install h5py
+
+
+[Install ADIOS and ADIOS python wrapper]
+
+

@@ -34,7 +34,7 @@ class config(plugin):
 
     def __init__(self, event):
         plugin.__init__(self,event,self)
-        message_address = os.environ.get('SHORE_DAEMON_ADDRESS', 'tcp://127.0.0.1:12306')
+        message_address = os.environ.get('SHORE_DAEMON_ADDRESS', 'tcp://0.0.0.0:12306')
         shore_root = os.environ.get('SHORE_ROOT', '/scratch/shore')
         db_address = os.environ.get('SHORE_MONGO_ADDRESS', 'mongodb://localhost:27017')
         print db_address
