@@ -1,4 +1,4 @@
-CC=gcc-4.9
+CC=gcc
 
 default:dynamic install
 

@@ -13,7 +13,7 @@ pip install pymongo
 pip install mpi4py
 pip install zmq
 pip install h5py
-
+pip install cython
 
 [Install ADIOS and ADIOS python wrapper]
 
