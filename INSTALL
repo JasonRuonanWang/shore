@@ -1,13 +1,18 @@
 
-Mac:
+### C/C++ libraries
+
+On Mac:
 
 brew install mongodb
 brew install openmpi
 brew install zeromq
 brew install hdf5
 
+On Linux:
 
-Universal:
+<To be added>
+
+### Python libraries
 
 pip install pymongo
 pip install mpi4py
@@ -15,6 +20,13 @@ pip install zmq
 pip install h5py
 pip install cython
 
-[Install ADIOS and ADIOS python wrapper]
+
+### Compile Manually Required
+
+Install ADIOS and ADIOS python wrapper
+
+
+### C Client
+
 
 
