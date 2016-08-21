@@ -1,10 +1,4 @@
-#    (c) University of Western Australia
-#    International Centre of Radio Astronomy Research
-#    M468/35 Stirling Hwy
-#    Perth WA 6009
-#    Australia
-#
-#    Copyright by UWA,
+#    Copyright by Ruonan Wang,
 #    All rights reserved
 #
 #    This library is free software; you can redistribute it and/or
@@ -23,7 +17,7 @@
 #    MA 02111-1307  USA
 #
 #    Any bugs, problems, and/or suggestions please email to
-#    jason.wang@icrar.org or jason.ruonan.wang@gmail.com
+#    jason.ruonan.wang@gmail.com
 
 import time
 from shoreMeta.plugin import plugin
@@ -53,6 +47,9 @@ class message(plugin):
     def event_handler_workflow(self, msg):
         self.respond(msg)
         return True
+
+    def bind(self):
+        pass
 
     def start(self):
         self._looping = True

@@ -53,16 +53,15 @@ class transport_zmqthreaded(transport):
             self.log('No zmq_worker handler in msg',category='error')
 
     def bind(self):
-        while True:
-            self._socket_clients = self._context.socket(zmq.ROUTER)
-            self._socket_workers = self._context.socket(zmq.DEALER)
-            try:
-                self._socket_clients.bind(self._url_clients)
-                self._socket_workers.bind(self._url_workers)
-                self.log('bound {0}'.format(self._url_clients), category='system')
-                return
-            except:
-                self.log('unable to bind address {0}'.format(self._url_clients), category='error')
+        self._socket_clients = self._context.socket(zmq.ROUTER)
+        self._socket_workers = self._context.socket(zmq.DEALER)
+        try:
+            self._socket_clients.bind(self._url_clients)
+            self._socket_workers.bind(self._url_workers)
+            self.log('bound {0}'.format(self._url_clients), category='system')
+            return
+        except:
+            self.log('unable to bind address {0}'.format(self._url_clients), category='error')
 
     def start_thread(self):
         _socket_worker = self._context.socket(zmq.REP)

@@ -25,7 +25,7 @@
 #    Any bugs, problems, and/or suggestions please email to
 #    jason.wang@icrar.org or jason.ruonan.wang@gmail.com
 
-import mpi4py
+from mpi4py import MPI
 import time
 from message import message
 import cPickle as pickle
@@ -38,19 +38,16 @@ class message_mpi(message):
         pass
 
     def start_thread(self):
-        msg = None
         while self._looping:
 #            try:
-                msg_recv = _socket_worker.recv()
+                msg_recv = MPI.COMM_WORLD.recv(source=MPI.ANY_SOURCE)
                 try:
                     msg = pickle.loads(msg_recv)
                 except:
-                    _socket_worker.send(pickle.dumps({'error': 'msg not unpickleable'}))
                     self.log('message_zmqthreaded received msg not unpickleable', category='error')
                 if isinstance(msg, dict):
                     msg['workflow'] = 'message'
                     msg['return'] = {}
-                    msg['zmq_worker'] = _socket_worker # send worker with msg so that it can be used for sending reply when pushed back to event module
                     self.push_event(msg, self.__class__.__name__)
 #            except Exception as e:
 #                self._looping = False
@@ -59,15 +56,17 @@ class message_mpi(message):
 #                import traceback, os.path
 #                top = traceback.extract_stack()[-1]
 #                print ', '.join([type(e).__name__, os.path.basename(top[0]), str(top[1])])
-        self.log("Worker thread is terminated!", category='system')
 
     def start_plugin(self):
-        while self._looping:
-            sleep(1)
+        pass
 
     def stop_thread(self):
         pass
 
 def get_class():
     return message_mpi
+
+
+
+
 

@@ -1,4 +1,4 @@
-from shoreClient import shoreClient as shore
+import shoreClient as shore
 import numpy as np
 import sys
 
@@ -27,6 +27,6 @@ for r in range(rows):
         for y in range(ydim):
             data[r][x][y] = x * 100 + y
 
-ret = shore.shorePut(data, doid, column, row, rows, backend=backend)
+ret = shore.client.put(data, doid, column, row, rows, backend=backend)
 
 print ret

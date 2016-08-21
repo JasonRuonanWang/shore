@@ -1,1 +1,3 @@
-import shoreClient, pycuda_binding
+import shoreClient
+client = shoreClient.instance()
+
