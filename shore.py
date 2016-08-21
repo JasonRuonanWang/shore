@@ -20,12 +20,16 @@
 #    jason.ruonan.wang@gmail.com
 
 
+client = None
+
 def start_daemon():
 
     import shoreSystem as system
     import shoreInfra as infra
     import shoreBackend as backend
-    import shoreClient as shore
+    from shoreClient import shoreClient
+
+
 
     event = system.event.observer()
     config = system.config.default(event)
@@ -42,12 +46,13 @@ def start_daemon():
             eval("backend.{0}.{1}(event, config)".format(module, plugin))
 
     event.push_event({'operation':'admin', 'command':'start'}, __name__)
+    global client
+    client = shoreClient.shoreClient(event, config)
 
 def stop_daemon(address = None):
 
     import zmq
     import os
-    import uuid
     import cPickle as pickle
 
     if not address:

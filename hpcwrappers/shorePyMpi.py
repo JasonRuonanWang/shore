@@ -17,7 +17,7 @@ shore.start_daemon()
 
 sys.path.append(sys.argv[1])
 import benchmark
-benchmark.write_bench()
+benchmark.write_bench(shore)
 
 shore.stop_daemon()
 
